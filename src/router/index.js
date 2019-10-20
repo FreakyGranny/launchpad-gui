@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import Wellcome from "../components/wellcome";
 import Home from "../components/home";
 import Account from "../components/account";
 import Login from "../components/login";
@@ -12,7 +13,7 @@ const ifNotAuthenticated = (to, from, next) => {
     next();
     return;
   }
-  next("/");
+  next("/explore");
 };
 
 const ifAuthenticated = (to, from, next) => {
@@ -28,6 +29,11 @@ export default new Router({
   routes: [
     {
       path: "/",
+      name: "Wellcome",
+      component: Wellcome
+    },
+    {
+      path: "/explore",
       name: "Home",
       component: Home,
       beforeEnter: ifAuthenticated

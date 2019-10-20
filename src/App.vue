@@ -1,9 +1,10 @@
 <template>
   <div>
     <md-toolbar class="md-transparent">
-      <h1 class="md-title">2GO</h1>
+      <a href="/">
+        <h1 class="md-title">2 START</h1>
+      </a>
     </md-toolbar>
-
     <md-content>
       <div class="main-container">
         <router-view />
