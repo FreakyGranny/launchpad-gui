@@ -5,7 +5,7 @@ import router from "./router";
 import store from "./store";
 import VueMaterial from "vue-material";
 import "vue-material/dist/vue-material.min.css";
-import "vue-material/dist/theme/default.css";
+import "@/assets/material.scss";
 import axios from "axios";
 import Loading from "./components/lib/loading";
 
