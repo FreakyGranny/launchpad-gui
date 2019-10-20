@@ -4,6 +4,12 @@
       <a href="/">
         <h1 class="md-title">2 START</h1>
       </a>
+      <div class=" md-toolbar-section-start">
+        <md-button class="md-primary">Explore</md-button>
+      </div>
+      <div class=" md-toolbar-section-end">
+        <md-button class="md-raised md-primary">Create</md-button>
+      </div>
     </md-toolbar>
     <md-content>
       <div class="main-container">
