@@ -8,9 +8,9 @@ function feedGenerator(nb) {
 
 function generateFeed() {
   return {
-    name: "Bender Rodriges",
-    content: "some words"
+    name: "PS4 Death Squared",
+    content: "Пати-игра от 2 до 4 человек"
   };
 }
 
-export default feedGenerator(5);
+export default feedGenerator(9);
