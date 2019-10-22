@@ -72,6 +72,12 @@
   width: 250px;
   height: 250px;
 }
+.md-icon {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  font-size: 16px !important;
+}
 .md-card {
   object-fit: cover;
   width: 250px;
