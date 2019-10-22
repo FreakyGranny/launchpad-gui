@@ -39,13 +39,10 @@
               md-mode="indeterminate"
             ></md-progress-spinner>
           </div>
-          <div
-            class="spacing"
-            v-if="this.totalProjects != this.projects.length"
-          >
+          <div class="spacing" v-if="!loading">
             <md-button
               class="md-raised md-primary"
-              v-bind:disabled="loading"
+              v-bind:disabled="isFinalPage"
               v-on:click="getProjects"
             >
               загрузить еще
@@ -82,6 +79,14 @@ export default {
   name: "home",
   created() {
     this.projects = this.getProjects();
+  },
+  computed: {
+    isFinalPage() {
+      if (typeof this.projects === "undefined") {
+        return false;
+      }
+      return this.totalProjects == this.projects.length;
+    }
   },
   methods: {
     getProjects() {
