@@ -14,7 +14,7 @@ const getters = {
 const actions = {
   [USER_REQUEST]: ({ commit, dispatch }) => {
     commit(USER_REQUEST);
-    axios({ url: "http://localhost:8000/api/user" })
+    axios({ url: "/user" })
       .then(resp => {
         commit(USER_SUCCESS, resp);
       })

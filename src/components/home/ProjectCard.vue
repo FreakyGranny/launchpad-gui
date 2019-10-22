@@ -1,13 +1,9 @@
 <template>
-  <div class="feed-item md-layout-item">
+  <div class="project-card md-layout-item">
     <md-card md-with-hover>
       <md-ripple>
         <md-card-media>
-          <img
-            class="img"
-            src="https://cdn02.nintendo-europe.com/media/images/10_share_images/games_15/nintendo_switch_download_software_1/H2x1_NSwitchDS_DeathSquared_image1600w.jpg"
-            alt="People"
-          />
+          <img class="img" v-bind:src="params.image_link" alt="People" />
         </md-card-media>
         <md-card-content>
           <div class="md-layout md-alignment-center">
@@ -21,11 +17,19 @@
             </div>
             <div class="md-layout-item md-size-100 title-area">
               <b>
-                <span class="title-text">{{ feed.name }}</span>
+                <span class="title-text">{{
+                  params.title.length > 27
+                    ? params.title.slice(0, 27) + "..."
+                    : params.title
+                }}</span>
               </b>
             </div>
             <div class="md-layout-item md-size-100 subtitle-area">
-              <span class="subtitle-text">{{ feed.content }}</span>
+              <span class="subtitle-text">{{
+                params.subtitle.length > 55
+                  ? params.subtitle.slice(0, 55) + "..."
+                  : params.subtitle
+              }}</span>
             </div>
             <div class="md-layout-item md-size-100 category-area">
               <b>
@@ -35,17 +39,17 @@
             <div class="md-layout-item md-size-100">
               <div class="md-layout">
                 <div class="md-layout-item">
-                  <span class="md-body-2">1023₽ </span>
+                  <span class="md-body-2">{{ params.total }}₽ </span>
                   <span class="md-caption">собрано</span>
                 </div>
                 <div class="md-layout-item right-text">
-                  <span class="md-body-1">83%</span>
+                  <span class="md-body-1">{{ params.percent }}%</span>
                 </div>
               </div>
               <md-progress-bar
                 class="md-accent"
                 md-mode="determinate"
-                md-value="40"
+                v-bind:md-value="params.percent"
               ></md-progress-bar>
             </div>
             <div class="md-layout-item md-size-100 days-area">
@@ -60,7 +64,7 @@
 </template>
 
 <style scoped>
-.feed-item {
+.project-card {
   padding: 1em;
 }
 .img {
@@ -126,7 +130,7 @@
 </style>
 <script>
 export default {
-  name: "feedItem",
-  props: { feed: Object }
+  name: "ProjectCard",
+  props: { params: Object }
 };
 </script>

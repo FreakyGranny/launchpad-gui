@@ -25,7 +25,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit(AUTH_REQUEST);
       axios({
-        url: "http://localhost:8000/api/token",
+        url: "/token",
         data: user,
         method: "POST"
       })

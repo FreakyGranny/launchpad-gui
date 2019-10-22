@@ -16,6 +16,8 @@ const token = localStorage.getItem("user-token");
 if (token) {
   axios.defaults.headers.common["Authorization"] = "Token " + token;
 }
+// axios.defaults.baseURL = "http://localhost:8000/api";
+axios.defaults.baseURL = "https://gaijin-be.k8s.2gis.dev/api";
 
 Vue.component("loading", Loading);
 

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <loading v-if="loading" />
     <div class="md-layout explore-grid">
       <div
         class="md-layout-item md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
@@ -22,12 +21,36 @@
       <div
         class="md-layout-item md-large-size-75 md-medium-size-70 md-small-size-100 md-xsmall-hide"
       >
-        <div v-if="isAuthenticated" class="md-layout">
-          <feed-item
-            v-for="(feed, index) in fakeFeed"
+        <div class="md-layout">
+          <project-card
+            v-for="(project, index) in projects"
             :key="index"
-            :feed="feed"
+            :params="project"
           />
+        </div>
+        <div class="md-layout md-alignment-center">
+          <div
+            class="md-layout md-layout-item md-size-100 md-alignment-center"
+            v-if="loading"
+          >
+            <md-progress-spinner
+              class="spacing"
+              :md-stroke="3"
+              md-mode="indeterminate"
+            ></md-progress-spinner>
+          </div>
+          <div
+            class="spacing"
+            v-if="this.totalProjects != this.projects.length"
+          >
+            <md-button
+              class="md-raised md-primary"
+              v-bind:disabled="loading"
+              v-on:click="getProjects"
+            >
+              загрузить еще
+            </md-button>
+          </div>
         </div>
       </div>
     </div>
@@ -42,26 +65,56 @@
 .explore-filter {
   padding-right: 50px;
 }
+.spacing {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
 </style>
 
 <script>
-import fakeFeed from "./fakeFeed";
-import FeedItem from "./feedItem.vue";
-import { mapGetters } from "vuex";
+import ProjectCard from "./ProjectCard.vue";
+import axios from "axios";
 
 export default {
   components: {
-    FeedItem
+    ProjectCard
   },
   name: "home",
-  computed: {
-    ...mapGetters(["isAuthenticated", "authStatus"]),
-    loading: function() {
-      return this.authStatus === "loading" && !this.isAuthenticated;
+  created() {
+    this.projects = this.getProjects();
+  },
+  methods: {
+    getProjects() {
+      this.loading = true;
+      let projectList = this.projects ? this.projects : [];
+      let pUrl = "/project?page_size=9";
+      if (this.nextPage) {
+        pUrl += "&page=" + this.nextPage;
+      }
+      axios({ url: pUrl })
+        .then(resp => {
+          for (let project of resp.data.results) {
+            projectList.push(project);
+          }
+          this.projects = projectList;
+          this.nextPage = resp.data.next;
+          this.totalProjects = resp.data.total;
+          this.loading = false;
+        })
+        .catch(resp => {
+          this.error = resp.data;
+          this.loading = false;
+        });
     }
   },
   data() {
-    return { fakeFeed };
+    return {
+      loading: true,
+      error: null,
+      nextPage: null,
+      totalProjects: 0,
+      projects: []
+    };
   }
 };
 </script>
