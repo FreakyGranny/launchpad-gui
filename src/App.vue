@@ -1,11 +1,11 @@
 <template>
   <div>
     <md-toolbar class="md-transparent">
-      <a href="/">
+      <router-link to="/">
         <h1 class="md-title">2 START</h1>
-      </a>
-      <div class=" md-toolbar-section-start">
-        <md-button class="md-primary">Explore</md-button>
+      </router-link>
+      <div class=" md-toolbar-section-start nav-button">
+        <md-button to="/explore" class="md-primary">исследовать</md-button>
       </div>
       <div class=" md-toolbar-section-end">
         <md-button class="md-raised md-primary">Create</md-button>
@@ -36,5 +36,8 @@ export default {
 <style lang="scss">
 .md-content {
   padding: 16px;
+}
+.nav-button {
+  margin-left: 12px;
 }
 </style>
