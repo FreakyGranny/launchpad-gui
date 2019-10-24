@@ -29,16 +29,7 @@
           />
         </div>
         <div class="md-layout md-alignment-center">
-          <div
-            class="md-layout md-layout-item md-size-100 md-alignment-center"
-            v-if="loading"
-          >
-            <md-progress-spinner
-              class="spacing"
-              :md-stroke="3"
-              md-mode="indeterminate"
-            ></md-progress-spinner>
-          </div>
+          <load-spinner v-if="loading"></load-spinner>
           <div class="spacing" v-if="!loading">
             <md-button
               class="md-raised md-primary"
@@ -70,11 +61,13 @@
 
 <script>
 import ProjectCard from "./ProjectCard.vue";
+import LoadSpinner from "../lib/loading";
 import axios from "axios";
 
 export default {
   components: {
-    ProjectCard
+    ProjectCard,
+    LoadSpinner
   },
   name: "home",
   created() {

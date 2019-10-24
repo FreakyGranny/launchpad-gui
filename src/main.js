@@ -7,7 +7,7 @@ import VueMaterial from "vue-material";
 import "vue-material/dist/vue-material.min.css";
 import "@/assets/material.scss";
 import axios from "axios";
-import Loading from "./components/lib/loading";
+// import Loading from "./components/lib/loading";
 
 Vue.config.productionTip = false;
 Vue.use(VueMaterial);
@@ -19,7 +19,7 @@ if (token) {
 // axios.defaults.baseURL = "http://localhost:8000/api";
 axios.defaults.baseURL = "https://gaijin-be.k8s.2gis.dev/api";
 
-Vue.component("loading", Loading);
+// Vue.component("loading", Loading);
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Wellcome from "../components/wellcome";
+import Project from "../components/project";
 import Home from "../components/home";
 import Account from "../components/account";
 import Login from "../components/login";
@@ -31,6 +32,15 @@ export default new Router({
       path: "/",
       name: "Wellcome",
       component: Wellcome
+    },
+    {
+      path: "/project",
+      redirect: "/explore"
+    },
+    {
+      path: "/project/:id",
+      name: "Project",
+      component: Project
     },
     {
       path: "/explore",
