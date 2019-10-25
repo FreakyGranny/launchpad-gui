@@ -7,10 +7,13 @@ import VueMaterial from "vue-material";
 import "vue-material/dist/vue-material.min.css";
 import "@/assets/material.scss";
 import axios from "axios";
+// import moment from "moment";
 // import Loading from "./components/lib/loading";
 
 Vue.config.productionTip = false;
 Vue.use(VueMaterial);
+
+// Vue.prototype.$moment = moment;
 
 const token = localStorage.getItem("user-token");
 if (token) {
