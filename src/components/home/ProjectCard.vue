@@ -1,6 +1,6 @@
 <template>
   <div class="project-card md-layout-item">
-    <router-link v-bind:to="'/project/' + params.id">
+    <div @click="onClickCard()">
       <md-card md-with-hover>
         <md-ripple>
           <md-card-media>
@@ -10,7 +10,10 @@
             <div class="md-layout md-alignment-center">
               <div class="md-layout-item md-size-100 status-area">
                 <b>
-                  <span class="status-text">ПОИСК УЧАСТНИКОВ</span>
+                  <status
+                    class="status-text"
+                    :sourceStatus="params.status"
+                  ></status>
                 </b>
               </div>
               <div class="md-layout-item md-size-100">
@@ -27,8 +30,8 @@
               </div>
               <div class="md-layout-item md-size-100 subtitle-area">
                 <span class="subtitle-text">{{
-                  params.subtitle.length > 55
-                    ? params.subtitle.slice(0, 55) + "..."
+                  params.subtitle.length > 50
+                    ? params.subtitle.slice(0, 50) + "..."
                     : params.subtitle
                 }}</span>
               </div>
@@ -54,14 +57,18 @@
                 ></md-progress-bar>
               </div>
               <div class="md-layout-item md-size-100 days-area">
-                <md-icon>access_time</md-icon>
-                <span class="md-body-1 middle-text">21 день остался</span>
+                <days-counter
+                  class="md-body-1 middle-text"
+                  :endDate="params.release_date"
+                  :withIcon="true"
+                  :ended="params.status != 'search'"
+                ></days-counter>
               </div>
             </div>
           </md-card-content>
         </md-ripple>
       </md-card>
-    </router-link>
+    </div>
   </div>
 </template>
 
@@ -75,12 +82,6 @@
   object-fit: cover;
   width: 250px;
   height: 250px;
-}
-.md-icon {
-  width: 16px;
-  min-width: 16px;
-  height: 16px;
-  font-size: 16px !important;
 }
 .md-card {
   object-fit: cover;
@@ -98,7 +99,6 @@
 }
 .status-text {
   font-size: 12px;
-  color: md-get-palette-color(green, 700);
 }
 .title-text {
   font-size: 15px;
@@ -110,10 +110,6 @@
 .category-text {
   font-size: 12px;
   color: md-get-palette-color(deeppurple, 600);
-}
-.middle-text {
-  vertical-align: middle;
-  margin-left: 5px;
 }
 .status-area {
   padding-bottom: 10px;
@@ -139,7 +135,19 @@
 }
 </style>
 <script>
+import Status from "../lib/status";
+import DaysCounter from "../lib/daysCounter";
+
 export default {
+  components: {
+    Status,
+    DaysCounter
+  },
+  methods: {
+    onClickCard() {
+      this.$router.push({ name: "Project", params: { id: this.params.id } });
+    }
+  },
   name: "ProjectCard",
   props: { params: Object }
 };

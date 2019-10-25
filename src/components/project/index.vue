@@ -15,7 +15,10 @@
           <div class="md-layout md-alignment-top">
             <div class="md-layout-item md-size-90 status-area">
               <b>
-                <span class="status-text">ПОИСК УЧАСТНИКОВ</span>
+                <status
+                  class="status-text"
+                  :sourceStatus="project.status"
+                ></status>
               </b>
             </div>
             <div class="md-layout-item md-size-10">
@@ -82,7 +85,12 @@
                   >
                 </div>
                 <div class="md-layout-item right-area">
-                  <span class="md-subheading">21 день остался</span>
+                  <days-counter
+                    class="md-subheading"
+                    :endDate="project.release_date"
+                    :withIcon="false"
+                    :ended="project.status != 'search'"
+                  ></days-counter>
                 </div>
               </div>
             </div>
@@ -204,7 +212,6 @@
 }
 .status-text {
   font-size: 14px;
-  color: md-get-palette-color(green, 700);
 }
 .title-text {
   font-size: 32px;
@@ -256,10 +263,14 @@
 <script>
 import axios from "axios";
 import LoadSpinner from "../lib/loading";
+import Status from "../lib/status";
+import DaysCounter from "../lib/daysCounter";
 
 export default {
   components: {
-    LoadSpinner
+    LoadSpinner,
+    Status,
+    DaysCounter
   },
   name: "project",
   created() {

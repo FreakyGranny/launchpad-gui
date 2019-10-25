@@ -8,7 +8,9 @@
         <md-button to="/explore" class="md-primary">исследовать</md-button>
       </div>
       <div class=" md-toolbar-section-end" v-if="profile.username">
-        <md-button class="md-raised md-primary custom-button">новый проект</md-button>
+        <md-button class="md-raised md-primary custom-button"
+          >новый проект</md-button
+        >
         <div class="profile">
           <router-link to="/account">
             <md-avatar>
@@ -21,7 +23,9 @@
     </md-toolbar>
     <md-content>
       <div class="main-container">
-        <router-view />
+        <transition name="fade">
+          <router-view />
+        </transition>
       </div>
     </md-content>
   </div>
