@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="header">
+      <span class="white-text">Все проекты</span>
+    </div>
     <div class="md-layout explore-grid">
       <div
         class="md-layout-item md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
@@ -32,7 +35,7 @@
           <load-spinner v-if="loading"></load-spinner>
           <div class="spacing" v-if="!loading">
             <md-button
-              class="md-raised md-primary"
+              class="md-raised md-primary custom-button"
               v-bind:disabled="isFinalPage"
               v-on:click="getProjects"
             >
@@ -46,7 +49,21 @@
 </template>
 
 <style>
+.white-text {
+  font-size: 42px;
+  color: aliceblue;
+}
+.header {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("/images/campaign.jpg");
+  height: 150px;
+  text-align: center;
+  line-height: 150px;
+}
 .explore-grid {
+  padding-top: 30px;
   margin: auto;
   max-width: 1200px;
 }

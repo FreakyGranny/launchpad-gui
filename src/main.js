@@ -18,6 +18,7 @@ if (token) {
 }
 // axios.defaults.baseURL = "http://localhost:8000/api";
 axios.defaults.baseURL = "https://gaijin-be.k8s.2gis.dev/api";
+// axios.defaults.baseURL = "https://samurai-be.k8s.2gis.dev/api";
 
 // Vue.component("loading", Loading);
 

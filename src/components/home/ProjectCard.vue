@@ -19,8 +19,8 @@
               <div class="md-layout-item md-size-100 title-area">
                 <b>
                   <span class="title-text">{{
-                    params.title.length > 27
-                      ? params.title.slice(0, 27) + "..."
+                    params.title.length > 25
+                      ? params.title.slice(0, 25) + "..."
                       : params.title
                   }}</span>
                 </b>
@@ -65,7 +65,9 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "~vue-material/dist/theme/engine";
+
 .project-card {
   padding: 1em;
 }
@@ -96,18 +98,18 @@
 }
 .status-text {
   font-size: 12px;
-  color: green;
+  color: md-get-palette-color(green, 700);
 }
 .title-text {
   font-size: 15px;
 }
 .subtitle-text {
   font-size: 13px;
-  color: rgba(0, 0, 0, 0.54);
+  color: md-get-palette-color(gray, 600);
 }
 .category-text {
   font-size: 12px;
-  color: purple;
+  color: md-get-palette-color(deeppurple, 600);
 }
 .middle-text {
   vertical-align: middle;
