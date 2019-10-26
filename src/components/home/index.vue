@@ -28,7 +28,8 @@
           <project-card
             v-for="(project, index) in projects"
             :key="index"
-            :params="project"
+            :project="project"
+            :type="projectTypes[project.project_type]"
           />
         </div>
         <div class="md-layout md-alignment-center">
