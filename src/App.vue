@@ -2,15 +2,17 @@
   <div>
     <md-toolbar class="c-toolbar" md-elevation="0">
       <router-link to="/">
-        <h1 class="md-title">2 START</h1>
+        <img class="logo" src="/images/logo-tr.png" alt="2 KICKSTARTER" />
       </router-link>
       <div class=" md-toolbar-section-start nav-button">
-        <md-button to="/explore" class="md-primary">исследовать</md-button>
+        <router-link to="/explore">
+          <span class="nav-link">Исследовать</span>
+        </router-link>
       </div>
       <div class=" md-toolbar-section-end" v-if="profile.username">
-        <md-button class="md-raised md-primary custom-button"
-          >новый проект</md-button
-        >
+        <router-link to="/explore">
+          <span class="nav-link">Новый проект</span>
+        </router-link>
         <div class="profile">
           <router-link to="/account">
             <md-avatar>
@@ -47,16 +49,34 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "~vue-material/dist/theme/engine";
+
 .c-toolbar {
   border-bottom: 1px solid #ddd;
+  padding-left: 10px;
 }
 .nav-button {
-  margin-left: 12px;
+  margin-left: 15px;
 }
 .profile {
   border-left: 1px solid #ddd;
-  padding-left: 10px;
+  padding-left: 16px;
   margin-left: 20px;
+}
+* {
+  text-decoration: none !important;
+}
+.nav-link {
+  color: md-get-palette-color(gray, 700);
+  font-size: 14px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+.nav-link:hover {
+  color: md-get-palette-color(deeppurple, 600);
+}
+.logo {
+  height: 40px;
 }
 </style>

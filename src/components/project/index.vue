@@ -89,7 +89,7 @@
                     class="md-subheading"
                     :endDate="project.release_date"
                     :withIcon="false"
-                    :ended="project.status != 'search'"
+                    :ended="project.status != search_status"
                   ></days-counter>
                 </div>
               </div>
@@ -265,6 +265,7 @@ import axios from "axios";
 import LoadSpinner from "../lib/loading";
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
+import { STATUS_SEARCH } from "../lib/const/status";
 
 export default {
   components: {
@@ -295,7 +296,8 @@ export default {
       loading: true,
       error: null,
       project: null,
-      count: 1
+      count: 1,
+      search_status: STATUS_SEARCH
     };
   }
 };
