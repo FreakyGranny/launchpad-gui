@@ -80,6 +80,8 @@
 import ProjectCard from "./ProjectCard.vue";
 import LoadSpinner from "../lib/loading";
 import axios from "axios";
+import { mapState } from "vuex";
+import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
 
 export default {
   components: {
@@ -88,16 +90,21 @@ export default {
   },
   name: "home",
   created() {
-    this.projects = this.getProjects();
+    if (this.$store.getters.isAuthenticated) {
+      this.$store.dispatch(PROJECT_TYPE_REQUEST).then(() => {
+        this.projects = this.getProjects();
+      });
+    }
   },
-  computed: {
+  computed: mapState({
+    projectTypes: state => state.projectType.items,
     isFinalPage() {
       if (typeof this.projects === "undefined") {
         return false;
       }
       return this.totalProjects == this.projects.length;
     }
-  },
+  }),
   methods: {
     getProjects() {
       this.loading = true;
@@ -119,6 +126,18 @@ export default {
         .catch(resp => {
           this.error = resp.data;
           this.loading = false;
+        });
+    },
+    getProjectTypes() {
+      this.loadingTypes = true;
+      axios({ url: "/project_type" })
+        .then(resp => {
+          this.projectTypes = resp.data;
+          this.loadingTypes = false;
+        })
+        .catch(resp => {
+          this.error = resp.data;
+          this.loadingTypes = false;
         });
     }
   },
