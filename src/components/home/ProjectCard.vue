@@ -4,17 +4,24 @@
       <md-card md-with-hover>
         <md-ripple>
           <md-card-media>
-            <img class="img" v-bind:src="params.image_link" alt="People" />
+            <img class="img" v-bind:src="project.image_link" alt="People" />
           </md-card-media>
           <md-card-content>
             <div class="md-layout md-alignment-center">
-              <div class="md-layout-item md-size-100 status-area">
+              <div class="md-layout-item md-size-90 status-area">
                 <b>
                   <status
                     class="status-text"
-                    :sourceStatus="params.status"
+                    :sourceStatus="project.status"
                   ></status>
                 </b>
+              </div>
+              <div class="md-layout-item md-size-10 status-area right-text">
+                <!-- <md-icon>
+                  accessibility
+                  <md-tooltip md-direction="bottom">Честная кампания</md-tooltip>
+                </md-icon> -->
+                <type-icon :type="type"></type-icon>
               </div>
               <div class="md-layout-item md-size-100">
                 <md-divider></md-divider>
@@ -22,17 +29,17 @@
               <div class="md-layout-item md-size-100 title-area">
                 <b>
                   <span class="title-text">{{
-                    params.title.length > 25
-                      ? params.title.slice(0, 25) + "..."
-                      : params.title
+                    project.title.length > 25
+                      ? project.title.slice(0, 25) + "..."
+                      : project.title
                   }}</span>
                 </b>
               </div>
               <div class="md-layout-item md-size-100 subtitle-area">
                 <span class="subtitle-text">{{
-                  params.subtitle.length > 50
-                    ? params.subtitle.slice(0, 50) + "..."
-                    : params.subtitle
+                  project.subtitle.length > 50
+                    ? project.subtitle.slice(0, 50) + "..."
+                    : project.subtitle
                 }}</span>
               </div>
               <div class="md-layout-item md-size-100 category-area">
@@ -43,25 +50,25 @@
               <div class="md-layout-item md-size-100">
                 <div class="md-layout">
                   <div class="md-layout-item">
-                    <span class="md-body-2">{{ params.total }}₽ </span>
+                    <span class="md-body-2">{{ project.total }}₽ </span>
                     <span class="md-caption">собрано</span>
                   </div>
                   <div class="md-layout-item right-text">
-                    <span class="md-body-1">{{ params.percent }}%</span>
+                    <span class="md-body-1">{{ project.percent }}%</span>
                   </div>
                 </div>
                 <md-progress-bar
                   class="md-accent"
                   md-mode="determinate"
-                  v-bind:md-value="params.percent"
+                  v-bind:md-value="project.percent"
                 ></md-progress-bar>
               </div>
               <div class="md-layout-item md-size-100 days-area">
                 <days-counter
                   class="md-body-1 middle-text"
-                  :endDate="params.release_date"
+                  :endDate="project.release_date"
                   :withIcon="true"
-                  :ended="params.status != 'search'"
+                  :ended="project.status != 'search'"
                 ></days-counter>
               </div>
             </div>
@@ -112,7 +119,7 @@
   color: md-get-palette-color(deeppurple, 600);
 }
 .status-area {
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 }
 .title-area {
   padding-top: 10px;
@@ -137,12 +144,14 @@
 <script>
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
+import TypeIcon from "../lib/typeIcon";
 import { STATUS_SEARCH } from "../lib/const/status";
 
 export default {
   components: {
     Status,
-    DaysCounter
+    DaysCounter,
+    TypeIcon
   },
   data() {
     return {
@@ -155,6 +164,9 @@ export default {
     }
   },
   name: "ProjectCard",
-  props: { params: Object }
+  props: {
+    project: Object,
+    type: Object
+  }
 };
 </script>

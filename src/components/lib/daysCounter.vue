@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-icon v-if="withIcon">access_time</md-icon>
+    <md-icon v-if="withIcon">watch_later</md-icon>
     <span class="counter-style" v-if="daysLeft > 0 && !ended">{{
       daysLeft
     }}</span>
@@ -10,10 +10,10 @@
 
 <style scoped>
 .md-icon {
-  width: 16px;
-  min-width: 16px;
-  height: 16px;
-  font-size: 16px !important;
+  width: 18px;
+  min-width: 18px;
+  height: 18px;
+  font-size: 18px !important;
 }
 .counter-style {
   margin-left: 4px;

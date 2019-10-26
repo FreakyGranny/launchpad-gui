@@ -23,7 +23,7 @@
             </div>
             <div class="md-layout-item md-size-10">
               <md-button class="md-icon-button md-primary moved-button">
-                <md-icon>menu</md-icon>
+                <md-icon>settings_applications</md-icon>
               </md-button>
             </div>
             <div class="md-layout-item md-size-100 title-area">
