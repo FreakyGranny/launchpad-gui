@@ -137,11 +137,17 @@
 <script>
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
+import { STATUS_SEARCH } from "../lib/const/status";
 
 export default {
   components: {
     Status,
     DaysCounter
+  },
+  data() {
+    return {
+      search_status: STATUS_SEARCH
+    };
   },
   methods: {
     onClickCard() {

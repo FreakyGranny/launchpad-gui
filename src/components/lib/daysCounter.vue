@@ -18,7 +18,7 @@
 .counter-style {
   margin-left: 4px;
   vertical-align: middle;
-  font-weight: 700;
+  font-weight: 500;
 }
 .text-style {
   margin-left: 4px;
