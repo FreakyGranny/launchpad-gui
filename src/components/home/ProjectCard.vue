@@ -17,10 +17,6 @@
                 </b>
               </div>
               <div class="md-layout-item md-size-10 status-area right-text">
-                <!-- <md-icon>
-                  accessibility
-                  <md-tooltip md-direction="bottom">Честная кампания</md-tooltip>
-                </md-icon> -->
                 <type-icon :type="type"></type-icon>
               </div>
               <div class="md-layout-item md-size-100">
@@ -50,8 +46,10 @@
               <div class="md-layout-item md-size-100">
                 <div class="md-layout">
                   <div class="md-layout-item">
-                    <span class="md-body-2">{{ project.total }}₽ </span>
-                    <span class="md-caption">собрано</span>
+                    <goal-counter
+                      :type="type"
+                      :count="project.total"
+                    ></goal-counter>
                   </div>
                   <div class="md-layout-item right-text">
                     <span class="md-body-1">{{ project.percent }}%</span>
@@ -144,6 +142,7 @@
 <script>
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
+import GoalCounter from "../lib/goalCounter";
 import TypeIcon from "../lib/typeIcon";
 import { STATUS_SEARCH } from "../lib/const/status";
 
@@ -151,6 +150,7 @@ export default {
   components: {
     Status,
     DaysCounter,
+    GoalCounter,
     TypeIcon
   },
   data() {
@@ -160,7 +160,7 @@ export default {
   },
   methods: {
     onClickCard() {
-      this.$router.push({ name: "Project", params: { id: this.params.id } });
+      this.$router.push({ name: "Project", params: { id: this.project.id } });
     }
   },
   name: "ProjectCard",

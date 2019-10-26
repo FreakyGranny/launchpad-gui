@@ -1,16 +1,16 @@
 <template>
   <div>
     <md-toolbar class="c-toolbar" md-elevation="0">
-      <router-link to="/">
+      <router-link to="/explore">
         <img class="logo" src="/images/logo-tr.png" alt="2 KICKSTARTER" />
       </router-link>
       <div class=" md-toolbar-section-start nav-button">
-        <router-link to="/explore">
-          <span class="nav-link">Исследовать</span>
+        <router-link to="/">
+          <span class="nav-link">Как это работает?</span>
         </router-link>
       </div>
       <div class=" md-toolbar-section-end" v-if="profile.username">
-        <router-link to="/explore">
+        <router-link to="/">
           <span class="nav-link">Новый проект</span>
         </router-link>
         <div class="profile">
