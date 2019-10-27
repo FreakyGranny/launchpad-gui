@@ -1,10 +1,10 @@
 <template>
   <div>
-    <md-icon v-if="withIcon">watch_later</md-icon>
+    <md-icon v-if="withIcon">{{ ended ? "timer_off" : "timer" }}</md-icon>
     <span class="counter-style" v-if="daysLeft > 0 && !ended">{{
       daysLeft
     }}</span>
-    <span class="text-style">{{ getText }}</span>
+    <span class="text-style" v-if="!ended">{{ getText }}</span>
   </div>
 </template>
 
@@ -39,9 +39,6 @@ export default {
       return daysDiff > 0 ? daysDiff : 0;
     },
     getText() {
-      if (this.ended) {
-        return "завершен";
-      }
       if (this.daysLeft == 0) {
         return "последний день";
       }

@@ -139,7 +139,7 @@
   text-align: right;
 }
 .days-area {
-  padding-top: 15px;
+  padding-top: 20px;
 }
 </style>
 <script>
