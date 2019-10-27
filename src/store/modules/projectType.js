@@ -8,10 +8,10 @@ import axios from "axios";
 import Vue from "vue";
 import { AUTH_LOGOUT } from "../actions/auth";
 
-const state = { status: "", projectTypes: [] };
+const state = { status: "", ptItems: {} };
 
 const getters = {
-  getProjectTypes: state => state.items
+  getProjectTypes: state => state.ptItems
 };
 
 const actions = {
@@ -39,7 +39,7 @@ const mutations = {
     for (let projectType of resp.data) {
       pt[projectType.id] = projectType;
     }
-    Vue.set(state, "items", pt);
+    Vue.set(state, "ptItems", pt);
   },
   [PROJECT_TYPE_ERROR]: state => {
     state.status = "error";

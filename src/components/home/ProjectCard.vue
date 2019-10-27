@@ -1,5 +1,5 @@
 <template>
-  <div class="project-card md-layout-item">
+  <div class="md-layout-item project-card">
     <div @click="onClickCard()">
       <md-card md-with-hover>
         <md-ripple>
@@ -40,7 +40,9 @@
               </div>
               <div class="md-layout-item md-size-100 category-area">
                 <b>
-                  <span class="category-text">ВИДЕО ИГРЫ</span>
+                  <span class="category-text">{{
+                    category.toUpperCase()
+                  }}</span>
                 </b>
               </div>
               <div class="md-layout-item md-size-100">
@@ -81,7 +83,8 @@
 @import "~vue-material/dist/theme/engine";
 
 .project-card {
-  padding: 1em;
+  padding: 20px;
+  flex: none;
 }
 .img {
   object-fit: cover;
@@ -166,7 +169,8 @@ export default {
   name: "ProjectCard",
   props: {
     project: Object,
-    type: Object
+    type: Object,
+    category: String
   }
 };
 </script>
