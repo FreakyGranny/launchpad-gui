@@ -31,7 +31,7 @@ export default {
     iconMap() {
       let map = {};
       (map[TYPE_CAMPAIGN] = "donut_large"),
-        (map[TYPE_CAMPAIGN_FAIR] = "accessibility"),
+        (map[TYPE_CAMPAIGN_FAIR] = "view_module"),
         (map[TYPE_EVENT] = "group"),
         (map[TYPE_EVENT_PLUS] = "group_add");
       return map;

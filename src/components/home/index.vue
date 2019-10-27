@@ -5,40 +5,107 @@
     </div>
     <div class="md-layout explore-grid">
       <div
-        class="md-layout-item md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
+        class="md-layout-item md-xlarge-size-25 md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
       >
         <md-list>
-          <md-list-item>Plain Text</md-list-item>
-          <md-list-item>Button</md-list-item>
-          <md-list-item href="https://google.com" target="_blank"
-            >Link</md-list-item
+          <md-subheader>КАТЕГОРИИ</md-subheader>
+          <md-list-item
+            class="list-offset"
+            :to="buildFilterLink(typeFilter, null, onlyOpen)"
           >
-          <md-list-item to="/components/list" exact
-            >Router <code>/</code></md-list-item
+            <span
+              class="list-regular-item"
+              v-bind:class="{
+                'list-selected-item': $route.query.category == null
+              }"
+              >Все проекты</span
+            >
+          </md-list-item>
+
+          <md-list-item
+            class="list-offset"
+            v-for="(category, index) in categories"
+            :key="'category_' + index"
+            :to="buildFilterLink(typeFilter, category.id, onlyOpen)"
           >
-          <md-list-item to="/components/list/router"
-            >Router <code>/router/**</code></md-list-item
+            <span
+              class="list-regular-item"
+              v-bind:class="{
+                'list-selected-item': category.id == $route.query.category
+              }"
+            >
+              {{ category.name }}
+            </span>
+          </md-list-item>
+
+          <md-divider></md-divider>
+          <md-subheader>ТИП ПРОЕКТА</md-subheader>
+
+          <md-list-item
+            class="list-offset"
+            :to="buildFilterLink(null, categoryFilter, onlyOpen)"
           >
+            <span
+              class="list-regular-item"
+              v-bind:class="{ 'list-selected-item': $route.query.type == null }"
+            >
+              Любой
+            </span>
+          </md-list-item>
+
+          <md-list-item
+            class="list-offset"
+            v-for="(type, index) in projectTypes"
+            :key="'type_' + index"
+            :to="buildFilterLink(type.id, categoryFilter, onlyOpen)"
+          >
+            <span
+              class="list-regular-item"
+              v-bind:class="{
+                'list-selected-item': type.id == $route.query.type
+              }"
+            >
+              {{ type.name }}
+            </span>
+          </md-list-item>
+
+          <md-divider></md-divider>
+          <md-list-item>
+            <span class="md-list-item-text">Только активные</span>
+            <md-switch v-model="onlyOpen" />
+          </md-list-item>
+          <md-button class="md-raised md-primary custom-button" to="/explore">
+            Сбросить фильтры
+          </md-button>
         </md-list>
       </div>
       <div
-        class="md-layout-item md-large-size-75 md-medium-size-70 md-small-size-100 md-xsmall-hide"
+        class="md-layout-item md-xlarge-size-75 md-large-size-75 md-medium-size-70 md-small-size-100 md-xsmall-hide"
       >
-        <div class="md-layout">
+        <div class="md-layout md-alignment-center-left">
           <project-card
             v-for="(project, index) in projects"
             :key="index"
             :project="project"
             :type="projectTypes[project.project_type]"
+            :category="categories[project.category[0]].name"
           />
         </div>
         <div class="md-layout md-alignment-center">
           <load-spinner v-if="loading"></load-spinner>
           <div class="spacing" v-if="!loading">
+            <md-empty-state
+              md-icon="help_outline"
+              md-label="Проекты не найдены"
+              md-description="К сожалению, не нашлось проектов удовлетворяющих всем фильтрам."
+              v-if="projects.length == 0"
+            >
+            </md-empty-state>
             <md-button
               class="md-raised md-primary custom-button"
               v-bind:disabled="isFinalPage"
               v-on:click="getProjects"
+              v-if="projects.length != 0"
             >
               загрузить еще
             </md-button>
@@ -49,10 +116,12 @@
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
+@import "~vue-material/dist/theme/engine";
+
 .white-text {
   font-size: 42px;
-  color: aliceblue;
+  color: md-get-palette-color(white, 400);
 }
 .header {
   background-size: cover;
@@ -75,6 +144,24 @@
   margin-top: 100px;
   margin-bottom: 100px;
 }
+.md-button-clean {
+  display: inline !important;
+}
+.list-regular-item {
+  color: md-get-palette-color(gray, 800);
+  font-weight: 400;
+}
+.list-selected-item {
+  color: md-get-palette-color(green, 700);
+  font-weight: 600;
+}
+.list-reset-item {
+  color: md-get-palette-color(deeppurple, 600);
+  font-weight: 600;
+}
+.list-offset {
+  padding-left: 15px;
+}
 </style>
 
 <script>
@@ -83,6 +170,7 @@ import LoadSpinner from "../lib/loading";
 import axios from "axios";
 import { mapState } from "vuex";
 import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
+import { CATEGORY_REQUEST } from "../../store/actions/category";
 
 export default {
   components: {
@@ -93,12 +181,15 @@ export default {
   created() {
     if (this.$store.getters.isAuthenticated) {
       this.$store.dispatch(PROJECT_TYPE_REQUEST).then(() => {
-        this.projects = this.getProjects();
+        this.$store.dispatch(CATEGORY_REQUEST).then(() => {
+          this.getProjects();
+        });
       });
     }
   },
   computed: mapState({
-    projectTypes: state => state.projectType.items,
+    projectTypes: state => state.projectType.ptItems,
+    categories: state => state.category.cItems,
     isFinalPage() {
       if (typeof this.projects === "undefined") {
         return false;
@@ -107,14 +198,65 @@ export default {
     }
   }),
   methods: {
-    getProjects() {
-      this.loading = true;
-      let projectList = this.projects ? this.projects : [];
+    buildFilterLink(typeId, categoryId, openFilter) {
+      let filterUrl = "/explore";
+      let params = {};
+      if (typeId) {
+        params["type"] = typeId;
+      }
+      if (categoryId) {
+        params["category"] = categoryId;
+      }
+      if (openFilter) {
+        params["filter"] = "open";
+      }
+      let query = Object.keys(params)
+        .map(k => escape(k) + "=" + escape(params[k]))
+        .join("&");
+      if (query) {
+        filterUrl += "?" + query;
+      }
+
+      return filterUrl;
+    },
+    setQueryParams() {
+      if (this.$route.query.type) {
+        this.typeFilter = this.$route.query.type;
+      } else {
+        this.typeFilter = null;
+      }
+      if (this.$route.query.category) {
+        this.categoryFilter = this.$route.query.category;
+      } else {
+        this.categoryFilter = null;
+      }
+      if (this.$route.query.filter) {
+        this.onlyOpen = true;
+      } else {
+        this.onlyOpen = false;
+      }
+    },
+    buildProjectUrl() {
       let pUrl = "/project?page_size=9";
       if (this.nextPage) {
         pUrl += "&page=" + this.nextPage;
       }
-      axios({ url: pUrl })
+      if (this.categoryFilter) {
+        pUrl += "&category=" + this.categoryFilter;
+      }
+      if (this.typeFilter) {
+        pUrl += "&type=" + this.typeFilter;
+      }
+      if (this.onlyOpen) {
+        pUrl += "&filter=open";
+      }
+      return pUrl;
+    },
+    getProjects() {
+      this.loading = true;
+      this.setQueryParams();
+      let projectList = this.projects ? this.projects : [];
+      axios({ url: this.buildProjectUrl() })
         .then(resp => {
           for (let project of resp.data.results) {
             projectList.push(project);
@@ -140,10 +282,40 @@ export default {
           this.error = resp.data;
           this.loadingTypes = false;
         });
+    },
+    resetState() {
+      this.loading = true;
+      this.error = null;
+      this.nextPage = null;
+      this.totalProjects = 0;
+      this.projects = [];
+    }
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.$route.query.type = to.query.type;
+    this.$route.query.category = to.query.category;
+    this.$route.query.filter = to.query.filter;
+    this.resetState();
+    this.getProjects();
+
+    next();
+  },
+  watch: {
+    onlyOpen() {
+      this.$router.push(
+        this.buildFilterLink(
+          this.typeFilter,
+          this.categoryFilter,
+          this.onlyOpen
+        )
+      );
     }
   },
   data() {
     return {
+      typeFilter: null,
+      categoryFilter: null,
+      onlyOpen: false,
       loading: true,
       error: null,
       nextPage: null,
