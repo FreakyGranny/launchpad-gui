@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Wellcome from "../components/wellcome";
 import Project from "../components/project";
-import Home from "../components/home";
+import Dashboard from "../components/dashboard";
 import Account from "../components/account";
 import Login from "../components/login";
 import store from "../store";
@@ -51,8 +51,8 @@ export default new Router({
     },
     {
       path: "/explore",
-      name: "Home",
-      component: Home,
+      name: "Dashboard",
+      component: Dashboard,
       beforeEnter: ifAuthenticated
     },
     {
