@@ -65,7 +65,7 @@
               </div>
               <div class="md-layout-item md-size-100 days-area">
                 <days-counter
-                  class="md-body-1 middle-text"
+                  class="md-body-1"
                   :endDate="project.release_date"
                   :withIcon="true"
                   :ended="project.status != 'search'"

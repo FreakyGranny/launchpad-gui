@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div class="header">
-      <span class="white-text">Все проекты</span>
-    </div>
+    <bg-header :categoryId="categoryFilter" />
     <div class="md-layout explore-grid">
       <div
         class="md-layout-item md-xlarge-size-25 md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
@@ -124,19 +122,6 @@
 <style lang="scss" scoped>
 @import "~vue-material/dist/theme/engine";
 
-.white-text {
-  font-size: 42px;
-  color: md-get-palette-color(white, 400);
-}
-.header {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: url("/images/campaign.jpg");
-  height: 150px;
-  text-align: center;
-  line-height: 150px;
-}
 .explore-grid {
   padding-top: 30px;
   margin: auto;
@@ -170,12 +155,14 @@
 <script>
 import ProjectCard from "./ProjectCard.vue";
 import LoadSpinner from "../lib/loading";
+import BgHeader from "../lib/bgHeader";
 import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
   components: {
     ProjectCard,
+    BgHeader,
     LoadSpinner
   },
   name: "home",
