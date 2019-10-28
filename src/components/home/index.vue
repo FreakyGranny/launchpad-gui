@@ -7,10 +7,11 @@
       <div
         class="md-layout-item md-xlarge-size-25 md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
       >
-        <md-list>
+        <md-list class="md-dense">
           <md-subheader>КАТЕГОРИИ</md-subheader>
           <md-list-item
             class="list-offset"
+            :md-ripple="false"
             :to="buildFilterLink(typeFilter, null, onlyOpen)"
           >
             <span
@@ -24,6 +25,7 @@
 
           <md-list-item
             class="list-offset"
+            :md-ripple="false"
             v-for="(category, index) in categories"
             :key="'category_' + index"
             :to="buildFilterLink(typeFilter, category.id, onlyOpen)"
@@ -43,6 +45,7 @@
 
           <md-list-item
             class="list-offset"
+            :md-ripple="false"
             :to="buildFilterLink(null, categoryFilter, onlyOpen)"
           >
             <span
@@ -55,6 +58,7 @@
 
           <md-list-item
             class="list-offset"
+            :md-ripple="false"
             v-for="(type, index) in projectTypes"
             :key="'type_' + index"
             :to="buildFilterLink(type.id, categoryFilter, onlyOpen)"
@@ -71,7 +75,7 @@
 
           <md-divider></md-divider>
           <md-list-item>
-            <span class="md-list-item-text">Только активные</span>
+            <span class="list-regular-item">Только активные</span>
             <md-switch v-model="onlyOpen" />
           </md-list-item>
           <md-button class="md-raised md-primary custom-button" to="/explore">
@@ -149,14 +153,12 @@
 }
 .list-regular-item {
   color: md-get-palette-color(gray, 800);
+  font-size: 15px;
   font-weight: 400;
 }
 .list-selected-item {
   color: md-get-palette-color(green, 700);
-  font-weight: 600;
-}
-.list-reset-item {
-  color: md-get-palette-color(deeppurple, 600);
+  font-size: 15px;
   font-weight: 600;
 }
 .list-offset {
