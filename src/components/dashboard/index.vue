@@ -153,7 +153,7 @@
 </style>
 
 <script>
-import ProjectCard from "./ProjectCard.vue";
+import ProjectCard from "../lib/ProjectCard";
 import LoadSpinner from "../lib/loading";
 import BgHeader from "../lib/bgHeader";
 import axios from "axios";
@@ -165,7 +165,7 @@ export default {
     BgHeader,
     LoadSpinner
   },
-  name: "home",
+  name: "dashboard",
   created() {
     this.getProjects();
   },
