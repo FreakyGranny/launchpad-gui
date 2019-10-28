@@ -7,7 +7,8 @@
       <div
         class="md-layout-item md-xlarge-size-25 md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
       >
-        <md-list class="md-dense">
+        <load-spinner v-if="!showFilters"></load-spinner>
+        <md-list class="md-dense" v-if="showFilters">
           <md-subheader>КАТЕГОРИИ</md-subheader>
           <md-list-item
             class="list-offset"
@@ -107,7 +108,7 @@
             </md-empty-state>
             <md-button
               class="md-raised md-primary custom-button"
-              v-bind:disabled="isFinalPage"
+              v-bind:disabled="isFinalPage()"
               v-on:click="getProjects"
               v-if="projects.length != 0"
             >
@@ -171,8 +172,6 @@ import ProjectCard from "./ProjectCard.vue";
 import LoadSpinner from "../lib/loading";
 import axios from "axios";
 import { mapState } from "vuex";
-import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
-import { CATEGORY_REQUEST } from "../../store/actions/category";
 
 export default {
   components: {
@@ -181,25 +180,22 @@ export default {
   },
   name: "home",
   created() {
-    if (this.$store.getters.isAuthenticated) {
-      this.$store.dispatch(PROJECT_TYPE_REQUEST).then(() => {
-        this.$store.dispatch(CATEGORY_REQUEST).then(() => {
-          this.getProjects();
-        });
-      });
-    }
+    this.getProjects();
   },
   computed: mapState({
     projectTypes: state => state.projectType.ptItems,
-    categories: state => state.category.cItems,
+    categories: state => state.category.cItems
+  }),
+  methods: {
+    showFilters() {
+      return this.categories.lenght != 0 && this.projectTypes.length != 0;
+    },
     isFinalPage() {
       if (typeof this.projects === "undefined") {
         return false;
       }
       return this.totalProjects == this.projects.length;
-    }
-  }),
-  methods: {
+    },
     buildFilterLink(typeId, categoryId, openFilter) {
       let filterUrl = "/explore";
       let params = {};
@@ -271,18 +267,6 @@ export default {
         .catch(resp => {
           this.error = resp.data;
           this.loading = false;
-        });
-    },
-    getProjectTypes() {
-      this.loadingTypes = true;
-      axios({ url: "/project_type" })
-        .then(resp => {
-          this.projectTypes = resp.data;
-          this.loadingTypes = false;
-        })
-        .catch(resp => {
-          this.error = resp.data;
-          this.loadingTypes = false;
         });
     },
     resetState() {

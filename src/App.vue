@@ -9,12 +9,15 @@
           <span class="nav-link">Как это работает?</span>
         </router-link>
       </div>
-      <div class=" md-toolbar-section-end" v-if="profile.username">
-        <router-link to="/">
+      <div class=" md-toolbar-section-end">
+        <router-link to="/" v-if="profile.username">
           <span class="nav-link">Новый проект</span>
         </router-link>
         <div class="profile">
-          <router-link to="/account">
+          <router-link to="/login" v-if="!profile.username">
+            <span class="nav-link">Войти</span>
+          </router-link>
+          <router-link to="/account" v-if="profile.username">
             <md-avatar>
               <img v-bind:src="profile.avatar" alt="Avatar" />
               <md-tooltip md-direction="bottom">Профиль</md-tooltip>
@@ -25,7 +28,7 @@
     </md-toolbar>
     <md-content>
       <div class="main-container">
-        <transition name="fade">
+        <transition>
           <router-view />
         </transition>
       </div>
@@ -36,6 +39,8 @@
 <script>
 import { mapState } from "vuex";
 import { USER_REQUEST } from "./store/actions/user";
+import { PROJECT_TYPE_REQUEST } from "./store/actions/projectType";
+import { CATEGORY_REQUEST } from "./store/actions/category";
 
 export default {
   components: {},
@@ -44,6 +49,8 @@ export default {
   created: function() {
     if (this.$store.getters.isAuthenticated) {
       this.$store.dispatch(USER_REQUEST);
+      this.$store.dispatch(PROJECT_TYPE_REQUEST);
+      this.$store.dispatch(CATEGORY_REQUEST);
     }
   }
 };
