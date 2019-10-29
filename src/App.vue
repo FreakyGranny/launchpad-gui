@@ -19,7 +19,11 @@
           </router-link>
           <router-link to="/account" v-if="profile.username">
             <md-avatar>
-              <img v-bind:src="profile.avatar" alt="Avatar" />
+              <img
+                v-bind:src="profile.avatar"
+                onerror="this.onerror=null;this.src='/images/avatar.jpeg';"
+                alt="Avatar"
+              />
               <md-tooltip md-direction="bottom">Профиль</md-tooltip>
             </md-avatar>
           </router-link>
