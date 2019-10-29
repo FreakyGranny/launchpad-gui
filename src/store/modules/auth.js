@@ -16,8 +16,8 @@ const state = {
 };
 
 const getters = {
-  isAuthenticated: state => !!state.token,
-  authStatus: state => state.status
+  IS_AUTHORIZED: state => !!state.token,
+  STORAGE_STATUS: state => state.status
 };
 
 const actions = {

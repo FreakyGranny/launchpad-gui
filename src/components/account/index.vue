@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="headline">
-      <h1>Your doge profile</h1>
+      <h1>Your profile</h1>
     </div>
-    <p v-if="profile.username">
-      <strong>Name:</strong> {{ profile.username }} {{ profile.avatar }}
+    <p v-if="IS_PROFILE_LOADED">
+      <strong>Name:</strong> {{ PROFILE.first_name }} {{ PROFILE.last_name }}
     </p>
   </div>
 </template>
@@ -22,10 +22,12 @@
 </style>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "account",
-  computed: mapState({ profile: state => state.user.profile })
+  computed: {
+    ...mapGetters(["IS_PROFILE_LOADED", "PROFILE"])
+  }
 };
 </script>

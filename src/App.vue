@@ -10,17 +10,17 @@
         </router-link>
       </div>
       <div class=" md-toolbar-section-end">
-        <router-link to="/" v-if="profile.username">
+        <router-link to="/" v-if="IS_PROFILE_LOADED">
           <span class="nav-link">Новый проект</span>
         </router-link>
         <div class="profile">
-          <router-link to="/login" v-if="!profile.username">
+          <router-link to="/login" v-if="!IS_PROFILE_LOADED">
             <span class="nav-link">Войти</span>
           </router-link>
-          <router-link to="/account" v-if="profile.username">
+          <router-link to="/account" v-if="IS_PROFILE_LOADED">
             <md-avatar>
               <img
-                v-bind:src="profile.avatar"
+                v-bind:src="PROFILE.avatar"
                 onerror="this.onerror=null;this.src='/images/avatar.jpeg';"
                 alt="Avatar"
               />
@@ -41,20 +41,18 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { USER_REQUEST } from "./store/actions/user";
-import { PROJECT_TYPE_REQUEST } from "./store/actions/projectType";
-import { CATEGORY_REQUEST } from "./store/actions/category";
 
 export default {
   components: {},
   name: "app",
-  computed: mapState({ profile: state => state.user.profile }),
-  created: function() {
-    if (this.$store.getters.isAuthenticated) {
-      this.$store.dispatch(USER_REQUEST);
-      this.$store.dispatch(PROJECT_TYPE_REQUEST);
-      this.$store.dispatch(CATEGORY_REQUEST);
+  computed: {
+    ...mapGetters(["IS_AUTHORIZED", "IS_PROFILE_LOADED", "PROFILE"])
+  },
+  created: async function() {
+    if (this.IS_AUTHORIZED) {
+      await this.$store.dispatch(USER_REQUEST);
     }
   }
 };

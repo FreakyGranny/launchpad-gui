@@ -1,5 +1,5 @@
 <template>
-  <md-icon>
+  <md-icon v-if="IS_PROJECT_TYPE_LOADED">
     {{ getIcon }}
     <md-tooltip md-direction="top">{{ type.name }}</md-tooltip>
   </md-icon>
@@ -18,6 +18,7 @@
 </style>
 
 <script>
+import { mapGetters } from "vuex";
 import {
   TYPE_CAMPAIGN,
   TYPE_CAMPAIGN_FAIR,
@@ -28,6 +29,10 @@ import {
 export default {
   name: "TypeIcon",
   computed: {
+    ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),
+    type() {
+      return this.PROJECT_TYPE[this.typeId];
+    },
     iconMap() {
       let map = {};
       (map[TYPE_CAMPAIGN] = "donut_large"),
@@ -46,6 +51,6 @@ export default {
   data() {
     return {};
   },
-  props: { type: Object }
+  props: { typeId: Number }
 };
 </script>

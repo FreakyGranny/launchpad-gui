@@ -1,10 +1,10 @@
 <template>
   <div
     class="header"
-    v-if="categories"
-    v-bind:style="{ 'background-image': 'url(' + getImageUrl() + ')' }"
+    v-if="IS_CATEGORY_LOADED"
+    v-bind:style="{ 'background-image': 'url(' + imageUrl + ')' }"
   >
-    <span class="white-text">{{ getText() }}</span>
+    <span class="white-text">{{ text }}</span>
   </div>
 </template>
 
@@ -25,30 +25,25 @@
 </style>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "BgHeader",
-  computed: mapState({ categories: state => state.category.cItems }),
-  methods: {
+  computed: {
+    ...mapGetters(["IS_CATEGORY_LOADED", "CATEGORY"]),
     curCategory() {
-      try {
-        return this.categories[this.categoryId];
-      } catch {
-        window.console.log("category not loaded");
-      }
-      return null;
+      return this.CATEGORY[this.categoryId];
     },
-    getText() {
+    text() {
       try {
-        return this.curCategory().name;
+        return this.curCategory.name;
       } catch {
         return "Все проекты";
       }
     },
-    getImageUrl() {
+    imageUrl() {
       try {
-        return this.picMap[this.curCategory().alias];
+        return this.picMap[this.curCategory.alias];
       } catch {
         return "/images/campaign.jpg";
       }
