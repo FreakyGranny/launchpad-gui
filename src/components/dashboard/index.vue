@@ -1,12 +1,17 @@
 <template>
   <div>
-    <bg-header :categoryId="categoryFilter" />
+    <bg-header v-if="IS_CATEGORY_LOADED" :categoryId="categoryFilter" />
     <div class="md-layout explore-grid">
       <div
         class="md-layout-item md-xlarge-size-25 md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
       >
-        <load-spinner v-if="!showFilters"></load-spinner>
-        <md-list class="md-dense" v-if="showFilters">
+        <load-spinner
+          v-if="!IS_CATEGORY_LOADED || !IS_PROJECT_TYPE_LOADED"
+        ></load-spinner>
+        <md-list
+          class="md-dense"
+          v-if="IS_CATEGORY_LOADED && IS_PROJECT_TYPE_LOADED"
+        >
           <md-subheader>КАТЕГОРИИ</md-subheader>
           <md-list-item
             class="list-offset"
@@ -25,7 +30,7 @@
           <md-list-item
             class="list-offset"
             :md-ripple="false"
-            v-for="(category, index) in categories"
+            v-for="(category, index) in CATEGORY"
             :key="'category_' + index"
             :to="buildFilterLink(typeFilter, category.id, onlyOpen)"
           >
@@ -58,7 +63,7 @@
           <md-list-item
             class="list-offset"
             :md-ripple="false"
-            v-for="(type, index) in projectTypes"
+            v-for="(type, index) in PROJECT_TYPE"
             :key="'type_' + index"
             :to="buildFilterLink(type.id, categoryFilter, onlyOpen)"
           >
@@ -90,8 +95,7 @@
             v-for="(project, index) in projects"
             :key="index"
             :project="project"
-            :type="projectTypes[project.project_type]"
-            :category="categories[project.category[0]].name"
+            :category="CATEGORY[project.category[0]]"
           />
         </div>
         <div class="md-layout md-alignment-center">
@@ -106,7 +110,7 @@
             </md-empty-state>
             <md-button
               class="md-raised md-primary custom-button"
-              v-bind:disabled="isFinalPage()"
+              v-bind:disabled="isFinalPage"
               v-on:click="getProjects"
               v-if="projects.length != 0"
             >
@@ -128,7 +132,8 @@
   max-width: 1200px;
 }
 .explore-filter {
-  padding-right: 50px;
+  padding-right: 10px;
+  padding-right: 40px;
 }
 .spacing {
   margin-top: 100px;
@@ -157,7 +162,9 @@ import ProjectCard from "../lib/ProjectCard";
 import LoadSpinner from "../lib/loading";
 import BgHeader from "../lib/bgHeader";
 import axios from "axios";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
+import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
+import { CATEGORY_REQUEST } from "../../store/actions/category";
 
 export default {
   components: {
@@ -166,23 +173,27 @@ export default {
     LoadSpinner
   },
   name: "dashboard",
-  created() {
+  created: async function() {
+    await this.$store.dispatch(PROJECT_TYPE_REQUEST);
+    await this.$store.dispatch(CATEGORY_REQUEST);
     this.getProjects();
   },
-  computed: mapState({
-    projectTypes: state => state.projectType.ptItems,
-    categories: state => state.category.cItems
-  }),
-  methods: {
-    showFilters() {
-      return this.categories.lenght != 0 && this.projectTypes.length != 0;
-    },
+  computed: {
+    ...mapGetters([
+      "STORAGE_STATUS",
+      "IS_CATEGORY_LOADED",
+      "IS_PROJECT_TYPE_LOADED",
+      "CATEGORY",
+      "PROJECT_TYPE"
+    ]),
     isFinalPage() {
       if (typeof this.projects === "undefined") {
         return false;
       }
       return this.totalProjects == this.projects.length;
-    },
+    }
+  },
+  methods: {
     buildFilterLink(typeId, categoryId, openFilter) {
       let filterUrl = "/explore";
       let params = {};

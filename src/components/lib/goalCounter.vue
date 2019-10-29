@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="IS_PROJECT_TYPE_LOADED">
     <span class="goal-count-text">{{ getCount }}</span>
     <span class="goal-descr-text">{{ getText }}</span>
   </div>
@@ -17,9 +17,15 @@
 </style>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "GoalCounter",
   computed: {
+    ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),
+    type() {
+      return this.PROJECT_TYPE[this.typeId];
+    },
     getCount() {
       if (this.type.goal_by_people) {
         return this.count;
@@ -55,7 +61,7 @@ export default {
   },
   props: {
     count: Number,
-    type: Object
+    typeId: Number
   }
 };
 </script>

@@ -7,12 +7,12 @@ import { AUTH_LOGOUT } from "../actions/auth";
 const state = { status: "", profile: {} };
 
 const getters = {
-  getProfile: state => state.profile,
-  isProfileLoaded: state => !!state.profile.username
+  PROFILE: state => state.profile,
+  IS_PROFILE_LOADED: state => !!state.profile.username
 };
 
 const actions = {
-  [USER_REQUEST]: ({ commit, dispatch }) => {
+  [USER_REQUEST]: async ({ commit, dispatch }) => {
     commit(USER_REQUEST);
     axios({ url: "/user" })
       .then(resp => {

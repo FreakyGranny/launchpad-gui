@@ -17,7 +17,7 @@
                 </b>
               </div>
               <div class="md-layout-item md-size-10 status-area right-text">
-                <type-icon :type="type"></type-icon>
+                <type-icon :typeId="project.project_type"></type-icon>
               </div>
               <div class="md-layout-item md-size-100">
                 <md-divider></md-divider>
@@ -38,10 +38,13 @@
                     : project.subtitle
                 }}</span>
               </div>
-              <div class="md-layout-item md-size-100 category-area">
+              <div
+                v-if="IS_CATEGORY_LOADED"
+                class="md-layout-item md-size-100 category-area"
+              >
                 <b>
                   <span class="category-text">{{
-                    category.toUpperCase()
+                    category.name.toUpperCase()
                   }}</span>
                 </b>
               </div>
@@ -49,7 +52,7 @@
                 <div class="md-layout">
                   <div class="md-layout-item">
                     <goal-counter
-                      :type="type"
+                      :typeId="project.project_type"
                       :count="project.total"
                     ></goal-counter>
                   </div>
@@ -143,6 +146,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
@@ -161,6 +165,9 @@ export default {
       search_status: STATUS_SEARCH
     };
   },
+  computed: {
+    ...mapGetters(["IS_CATEGORY_LOADED"])
+  },
   methods: {
     onClickCard() {
       this.$router.push({ name: "Project", params: { id: this.project.id } });
@@ -169,8 +176,7 @@ export default {
   name: "ProjectCard",
   props: {
     project: Object,
-    type: Object,
-    category: String
+    category: Object
   }
 };
 </script>

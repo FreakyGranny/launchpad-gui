@@ -11,11 +11,12 @@ import { AUTH_LOGOUT } from "../actions/auth";
 const state = { status: "", ptItems: {} };
 
 const getters = {
-  getProjectTypes: state => state.ptItems
+  PROJECT_TYPE: state => state.ptItems,
+  IS_PROJECT_TYPE_LOADED: state => !!state.ptItems.loaded
 };
 
 const actions = {
-  [PROJECT_TYPE_REQUEST]: ({ commit, dispatch }) => {
+  [PROJECT_TYPE_REQUEST]: async ({ commit, dispatch }) => {
     commit(PROJECT_TYPE_REQUEST);
     axios({ url: "/project_type" })
       .then(resp => {
@@ -35,7 +36,7 @@ const mutations = {
   },
   [PROJECT_TYPE_SUCCESS]: (state, resp) => {
     state.status = "success";
-    let pt = {};
+    let pt = { loaded: true };
     for (let projectType of resp.data) {
       pt[projectType.id] = projectType;
     }

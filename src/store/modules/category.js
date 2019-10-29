@@ -11,11 +11,12 @@ import { AUTH_LOGOUT } from "../actions/auth";
 const state = { status: "", cItems: {} };
 
 const getters = {
-  getCategories: state => state.cItems
+  CATEGORY: state => state.cItems,
+  IS_CATEGORY_LOADED: state => !!state.cItems.loaded
 };
 
 const actions = {
-  [CATEGORY_REQUEST]: ({ commit, dispatch }) => {
+  [CATEGORY_REQUEST]: async ({ commit, dispatch }) => {
     commit(CATEGORY_REQUEST);
     axios({ url: "/category" })
       .then(resp => {
@@ -35,7 +36,7 @@ const mutations = {
   },
   [CATEGORY_SUCCESS]: (state, resp) => {
     state.status = "success";
-    let cat = {};
+    let cat = { loaded: true };
     for (let category of resp.data) {
       cat[category.id] = category;
     }
