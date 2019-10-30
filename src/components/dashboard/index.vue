@@ -163,8 +163,8 @@ import LoadSpinner from "../lib/loading";
 import BgHeader from "../lib/bgHeader";
 import axios from "axios";
 import { mapGetters } from "vuex";
-import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
-import { CATEGORY_REQUEST } from "../../store/actions/category";
+// import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
+// import { CATEGORY_REQUEST } from "../../store/actions/category";
 
 export default {
   components: {
@@ -174,8 +174,8 @@ export default {
   },
   name: "dashboard",
   created: async function() {
-    await this.$store.dispatch(PROJECT_TYPE_REQUEST);
-    await this.$store.dispatch(CATEGORY_REQUEST);
+    // await this.$store.dispatch(PROJECT_TYPE_REQUEST);
+    // await this.$store.dispatch(CATEGORY_REQUEST);
     this.getProjects();
   },
   computed: {

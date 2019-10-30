@@ -7,6 +7,8 @@ import {
   AUTH_LOGOUT
 } from "../actions/auth";
 import { USER_REQUEST } from "../actions/user";
+import { CATEGORY_REQUEST } from "../actions/category";
+import { PROJECT_TYPE_REQUEST } from "../actions/projectType";
 import axios from "axios";
 
 const state = {
@@ -37,6 +39,8 @@ const actions = {
             "Token " + resp.data.token;
           commit(AUTH_SUCCESS, resp);
           dispatch(USER_REQUEST);
+          dispatch(CATEGORY_REQUEST);
+          dispatch(PROJECT_TYPE_REQUEST);
           resolve(resp);
         })
         .catch(err => {
