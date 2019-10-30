@@ -22,7 +22,10 @@
               </b>
             </div>
             <div class="md-layout-item md-size-10">
-              <md-button class="md-icon-button md-primary moved-button">
+              <md-button
+                v-if="isOwner"
+                class="md-icon-button md-primary moved-button"
+              >
                 <md-icon>menu</md-icon>
               </md-button>
             </div>
@@ -54,22 +57,43 @@
                     </span>
                   </div>
                   <div class="md-layout-item">
-                    <span class="md-subheading"
-                      >{{ project.owner.profile.project_count }} проекта</span
-                    >
+                    <span class="md-subheading">{{
+                      project.owner.profile.project_count
+                    }}</span>
+                    <project-counter
+                      class="md-subheading"
+                      :count="project.owner.profile.project_count"
+                    />
                   </div>
                 </div>
               </div>
             </div>
             <div class="md-layout-item md-size-100 progress-area">
               <div
+                v-if="IS_PROJECT_TYPE_LOADED"
                 class="md-layout md-alignment-bottom-right progress-area-top"
               >
                 <div class="md-layout-item">
-                  <span class="md-headline">{{ project.total }} ₽ </span>
+                  <goal-counter
+                    class="md-headline"
+                    :typeId="project.project_type"
+                    :count="project.total"
+                    mode="units"
+                  />
+                  <goal-counter
+                    class="md-subheading"
+                    :typeId="project.project_type"
+                    :count="project.total"
+                  />
                 </div>
-                <div class="md-layout-item right-area">
-                  <span class="md-subheading">3 участника</span>
+                <div v-if="isMoneyProject" class="md-layout-item right-area">
+                  <span class="md-subheading">30</span>
+                  <goal-counter
+                    class="md-subheading"
+                    :typeId="project.project_type"
+                    count="30"
+                    mode="members"
+                  />
                 </div>
               </div>
               <md-progress-bar
@@ -78,10 +102,25 @@
                 v-bind:md-value="project.percent"
               ></md-progress-bar>
               <div class="md-layout progress-area-bottom">
-                <div class="md-layout-item">
+                <div v-if="IS_PROJECT_TYPE_LOADED" class="md-layout-item">
                   <span class="md-subheading">{{ project.percent }}% </span>
-                  <span class="md-subheading"
-                    >из {{ project.goal_amount }}₽</span
+                  <span class="md-subheading">из</span>
+                  <goal-counter
+                    v-if="isMoneyProject"
+                    class="md-subheading"
+                    :typeId="project.project_type"
+                    :count="project.goal_amount"
+                    mode="units"
+                  />
+                  <goal-counter
+                    v-if="!isMoneyProject"
+                    class="md-subheading"
+                    :typeId="project.project_type"
+                    :count="project.goal_people"
+                    mode="units"
+                  />
+                  <span v-if="!isMoneyProject" class="md-subheading"
+                    >людей</span
                   >
                 </div>
                 <div class="md-layout-item right-area">
@@ -258,24 +297,48 @@
   width: 50px;
   height: 50px;
 }
+.goal-text {
+  font-size: 24px;
+}
+.goal-descr-text {
+  font-size: 20px;
+}
 </style>
 
 <script>
+import { mapGetters } from "vuex";
 import axios from "axios";
 import LoadSpinner from "../lib/loading";
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
+import GoalCounter from "../lib/goalCounter";
+import ProjectCounter from "../lib/projectCounter";
 import { STATUS_SEARCH } from "../lib/const/status";
 
 export default {
   components: {
     LoadSpinner,
     Status,
+    GoalCounter,
+    ProjectCounter,
     DaysCounter
   },
   name: "project",
   created() {
     this.project = this.getProject();
+  },
+  computed: {
+    ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE", "PROFILE"]),
+    isMoneyProject() {
+      let type = this.PROJECT_TYPE[this.project.project_type];
+      if (type.goal_by_people) {
+        return false;
+      }
+      return true;
+    },
+    isOwner() {
+      return this.PROFILE.id == this.project.owner.id;
+    }
   },
   methods: {
     getProject() {

@@ -52,9 +52,16 @@
                 <div class="md-layout">
                   <div class="md-layout-item">
                     <goal-counter
+                      class="goal-count-text"
                       :typeId="project.project_type"
                       :count="project.total"
-                    ></goal-counter>
+                      mode="units"
+                    />
+                    <goal-counter
+                      class="goal-units-text"
+                      :typeId="project.project_type"
+                      :count="project.total"
+                    />
                   </div>
                   <div class="md-layout-item right-text">
                     <span class="md-body-1">{{ project.percent }}%</span>
@@ -143,6 +150,14 @@
 }
 .days-area {
   padding-top: 20px;
+}
+.goal-count-text {
+  font-size: 14px;
+  font-weight: 800;
+}
+.goal-descr-text {
+  padding-left: 5px;
+  font-size: 12px;
 }
 </style>
 <script>

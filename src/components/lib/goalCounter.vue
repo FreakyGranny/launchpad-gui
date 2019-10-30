@@ -1,20 +1,10 @@
 <template>
-  <div v-if="IS_PROJECT_TYPE_LOADED">
-    <span class="goal-count-text">{{ getCount }}</span>
-    <span class="goal-descr-text">{{ getText }}</span>
-  </div>
+  <span v-if="IS_PROJECT_TYPE_LOADED">
+    {{ getText }}
+  </span>
 </template>
 
-<style scoped>
-.goal-count-text {
-  font-size: 14px;
-  font-weight: 800;
-}
-.goal-descr-text {
-  padding-left: 5px;
-  font-size: 12px;
-}
-</style>
+<style></style>
 
 <script>
 import { mapGetters } from "vuex";
@@ -26,16 +16,23 @@ export default {
     type() {
       return this.PROJECT_TYPE[this.typeId];
     },
-    getCount() {
-      if (this.type.goal_by_people) {
-        return this.count;
-      }
-      if (this.type.goal_by_amount) {
-        return this.count + "₽";
-      }
-      return this.count;
-    },
     getText() {
+      if (this.mode == "members") {
+        if (this.type.goal_by_amount) {
+          return this.getMembers();
+        }
+        if (this.type.goal_by_people) {
+          return null;
+        }
+      }
+      if (this.mode == "units") {
+        if (this.type.goal_by_people) {
+          return this.count;
+        }
+        if (this.type.goal_by_amount) {
+          return this.count + "₽";
+        }
+      }
       if (this.type.goal_by_people) {
         return this.getMembers();
       }
@@ -61,7 +58,8 @@ export default {
   },
   props: {
     count: Number,
-    typeId: Number
+    typeId: Number,
+    mode: String
   }
 };
 </script>
