@@ -157,8 +157,7 @@
             </span>
           </template>
           <md-tab id="tab-desc" md-label="Описание">
-            <md-content class="tab-content">
-              {{ project.description }}
+            <md-content v-html="project.description" class="tab-content">
             </md-content>
           </md-tab>
 
