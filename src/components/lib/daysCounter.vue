@@ -1,10 +1,20 @@
 <template>
   <div>
     <md-icon v-if="withIcon">{{ ended ? "timer_off" : "timer" }}</md-icon>
-    <span class="counter-style" v-if="daysLeft > 0 && !ended">{{
-      daysLeft
-    }}</span>
-    <span class="text-style" v-if="!ended">{{ getText }}</span>
+    <span
+      v-bind:class="{ 'days-text-centred': withIcon }"
+      class="counter-style"
+      v-if="daysLeft > 0 && !ended"
+    >
+      {{ daysLeft }}
+    </span>
+    <span
+      v-bind:class="{ 'days-text-centred': withIcon }"
+      class="text-style"
+      v-if="!ended"
+    >
+      {{ getText }}
+    </span>
   </div>
 </template>
 
@@ -22,6 +32,11 @@
 }
 .text-style {
   margin-left: 4px;
+  vertical-align: middle;
+}
+.days-text-centred {
+  margin-top: 2px;
+  display: inline-block;
   vertical-align: middle;
 }
 </style>

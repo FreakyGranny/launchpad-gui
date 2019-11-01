@@ -10,10 +10,6 @@
 
 .md-icon {
   color: md-get-palette-color(deeppurple, 600) !important;
-  width: 20px;
-  min-width: 20px;
-  height: 20px;
-  font-size: 20px !important;
 }
 </style>
 
