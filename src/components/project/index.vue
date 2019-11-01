@@ -13,7 +13,7 @@
       <div class="project-description md-layout-item">
         <md-content class="side-bar">
           <div class="md-layout md-alignment-top">
-            <div class="md-layout-item md-size-90 status-area">
+            <div class="md-layout-item md-size-95 status-area">
               <b>
                 <status
                   class="status-text"
@@ -21,13 +21,31 @@
                 ></status>
               </b>
             </div>
-            <div class="md-layout-item md-size-10">
-              <md-button
-                v-if="isOwner"
-                class="md-icon-button md-primary moved-button"
-              >
-                <md-icon>menu</md-icon>
-              </md-button>
+            <div class="md-layout-item md-size-5 md-alignment-top-right">
+              <type-icon :typeId="project.project_type"></type-icon>
+              <md-menu v-if="isOwner" md-size="auto">
+                <md-button
+                  md-menu-trigger
+                  class="md-icon-button md-primary moved-button"
+                >
+                  <md-icon>menu</md-icon>
+                </md-button>
+
+                <md-menu-content>
+                  <md-menu-item>
+                    <md-icon>publish</md-icon>
+                    <span>Опубликовать</span>
+                  </md-menu-item>
+                  <md-menu-item>
+                    <md-icon>edit</md-icon>
+                    <span>Редактировать</span>
+                  </md-menu-item>
+                  <md-menu-item>
+                    <md-icon>delete</md-icon>
+                    <span>Удалить</span>
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
             </div>
             <div class="md-layout-item md-size-100 title-area">
               <span class="title-text">{{ project.title }}</span>
@@ -87,11 +105,11 @@
                   />
                 </div>
                 <div v-if="isMoneyProject" class="md-layout-item right-area">
-                  <span class="md-subheading">30</span>
+                  <span class="md-subheading">{{ donations.length }}</span>
                   <goal-counter
                     class="md-subheading"
                     :typeId="project.project_type"
-                    count="30"
+                    :count="donations.length"
                     mode="members"
                   />
                 </div>
@@ -134,9 +152,10 @@
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <md-button class="md-raised md-primary custom-button"
-                >Поддержать</md-button
-              >
+              <button-set
+                :status="project.status"
+                :typeId="project.project_type"
+              />
             </div>
           </div>
         </md-content>
@@ -145,16 +164,10 @@
     <div class="md-layout-item md-size-100 separator"></div>
     <div class="md-layout project-grid" v-if="!loading">
       <div class="md-layout-item project-tabs">
-        <md-tabs>
+        <md-tabs md-alignment="fixed">
           <template slot="md-tab" slot-scope="{ tab }">
-            <span
-              >{{ tab.label }}
-              <md-badge
-                class="badge"
-                v-if="tab.data.badge"
-                v-bind:md-content="tab.data.badge"
-              />
-            </span>
+            <span class="md-subheading tab-head">{{ tab.label }} </span>
+            <md-chip v-if="tab.data.badge">{{ tab.data.badge }} </md-chip>
           </template>
           <md-tab id="tab-desc" md-label="Описание">
             <md-content v-html="project.description" class="tab-content">
@@ -163,17 +176,35 @@
 
           <md-tab
             id="tab-member"
-            md-label="Участники |_|"
-            :md-template-data="{ badge: 1 }"
+            md-label="Участники"
+            :md-template-data="{ badge: donations.length }"
           >
             <md-content class="tab-content">
-              member list
+              <!-- <md-list>
+                <md-list-item
+                  :md-ripple="false"
+                  v-for="(donat, index) in donations"
+                  :key="'donation_' + index"
+                >
+                  <md-avatar>
+                    <img v-bind:src="donat.user.avatar" alt="Avatar" />
+                  </md-avatar>
+                  <span>{{
+                    donat.user.first_name + " " + donat.user.last_name
+                  }}</span>
+                  <md-icon>check_circle</md-icon>
+                </md-list-item>
+              </md-list> -->
+              <donate-list
+                :donations="donations"
+                :typeId="project.project_type"
+              />
             </md-content>
           </md-tab>
 
           <md-tab
             id="tab-comments"
-            md-label="Комментарии |_|"
+            md-label="Комментарии"
             :md-template-data="{ badge: '0' }"
             md-disabled
           >
@@ -215,10 +246,10 @@
 }
 .project-tabs {
   margin: auto;
-  max-width: 900px;
+  max-width: 800px;
 }
 .tab-content {
-  min-height: 200px;
+  min-height: 400px;
 }
 .blur {
   position: absolute;
@@ -302,6 +333,16 @@
 .goal-descr-text {
   font-size: 20px;
 }
+.md-chip {
+  margin-left: 10px;
+  height: 20px;
+  line-height: 20px;
+}
+.tab-head {
+  margin-top: 3px;
+  display: inline-block;
+  vertical-align: middle;
+}
 </style>
 
 <script>
@@ -309,9 +350,12 @@ import { mapGetters } from "vuex";
 import axios from "axios";
 import LoadSpinner from "../lib/loading";
 import Status from "../lib/status";
+import TypeIcon from "../lib/typeIcon";
 import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
 import ProjectCounter from "../lib/projectCounter";
+import ButtonSet from "./ButtonSet";
+import DonateList from "./DonateList";
 import { STATUS_SEARCH } from "../lib/const/status";
 
 export default {
@@ -319,45 +363,68 @@ export default {
     LoadSpinner,
     Status,
     GoalCounter,
+    TypeIcon,
     ProjectCounter,
+    ButtonSet,
+    DonateList,
     DaysCounter
   },
   name: "project",
   created() {
     this.project = this.getProject();
+    this.donations = this.getDonations();
   },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE", "PROFILE"]),
+    type() {
+      return this.PROJECT_TYPE[this.project.project_type];
+    },
     isMoneyProject() {
-      let type = this.PROJECT_TYPE[this.project.project_type];
-      if (type.goal_by_people) {
+      if (this.type.goal_by_people) {
         return false;
       }
       return true;
     },
     isOwner() {
       return this.PROFILE.id == this.project.owner.id;
+    },
+    loading() {
+      return this.loadingProject || this.loadingDonation;
     }
   },
   methods: {
     getProject() {
-      this.loading = true;
+      this.loadingProject = true;
       axios({ url: "/project/" + this.$route.params.id })
         .then(resp => {
           this.project = resp.data;
-          this.loading = false;
+          this.loadingProject = false;
         })
         .catch(resp => {
           this.error = resp.data;
-          this.loading = false;
+          this.loadingProject = false;
+        });
+    },
+    getDonations() {
+      this.loadingDonation = true;
+      axios({ url: "/donation?project_id=" + this.$route.params.id })
+        .then(resp => {
+          this.donations = resp.data;
+          this.loadingDonation = false;
+        })
+        .catch(resp => {
+          this.error = resp.data;
+          this.loadingDonation = false;
         });
     }
   },
   data() {
     return {
-      loading: true,
+      loadingProject: true,
+      loadingDonation: true,
       error: null,
       project: null,
+      donations: [],
       count: 1,
       search_status: STATUS_SEARCH
     };

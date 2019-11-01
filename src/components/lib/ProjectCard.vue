@@ -75,7 +75,7 @@
               </div>
               <div class="md-layout-item md-size-100 days-area">
                 <days-counter
-                  class="md-body-1"
+                  class="md-body-1 days-text-centred"
                   :endDate="project.release_date"
                   :withIcon="true"
                   :ended="project.status != 'search'"
@@ -158,6 +158,12 @@
 .goal-descr-text {
   padding-left: 5px;
   font-size: 12px;
+}
+.md-icon {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  font-size: 20px !important;
 }
 </style>
 <script>
