@@ -8,21 +8,7 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-@import "~vue-material/dist/theme/engine";
-.white-text {
-  font-size: 42px;
-  color: md-get-palette-color(white, 400);
-}
-.header {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 150px;
-  text-align: center;
-  line-height: 150px;
-}
-</style>
+<style></style>
 
 <script>
 import { mapGetters } from "vuex";

@@ -12,7 +12,7 @@ const state = { status: "", cItems: {} };
 
 const getters = {
   CATEGORY: state => state.cItems,
-  IS_CATEGORY_LOADED: state => !!state.cItems.loaded
+  IS_CATEGORY_LOADED: state => state.categoriesLoaded
 };
 
 const actions = {
@@ -36,10 +36,11 @@ const mutations = {
   },
   [CATEGORY_SUCCESS]: (state, resp) => {
     state.status = "success";
-    let cat = { loaded: true };
+    let cat = {};
     for (let category of resp.data) {
       cat[category.id] = category;
     }
+    Vue.set(state, "categoriesLoaded", true);
     Vue.set(state, "cItems", cat);
   },
   [CATEGORY_ERROR]: state => {

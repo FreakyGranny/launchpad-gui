@@ -12,7 +12,7 @@ const state = { status: "", ptItems: {} };
 
 const getters = {
   PROJECT_TYPE: state => state.ptItems,
-  IS_PROJECT_TYPE_LOADED: state => !!state.ptItems.loaded
+  IS_PROJECT_TYPE_LOADED: state => state.ptLoaded
 };
 
 const actions = {
@@ -36,10 +36,11 @@ const mutations = {
   },
   [PROJECT_TYPE_SUCCESS]: (state, resp) => {
     state.status = "success";
-    let pt = { loaded: true };
+    let pt = {};
     for (let projectType of resp.data) {
       pt[projectType.id] = projectType;
     }
+    Vue.set(state, "ptLoaded", true);
     Vue.set(state, "ptItems", pt);
   },
   [PROJECT_TYPE_ERROR]: state => {

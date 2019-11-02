@@ -5,6 +5,7 @@ import Project from "../components/project";
 import Dashboard from "../components/dashboard";
 import Account from "../components/account";
 import Login from "../components/login";
+import Create from "../components/create";
 import store from "../store";
 
 Vue.use(Router);
@@ -47,7 +48,14 @@ export default new Router({
     {
       path: "/project/:id",
       name: "Project",
-      component: Project
+      component: Project,
+      beforeEnter: ifAuthenticated
+    },
+    {
+      path: "/create",
+      name: "Create",
+      component: Create,
+      beforeEnter: ifAuthenticated
     },
     {
       path: "/explore",

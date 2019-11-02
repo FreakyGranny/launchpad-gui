@@ -88,9 +88,9 @@
         </md-list>
       </div>
       <div
-        class="md-layout-item md-xlarge-size-75 md-large-size-75 md-medium-size-70 md-small-size-100 md-xsmall-hide"
+        class="md-layout-item md-xlarge-size-75 md-large-size-75 md-medium-size-70 md-small-size-100"
       >
-        <div class="md-layout md-alignment-center-left">
+        <div :class="cardsAlignment" class="md-layout">
           <project-card
             v-for="(project, index) in projects"
             :key="index"
@@ -163,8 +163,6 @@ import LoadSpinner from "../lib/loading";
 import BgHeader from "../lib/bgHeader";
 import axios from "axios";
 import { mapGetters } from "vuex";
-// import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
-// import { CATEGORY_REQUEST } from "../../store/actions/category";
 
 export default {
   components: {
@@ -174,8 +172,6 @@ export default {
   },
   name: "dashboard",
   created: async function() {
-    // await this.$store.dispatch(PROJECT_TYPE_REQUEST);
-    // await this.$store.dispatch(CATEGORY_REQUEST);
     this.getProjects();
   },
   computed: {
@@ -191,6 +187,12 @@ export default {
         return false;
       }
       return this.totalProjects == this.projects.length;
+    },
+    cardsAlignment() {
+      return {
+        "md-alignment-top-left": this.$mq === "lg",
+        "md-alignment-top-center": this.$mq !== "lg"
+      };
     }
   },
   methods: {

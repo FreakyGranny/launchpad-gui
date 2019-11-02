@@ -5,36 +5,32 @@
       @submit.prevent="login"
     >
       <md-card
-        class="md-layout-item md-size-40 md-small-size-80 md-xsmall-size-100"
+        class="md-layout-item md-size-40 md-xlarge-30 md-large-40 md-small-size-60 md-xsmall-size-100"
       >
-        <md-card-header>
-          <div class="md-title">Sign in</div>
-        </md-card-header>
         <md-card-content>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-xsmall-size-100">
+          <div class="md-layout md-alignment-center-center top-spacing">
+            <div class="md-layout-item md-size-15">
+              <md-icon class="md-promary md-size-2x">person</md-icon>
+            </div>
+            <div class="md-layout-item md-size-85">
               <md-field>
-                <label>Username</label>
-                <md-input v-model="username" type="text" placeholder="Snoopy" />
+                <label>Имя пользователя</label>
+                <md-input v-model="username" type="text" />
               </md-field>
             </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-xsmall-size-100">
+            <div class="md-layout-item md-size-15">
+              <md-icon class="md-promary md-size-2x">vpn_key</md-icon>
+            </div>
+            <div class="md-layout-item md-size-85">
               <md-field>
-                <label>Password</label>
-                <md-input
-                  required
-                  v-model="password"
-                  type="password"
-                  placeholder="Password"
-                />
+                <label>Пароль</label>
+                <md-input required v-model="password" type="password" />
               </md-field>
             </div>
           </div>
           <md-card-actions>
             <md-button type="submit" class="md-raised md-primary"
-              >Login</md-button
+              >Войти</md-button
             >
           </md-card-actions>
         </md-card-content>
@@ -50,8 +46,8 @@ export default {
   name: "login",
   data() {
     return {
-      username: "root",
-      password: "qweqwe"
+      username: "",
+      password: ""
     };
   },
   methods: {
@@ -66,7 +62,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vue-material/dist/theme/engine";
+
+.md-icon {
+  color: md-get-palette-color(deeppurple, 600) !important;
+}
+.md-card {
+  border-radius: 0px;
+}
+.top-spacing {
+  padding-top: 30px;
+}
 .fill-height {
-  height: 85vh;
+  height: calc(100vh - 47px);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  line-height: calc(100vh - 47px);
+  background-image: url("/images/login_background.jpg");
 }
 </style>
