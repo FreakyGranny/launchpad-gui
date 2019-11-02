@@ -22,8 +22,31 @@
               </b>
             </div>
             <div class="md-layout-item md-size-5 md-alignment-top-right">
-              <type-icon :typeId="project.project_type"></type-icon>
-              <md-menu v-if="isOwner" md-size="auto">
+              <md-speed-dial
+                v-if="isOwner"
+                class="md-top-right"
+                md-direction="bottom"
+              >
+                <md-speed-dial-target class="md-primary">
+                  <md-icon>menu</md-icon>
+                </md-speed-dial-target>
+
+                <md-speed-dial-content>
+                  <md-button class="md-icon-button">
+                    <md-icon>publish</md-icon>
+                  </md-button>
+
+                  <md-button class="md-icon-button">
+                    <md-icon>edit</md-icon>
+                  </md-button>
+
+                  <md-button class="md-icon-button">
+                    <md-icon>delete</md-icon>
+                  </md-button>
+                </md-speed-dial-content>
+              </md-speed-dial>
+
+              <!-- <md-menu v-if="isOwner" md-size="auto">
                 <md-button
                   md-menu-trigger
                   class="md-icon-button md-primary moved-button"
@@ -45,7 +68,7 @@
                     <span>Удалить</span>
                   </md-menu-item>
                 </md-menu-content>
-              </md-menu>
+              </md-menu> -->
             </div>
             <div class="md-layout-item md-size-100 title-area">
               <span class="title-text">{{ project.title }}</span>
@@ -180,21 +203,6 @@
             :md-template-data="{ badge: donations.length }"
           >
             <md-content class="tab-content">
-              <!-- <md-list>
-                <md-list-item
-                  :md-ripple="false"
-                  v-for="(donat, index) in donations"
-                  :key="'donation_' + index"
-                >
-                  <md-avatar>
-                    <img v-bind:src="donat.user.avatar" alt="Avatar" />
-                  </md-avatar>
-                  <span>{{
-                    donat.user.first_name + " " + donat.user.last_name
-                  }}</span>
-                  <md-icon>check_circle</md-icon>
-                </md-list-item>
-              </md-list> -->
               <donate-list
                 :donations="donations"
                 :typeId="project.project_type"
@@ -343,6 +351,10 @@
   display: inline-block;
   vertical-align: middle;
 }
+.md-speed-dial {
+  position: absolute;
+  transform: translate(10%, 30%);
+}
 </style>
 
 <script>
@@ -350,7 +362,6 @@ import { mapGetters } from "vuex";
 import axios from "axios";
 import LoadSpinner from "../lib/loading";
 import Status from "../lib/status";
-import TypeIcon from "../lib/typeIcon";
 import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
 import ProjectCounter from "../lib/projectCounter";
@@ -363,7 +374,6 @@ export default {
     LoadSpinner,
     Status,
     GoalCounter,
-    TypeIcon,
     ProjectCounter,
     ButtonSet,
     DonateList,

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="headline">
-      <h1>Your profile</h1>
+    <div class="header header-account">
+      <span class="white-text">Профиль</span>
     </div>
     <p v-if="IS_PROFILE_LOADED">
       <strong>Name:</strong> {{ PROFILE.first_name }} {{ PROFILE.last_name }}
@@ -9,15 +9,9 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-.headline {
-  margin-top: 1em;
-  display: flex;
-  img {
-    height: 80px;
-    width: 80px;
-    border-radius: 50%;
-  }
+<style scoped>
+.header-account {
+  background-image: url("/images/keys.jpg");
 }
 </style>
 
