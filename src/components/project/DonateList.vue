@@ -53,12 +53,10 @@ export default {
   },
   methods: {
     paymentIcon(donation) {
-      return donation.is_paid
-        ? "radio_button_unchecked"
-        : "check_circle_outline";
+      return donation.paid ? "check_circle_outline" : "radio_button_unchecked";
     },
     paymentTooltip(donation) {
-      return donation.is_paid ? "Ожидается перевод" : "Перевод получен";
+      return donation.paid ? "Перевод получен" : "Ожидается перевод";
     }
   },
   data() {

@@ -13,62 +13,13 @@
       <div class="project-description md-layout-item">
         <md-content class="side-bar">
           <div class="md-layout md-alignment-top">
-            <div class="md-layout-item md-size-95 status-area">
+            <div class="md-layout-item md-size-100 status-area">
               <b>
                 <status
                   class="status-text"
                   :sourceStatus="project.status"
                 ></status>
               </b>
-            </div>
-            <div class="md-layout-item md-size-5 md-alignment-top-right">
-              <md-speed-dial
-                v-if="isOwner"
-                class="md-top-right"
-                md-direction="bottom"
-              >
-                <md-speed-dial-target class="md-primary">
-                  <md-icon>menu</md-icon>
-                </md-speed-dial-target>
-
-                <md-speed-dial-content>
-                  <md-button class="md-icon-button">
-                    <md-icon>publish</md-icon>
-                  </md-button>
-
-                  <md-button class="md-icon-button">
-                    <md-icon>edit</md-icon>
-                  </md-button>
-
-                  <md-button class="md-icon-button">
-                    <md-icon>delete</md-icon>
-                  </md-button>
-                </md-speed-dial-content>
-              </md-speed-dial>
-
-              <!-- <md-menu v-if="isOwner" md-size="auto">
-                <md-button
-                  md-menu-trigger
-                  class="md-icon-button md-primary moved-button"
-                >
-                  <md-icon>menu</md-icon>
-                </md-button>
-
-                <md-menu-content>
-                  <md-menu-item>
-                    <md-icon>publish</md-icon>
-                    <span>Опубликовать</span>
-                  </md-menu-item>
-                  <md-menu-item>
-                    <md-icon>edit</md-icon>
-                    <span>Редактировать</span>
-                  </md-menu-item>
-                  <md-menu-item>
-                    <md-icon>delete</md-icon>
-                    <span>Удалить</span>
-                  </md-menu-item>
-                </md-menu-content>
-              </md-menu> -->
             </div>
             <div class="md-layout-item md-size-100 title-area">
               <span class="title-text">{{ project.title }}</span>
@@ -223,6 +174,29 @@
         </md-tabs>
       </div>
     </div>
+    <md-speed-dial
+      v-if="project && isOwner"
+      class="md-top-right"
+      md-direction="bottom"
+    >
+      <md-speed-dial-target class="md-primary">
+        <md-icon>menu</md-icon>
+      </md-speed-dial-target>
+
+      <md-speed-dial-content>
+        <md-button class="md-icon-button">
+          <md-icon>publish</md-icon>
+        </md-button>
+
+        <md-button class="md-icon-button">
+          <md-icon>edit</md-icon>
+        </md-button>
+
+        <md-button class="md-icon-button">
+          <md-icon>delete</md-icon>
+        </md-button>
+      </md-speed-dial-content>
+    </md-speed-dial>
   </div>
 </template>
 
@@ -353,7 +327,7 @@
 }
 .md-speed-dial {
   position: absolute;
-  transform: translate(10%, 30%);
+  transform: translate(0%, 20%);
 }
 </style>
 
