@@ -13,18 +13,21 @@
         v-for="(project_type, index) in PROJECT_TYPE"
         :key="index"
       >
-        <md-card md-with-hover md-inset>
-          <md-card-header>
-            <md-icon class="md-size-2x">thumb_up</md-icon>
-          </md-card-header>
-
-          <md-card-content>
-            <div class="md-subheading">{{ project_type.name }}</div>
-            {{ project_type.description }}
-          </md-card-content>
-        </md-card>
+        <div @click="onClickCard(project_type.id)">
+          <project-type-card
+            :name="project_type.name"
+            :options="project_type.options"
+            :typeId="project_type.id"
+          />
+        </div>
       </div>
     </div>
+    <md-dialog-alert
+      v-if="selectedType"
+      :md-active.sync="modal"
+      :md-title="selectedType.toString()"
+      md-content="Your post <strong>Material Design is awesome</strong> has been created."
+    />
   </div>
 </template>
 
@@ -37,25 +40,35 @@
   flex: none;
 }
 .create-grid {
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-top: 50px;
+  padding-bottom: 50px;
   margin: auto;
-}
-.md-card {
-  object-fit: cover;
-  width: 273px;
-  height: 273px;
-  /* border-radius: 0px; */
 }
 </style>
 
 <script>
 import { mapGetters } from "vuex";
+import ProjectTypeCard from "./ProjectTypeCard";
 
 export default {
   name: "create",
+  components: {
+    ProjectTypeCard
+  },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"])
+  },
+  methods: {
+    onClickCard(typeId) {
+      this.selectedType = typeId;
+      this.modal = !this.modal;
+    }
+  },
+  data() {
+    return {
+      modal: false,
+      selectedType: null
+    };
   }
 };
 </script>

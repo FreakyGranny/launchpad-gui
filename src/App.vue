@@ -103,7 +103,7 @@ export default {
 @import "~vue-material/dist/theme/engine";
 
 .top-of-top {
-  min-width: 300px;
+  min-width: 350px;
 }
 .c-toolbar {
   border-bottom: 1px solid #ddd;

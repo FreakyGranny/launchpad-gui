@@ -17,7 +17,11 @@
                 </b>
               </div>
               <div class="md-layout-item md-size-10 status-area right-text">
-                <type-icon :typeId="project.project_type"></type-icon>
+                <type-icon
+                  class="md-primary"
+                  :typeId="project.project_type"
+                  :withTooltip="true"
+                />
               </div>
               <div class="md-layout-item md-size-100">
                 <md-divider></md-divider>
