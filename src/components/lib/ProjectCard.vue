@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout-item project-card">
     <div @click="onClickCard()">
-      <md-card md-with-hover>
+      <md-card :class="{ 'draft-card': markDraft }" md-with-hover>
         <md-ripple>
           <md-card-media>
             <img class="img" v-bind:src="project.image_link" alt="People" />
@@ -82,7 +82,7 @@
                   class="md-body-1 days-text-centred"
                   :endDate="project.release_date"
                   :withIcon="true"
-                  :ended="project.status != 'search'"
+                  :ended="showDaysCounter"
                 ></days-counter>
               </div>
             </div>
@@ -169,6 +169,9 @@
   height: 20px;
   font-size: 20px !important;
 }
+.draft-card {
+  background-color: md-get-palette-color(green, 50) !important;
+}
 </style>
 <script>
 import { mapGetters } from "vuex";
@@ -176,7 +179,7 @@ import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
 import TypeIcon from "../lib/typeIcon";
-import { STATUS_SEARCH } from "../lib/const/status";
+import { STATUS_SEARCH, STATUS_DRAFT } from "../lib/const/status";
 
 export default {
   components: {
@@ -185,13 +188,20 @@ export default {
     GoalCounter,
     TypeIcon
   },
-  data() {
-    return {
-      search_status: STATUS_SEARCH
-    };
-  },
   computed: {
-    ...mapGetters(["IS_CATEGORY_LOADED"])
+    ...mapGetters(["IS_CATEGORY_LOADED"]),
+    markDraft() {
+      return this.project.status == STATUS_DRAFT;
+    },
+    showDaysCounter() {
+      switch (this.project.status) {
+        case STATUS_DRAFT:
+        case STATUS_SEARCH:
+          return false;
+        default:
+          return true;
+      }
+    }
   },
   methods: {
     onClickCard() {
