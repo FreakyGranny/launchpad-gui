@@ -1,7 +1,7 @@
 <template>
   <md-icon v-if="IS_PROJECT_TYPE_LOADED">
     {{ getIcon }}
-    <md-tooltip v-if="withTooltip" md-direction="top">
+    <md-tooltip v-if="withTooltip" md-direction="bottom">
       {{ type.name }}
     </md-tooltip>
   </md-icon>
