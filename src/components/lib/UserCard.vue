@@ -2,7 +2,7 @@
   <div class="outer">
     <div class="user-header">
       <div class="md-layout md-alignment-center inner">
-        <md-content class="md-elevation-12 user-card">
+        <md-content class="md-elevation-8 user-card">
           <div class="card-content md-layout md-alignment-top-left">
             <div class="md-layout-item md-size-40">
               <md-avatar class="avatar-custom">
@@ -26,20 +26,19 @@
                   </div>
                 </div>
               </div>
-              <div class="md-layout bottom-link-bar">
-                <md-button
-                  :href="'https://planeta.2gis.ru/profile/' + user.username"
-                  class="md-icon-button md-primary"
-                >
-                  <md-icon>language</md-icon>
-                  <md-tooltip md-direction="bottom"
-                    >Открыть профиль на планете</md-tooltip
-                  >
-                </md-button>
-              </div>
             </div>
           </div>
-          <md-content class="bottom-bar md-primary" />
+          <md-content class="bottom-bar md-primary">
+            <md-button
+              :href="'https://planeta.2gis.ru/profile/' + user.username"
+              class="md-icon-button bottom-item-offset"
+            >
+              <md-icon class="white-icon">language</md-icon>
+              <md-tooltip md-direction="bottom"
+                >Открыть профиль на планете</md-tooltip
+              >
+            </md-button>
+          </md-content>
         </md-content>
       </div>
     </div>
@@ -48,7 +47,7 @@
 
 <style scoped>
 .outer {
-  height: 400px;
+  height: 440px;
 }
 .user-header {
   background-size: cover;
@@ -72,7 +71,8 @@
   margin: 30px;
 }
 .bottom-bar {
-  height: 7px;
+  height: 50px;
+  text-align: center;
 }
 .divider-space {
   margin-top: 10px;
@@ -92,8 +92,11 @@
   padding-left: 15px;
   display: inline-flex;
 }
-.bottom-link-bar {
-  margin-top: 120px;
+.md-icon.md-theme-default.md-icon-font {
+  color: white;
+}
+.bottom-item-offset {
+  margin-top: 5px;
 }
 </style>
 
