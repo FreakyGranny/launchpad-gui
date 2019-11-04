@@ -8,7 +8,7 @@
               <md-avatar class="avatar-custom">
                 <img
                   v-bind:src="user.avatar"
-                  onerror="this.onerror=null;this.src='/images/avatar.jpeg';"
+                  onerror="this.onerror=null;this.src='/images/avatar.png';"
                   alt="Avatar"
                 />
               </md-avatar>

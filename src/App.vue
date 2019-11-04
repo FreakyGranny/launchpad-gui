@@ -39,7 +39,7 @@
                 <md-avatar>
                   <img
                     v-bind:src="PROFILE.avatar"
-                    onerror="this.onerror=null;this.src='/images/avatar.jpeg';"
+                    onerror="this.onerror=null;this.src='/images/avatar.png';"
                     alt="Avatar"
                   />
                   <md-tooltip md-direction="bottom">Профиль</md-tooltip>
