@@ -4,6 +4,7 @@ import Wellcome from "../components/wellcome";
 import Project from "../components/project";
 import Dashboard from "../components/dashboard";
 import Account from "../components/account";
+import User from "../components/user";
 import Login from "../components/login";
 import Create from "../components/create";
 import store from "../store";
@@ -67,6 +68,16 @@ export default new Router({
       path: "/account",
       name: "Account",
       component: Account,
+      beforeEnter: ifAuthenticated
+    },
+    {
+      path: "/user",
+      redirect: "/account"
+    },
+    {
+      path: "/user/:id",
+      name: "User",
+      component: User,
       beforeEnter: ifAuthenticated
     },
     {
