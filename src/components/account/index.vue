@@ -77,11 +77,6 @@
 </template>
 
 <style scoped>
-.header-account {
-  background-image: url("/images/user.jpg");
-  height: 300px;
-  line-height: 300px;
-}
 .projects-grid {
   padding-top: 30px;
   margin: auto;

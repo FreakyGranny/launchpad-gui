@@ -54,7 +54,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url("/images/keys.jpg");
+  background-image: url("/images/user.jpg");
   height: 300px;
   position: relative;
 }

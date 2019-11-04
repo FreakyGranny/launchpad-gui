@@ -154,7 +154,7 @@
             :md-template-data="{ badge: donations.length }"
           >
             <md-content class="tab-content">
-              <donate-list
+              <donate-tab
                 :donations="donations"
                 :typeId="project.project_type"
               />
@@ -231,6 +231,8 @@
   max-width: 800px;
 }
 .tab-content {
+  margin-left: 20px;
+  margin-right: 20px;
   min-height: 400px;
 }
 .blur {
@@ -340,7 +342,7 @@ import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
 import ProjectCounter from "../lib/projectCounter";
 import ButtonSet from "./ButtonSet";
-import DonateList from "./DonateList";
+import DonateTab from "./DonateTab";
 import { STATUS_SEARCH } from "../lib/const/status";
 
 export default {
@@ -350,7 +352,7 @@ export default {
     GoalCounter,
     ProjectCounter,
     ButtonSet,
-    DonateList,
+    DonateTab,
     DaysCounter
   },
   name: "project",
