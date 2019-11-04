@@ -22,7 +22,7 @@
             v-if="IS_PROJECT_TYPE_LOADED && isMoneyProject"
           >
             {{ paymentIcon }}
-            <md-tooltip md-direction="right">{{ paymentTooltip }}</md-tooltip>
+            <md-tooltip md-direction="bottom">{{ paymentTooltip }}</md-tooltip>
           </md-icon>
         </div>
       </div>
