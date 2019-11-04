@@ -34,7 +34,9 @@
                     <router-link v-bind:to="'/user/' + project.owner.id">
                       <md-avatar class="owner-avatar">
                         <img v-bind:src="project.owner.avatar" alt="Avatar" />
-                        <md-tooltip md-direction="bottom">Профиль</md-tooltip>
+                        <md-tooltip md-direction="bottom"
+                          >Профиль автора</md-tooltip
+                        >
                       </md-avatar>
                     </router-link>
                   </div>
