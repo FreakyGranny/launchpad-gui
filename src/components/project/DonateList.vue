@@ -10,7 +10,7 @@
           <img
             v-bind:src="donat.user.avatar"
             alt="Avatar"
-            onerror="this.onerror=null;this.src='/images/avatar.jpeg';"
+            onerror="this.onerror=null;this.src='/images/avatar.png';"
           />
         </md-avatar>
         <span>{{ donat.user.first_name + " " + donat.user.last_name }}</span>
