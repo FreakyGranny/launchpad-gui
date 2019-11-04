@@ -1,0 +1,9 @@
+version: '2.1'
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    image: docker-hub.2gis.ru/pet-projects/ronin:${IMAGE_VERSION:-latest}
