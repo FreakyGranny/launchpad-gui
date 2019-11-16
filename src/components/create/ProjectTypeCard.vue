@@ -1,62 +1,68 @@
 <template>
-  <md-card md-with-hover>
-    <md-card-content>
-      <div class="md-layout md-alignment-center">
-        <type-icon
-          class="md-primary md-size-3x"
-          :typeId="typeId"
-          :withTooltip="false"
-        />
-      </div>
-      <div class="md-layout md-alignment-center">
-        <div class="options-title-text">{{ name }}</div>
-        <ul class="list-options">
-          <li
-            class="list-options-item"
-            v-for="(option, index) in options"
-            :key="index"
-          >
-            <span class="options-text">{{ option }}</span>
-          </li>
-        </ul>
-      </div>
-    </md-card-content>
-  </md-card>
+  <!-- badge for new project types -->
+  <v-badge class="pa-2" color="grey" overlap v-model="badgeShow">
+    <template v-slot:badge>
+      <div>Comming soon</div>
+    </template>
+
+    <v-hover v-slot:default="{ hover }">
+      <v-card
+        :elevation="hover ? 8 : 2"
+        width="280"
+        height="400"
+        tile
+        @click="handleClick"
+        :disabled="typeId > 2"
+      >
+        <!-- disabled new project types for a while -->
+        <v-card-text class="pt-2 px-4">
+          <v-row class="mt-2" justify="center" no-gutters>
+            <type-icon :size="75" :typeId="typeId" :withTooltip="false" />
+          </v-row>
+          <v-row class="mb-2" justify="center" no-gutters>
+            <div class="primarytext--text subtitle-1 font-weight-bold">
+              {{ name }}
+            </div>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row class="mt-2" justify="center" no-gutters>
+            <div class="secondarytext--text caption">
+              <ul class="list-options">
+                <li
+                  class="py-1"
+                  v-for="(option, index) in options"
+                  :key="index"
+                >
+                  <span class="options-text">{{ option }}</span>
+                </li>
+              </ul>
+            </div>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-hover>
+  </v-badge>
 </template>
 
-<style lang="scss" scoped>
-@import "~vue-material/dist/theme/engine";
-
-.md-card {
-  object-fit: cover;
-  width: 300px;
-  height: 390px;
-  border-radius: 0px;
-}
-.options-title-text {
-  font-size: 16px;
-  font-weight: 800;
-  border-bottom: 1px solid #ddd;
-}
-.options-text {
-  font-size: 13px;
-  color: md-get-palette-color(gray, 600);
-}
-.list-options {
-  padding-inline-start: 25px;
-}
-.list-options-item {
-  padding-bottom: 5px;
-}
-</style>
+<style scoped></style>
 
 <script>
 import TypeIcon from "../lib/typeIcon";
 
 export default {
-  name: "create",
+  name: "ProjectTypeCard",
   components: {
     TypeIcon
+  },
+  computed: {
+    badgeShow() {
+      return this.typeId > 2;
+    }
+  },
+  methods: {
+    handleClick() {
+      this.$emit("click");
+    }
   },
   props: {
     typeId: Number,

@@ -1,45 +1,28 @@
 <template>
-  <div>
-    <md-icon v-if="withIcon">{{ ended ? "timer_off" : "timer" }}</md-icon>
-    <span
-      v-bind:class="{ 'days-text-centred': withIcon }"
-      class="counter-style"
-      v-if="daysLeft > 0 && !ended"
-    >
-      {{ daysLeft }}
-    </span>
-    <span
-      v-bind:class="{ 'days-text-centred': withIcon }"
-      class="text-style"
-      v-if="!ended"
-    >
-      {{ getText }}
-    </span>
-  </div>
+  <v-row
+    :align="alignBottom ? 'baseline' : 'center'"
+    :justify="justifyEnd ? 'end' : 'start'"
+    no-gutters
+  >
+    <v-col cols="1" v-if="withIcon">
+      <v-icon size="18" color="primarytext">
+        {{ ended ? "mdi-timer-off" : "mdi-timer" }}
+      </v-icon>
+    </v-col>
+    <v-col cols="auto" v-if="daysLeft > 0 && !ended">
+      <div class="primarytext--text font-weight-bold ml-1">
+        {{ daysLeft }}
+      </div>
+    </v-col>
+    <v-col cols="auto" v-if="!ended">
+      <div class="primarytext--text ml-1">
+        {{ getText }}
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
-<style scoped>
-.md-icon {
-  width: 18px;
-  min-width: 18px;
-  height: 18px;
-  font-size: 18px !important;
-}
-.counter-style {
-  margin-left: 4px;
-  vertical-align: middle;
-  font-weight: 500;
-}
-.text-style {
-  margin-left: 4px;
-  vertical-align: middle;
-}
-.days-text-centred {
-  margin-top: 2px;
-  display: inline-block;
-  vertical-align: middle;
-}
-</style>
+<style scoped></style>
 
 <script>
 import moment from "moment";
@@ -72,7 +55,9 @@ export default {
   props: {
     endDate: String,
     withIcon: Boolean,
-    ended: Boolean
+    ended: Boolean,
+    alignBottom: Boolean,
+    justifyEnd: Boolean
   }
 };
 </script>

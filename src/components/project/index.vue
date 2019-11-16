@@ -1,181 +1,159 @@
 <template>
   <div>
-    <load-spinner v-if="loading"></load-spinner>
-    <div class="md-layout project-grid" v-if="!loading">
-      <div class="md-layout-item md-size-55 md-small-hide project-image">
-        <img
-          class="blur"
-          v-bind:src="project.image_link"
-          alt="project background"
-        />
-        <img class="img" v-bind:src="project.image_link" alt="project image" />
-      </div>
-      <div class="project-description md-layout-item">
-        <md-content class="side-bar">
-          <div class="md-layout md-alignment-top">
-            <div class="md-layout-item md-size-100 status-area">
-              <b>
+    <load-spinner :overlay="!IS_PROJECT_TYPE_LOADED || loading"></load-spinner>
+    <v-container fluid v-if="!loading">
+      <v-row justify="center" no-gutters>
+        <v-col xl="7" lg="9" md="11" sm="9" xs="12" class="my-3">
+          <v-row justify="center" no-gutters>
+            <project-picture :imageSrc="project.image_link" />
+            <v-col xl="5" lg="5" md="5" sm="12">
+              <v-row class="mx-4 mt-3 mb-0">
                 <status
-                  class="status-text"
+                  class="subtitle-2 font-weight-bold"
                   :sourceStatus="project.status"
-                ></status>
-              </b>
-            </div>
-            <div class="md-layout-item md-size-100 title-area">
-              <span class="title-text">{{ project.title }}</span>
-            </div>
-            <div class="md-layout-item md-size-100 subtitle-area">
-              <span class="subtitle-text">{{ project.subtitle }}</span>
-            </div>
-            <div class="md-layout-item md-size-100">
-              <div class="md-layout">
-                <div class="md-layout-item md-size-15">
-                  <div>
-                    <router-link v-bind:to="'/user/' + project.owner.id">
-                      <md-avatar class="owner-avatar">
-                        <img v-bind:src="project.owner.avatar" alt="Avatar" />
-                        <md-tooltip md-direction="bottom"
-                          >Профиль автора</md-tooltip
-                        >
-                      </md-avatar>
-                    </router-link>
-                  </div>
+                />
+              </v-row>
+              <v-row class="mx-4 mt-1">
+                <div class="primarytext--text display-1">
+                  {{ project.title }}
                 </div>
-                <div
-                  class="md-layout md-layout-item md-size-80 md-alignment-center"
-                >
-                  <div class="md-layout-item md-size-100">
-                    <span class="md-title"
-                      >{{ project.owner.first_name }}
+              </v-row>
+              <v-row class="ma-4 subtitle-area">
+                <div class="secondarytext--text title font-weight-regular">
+                  {{ project.subtitle }}
+                </div>
+              </v-row>
+
+              <v-row class="mx-4" align="center">
+                <v-avatar size="50">
+                  <img
+                    v-bind:src="project.owner.avatar"
+                    onerror="this.onerror=null;this.src='/images/avatar.png';"
+                    alt="Author avatar"
+                  />
+                </v-avatar>
+                <v-col cols="9" class="pa-0">
+                  <v-row class="mx-4">
+                    <!-- hide author profile for a while -->
+                    <!-- <router-link v-bind:to="'/user/' + project.owner.id"> -->
+                    <div class="primarytext--text title font-weight-regular">
+                      {{ project.owner.first_name }}
                       {{ project.owner.last_name }}
-                    </span>
-                  </div>
-                  <div class="md-layout-item">
-                    <span class="md-subheading">{{
-                      project.owner.profile.project_count
-                    }}</span>
+                    </div>
+                    <!-- </router-link> -->
+                  </v-row>
+                  <v-row class="mx-4">
+                    <div class="primarytext--text body-1 font-weight-medium">
+                      {{ project.owner.profile.project_count }}
+                    </div>
                     <project-counter
-                      class="md-subheading"
+                      class="primarytext--text body-1 ml-1"
                       :count="project.owner.profile.project_count"
                     />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="md-layout-item md-size-100 progress-area">
-              <div
-                v-if="IS_PROJECT_TYPE_LOADED"
-                class="md-layout md-alignment-bottom-right progress-area-top"
-              >
-                <div class="md-layout-item">
-                  <goal-counter
-                    class="md-headline"
-                    :typeId="project.project_type"
-                    :count="project.total"
-                    mode="units"
-                  />
-                  <goal-counter
-                    class="md-subheading"
-                    :typeId="project.project_type"
-                    :count="project.total"
-                  />
-                </div>
-                <div v-if="isMoneyProject" class="md-layout-item right-area">
-                  <span class="md-subheading">{{ donations.length }}</span>
-                  <goal-counter
-                    class="md-subheading"
-                    :typeId="project.project_type"
-                    :count="donations.length"
-                    mode="members"
-                  />
-                </div>
-              </div>
-              <md-progress-bar
-                class="md-accent"
-                md-mode="determinate"
-                v-bind:md-value="project.percent"
-              ></md-progress-bar>
-              <div class="md-layout progress-area-bottom">
-                <div v-if="IS_PROJECT_TYPE_LOADED" class="md-layout-item">
-                  <span class="md-subheading">{{ project.percent }}% </span>
-                  <span class="md-subheading">из</span>
-                  <goal-counter
-                    v-if="isMoneyProject"
-                    class="md-subheading"
-                    :typeId="project.project_type"
-                    :count="project.goal_amount"
-                    mode="units"
-                  />
-                  <goal-counter
-                    v-if="!isMoneyProject"
-                    class="md-subheading"
-                    :typeId="project.project_type"
-                    :count="project.goal_people"
-                    mode="units"
-                  />
-                  <span v-if="!isMoneyProject" class="md-subheading"
-                    >людей</span
-                  >
-                </div>
-                <div class="md-layout-item right-area">
+                  </v-row>
+                </v-col>
+              </v-row>
+
+              <v-row class="mx-4 mt-2" no-gutters v-if="IS_PROJECT_TYPE_LOADED">
+                <v-col cols="6" class="pa-0">
+                  <v-row align="baseline" no-gutters>
+                    <goal-counter
+                      class="primarytext--text headline"
+                      :typeId="project.project_type"
+                      :count="project.total"
+                      mode="units"
+                    />
+                    <goal-counter
+                      class="primarytext--text body-1 pl-1"
+                      :typeId="project.project_type"
+                      :count="project.total"
+                    />
+                  </v-row>
+                </v-col>
+                <v-col cols="6" class="pa-0" v-if="isMoneyProject">
+                  <v-row justify="end" align="baseline" no-gutters>
+                    <div class="primarytext--text headline">
+                      {{ donations.length }}
+                    </div>
+                    <goal-counter
+                      class="primarytext--text body-1 pl-1"
+                      :typeId="project.project_type"
+                      :count="donations.length"
+                      mode="members"
+                    />
+                  </v-row>
+                </v-col>
+              </v-row>
+
+              <v-row class="mx-4 my-1">
+                <v-progress-linear
+                  color="accent"
+                  height="10px"
+                  rounded
+                  v-bind:value="project.percent"
+                />
+              </v-row>
+
+              <v-row class="mx-4 mb-4" no-gutters v-if="IS_PROJECT_TYPE_LOADED">
+                <v-col cols="6" class="pa-0">
+                  <v-row align="baseline" no-gutters>
+                    <div class="primarytext--text body-1">
+                      {{ project.percent }}% из
+                    </div>
+                    <goal-counter
+                      v-if="isMoneyProject"
+                      class="primarytext--text body-1 pl-1"
+                      :typeId="project.project_type"
+                      :count="project.goal_amount"
+                      mode="units"
+                    />
+                    <goal-counter
+                      v-if="!isMoneyProject"
+                      class="primarytext--text body-1 px-1"
+                      :typeId="project.project_type"
+                      :count="project.goal_people"
+                      mode="units"
+                    />
+                    <div
+                      class="primarytext--text body-1"
+                      v-if="!isMoneyProject"
+                    >
+                      людей
+                    </div>
+                  </v-row>
+                </v-col>
+                <v-col cols="6" class="pa-0" v-if="isMoneyProject">
                   <days-counter
-                    class="md-subheading"
+                    class="body-1"
                     :endDate="project.release_date"
                     :withIcon="false"
                     :ended="project.status != search_status"
-                  ></days-counter>
-                </div>
-              </div>
-            </div>
-            <div class="md-layout-item md-size-100">
-              <button-set
-                :status="project.status"
-                :typeId="project.project_type"
-              />
-            </div>
-          </div>
-        </md-content>
-      </div>
-    </div>
-    <div class="md-layout-item md-size-100 separator"></div>
-    <div class="md-layout project-grid" v-if="!loading">
-      <div class="md-layout-item project-tabs">
-        <md-tabs md-alignment="fixed">
-          <template slot="md-tab" slot-scope="{ tab }">
-            <span class="md-subheading tab-head">{{ tab.label }} </span>
-            <md-chip v-if="tab.data.badge">{{ tab.data.badge }} </md-chip>
-          </template>
-          <md-tab id="tab-desc" md-label="Описание">
-            <md-content v-html="project.description" class="tab-content">
-            </md-content>
-          </md-tab>
-
-          <md-tab
-            id="tab-member"
-            md-label="Участники"
-            :md-template-data="{ badge: donations.length }"
-          >
-            <md-content class="tab-content">
-              <donate-tab
-                :donations="donations"
-                :typeId="project.project_type"
-              />
-            </md-content>
-          </md-tab>
-
-          <md-tab
-            id="tab-comments"
-            md-label="Комментарии"
-            :md-template-data="{ badge: '0' }"
-            md-disabled
-          >
-            <md-content class="tab-content">
-              Home Tab
-            </md-content>
-          </md-tab>
-        </md-tabs>
-      </div>
-    </div>
+                    :alignBottom="true"
+                    :justifyEnd="true"
+                  />
+                </v-col>
+              </v-row>
+              <v-row class="ma-4">
+                <button-set
+                  :status="project.status"
+                  :typeId="project.project_type"
+                />
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-divider></v-divider>
+      <v-row justify="center" no-gutters v-if="!loading">
+        <tabs
+          :donations="donations"
+          :description="project.description"
+          :typeId="project.project_type"
+        />
+      </v-row>
+    </v-container>
+  </div>
+  <!--
     <md-speed-dial
       v-if="project && isOwner"
       class="md-top-right"
@@ -199,139 +177,12 @@
         </md-button>
       </md-speed-dial-content>
     </md-speed-dial>
-  </div>
+  </div> -->
 </template>
 
 <style lang="scss" scoped>
-@import "~vue-material/dist/theme/engine";
-
-.separator {
-  border-top: 1px solid #ddd;
-  margin-top: 40px;
-}
-.moved-button {
-  position: absolute;
-  transform: translate(+25%, -25%);
-}
-.project-grid {
-  margin: auto;
-  max-width: 1100px;
-  padding-top: 30px;
-}
-.project-image {
-  height: 400px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-.project-description {
-  margin-left: 40px;
-  height: 400px;
-}
-.project-tabs {
-  margin: auto;
-  max-width: 800px;
-}
-.tab-content {
-  margin-left: 20px;
-  margin-right: 20px;
-  min-height: 400px;
-}
-.blur {
-  position: absolute;
-  /* top: 50%;
-  left: 50%; */
-  transform: translate(-5%, -5%);
-  display: block;
-  width: 110%;
-  height: 110%;
-  max-width: 110%;
-  max-height: 110%;
-  object-fit: cover;
-  filter: blur(5px);
-}
-.img {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-}
-.badge {
-  top: 12px;
-  right: 15px;
-}
-.side-bar {
-  padding: 0px;
-}
-.status-text {
-  font-size: 14px;
-}
-.title-text {
-  font-size: 32px;
-}
-.subtitle-text {
-  font-size: 20px;
-  color: md-get-palette-color(gray, 600);
-}
-.status-area {
-  padding-bottom: 10px;
-}
-.title-area {
-  margin-top: 5px;
-  max-height: 60px;
-}
 .subtitle-area {
-  margin-top: 10px;
-  margin-bottom: 14px;
-  min-height: 70px;
-  max-height: 70px;
-}
-.progress-area {
-  padding-top: 15px;
-  padding-bottom: 5px;
-}
-.progress-area-top {
-  margin-bottom: 5px;
-}
-.progress-area-bottom {
-  padding-top: 5px;
-  padding-bottom: 10px;
-}
-.right-area {
-  text-align: right;
-}
-.days-area {
-  padding-top: 15px;
-}
-.md-progress-bar {
-  height: 10px;
-  border-radius: 5px;
-}
-.owner-avatar {
-  width: 50px;
-  height: 50px;
-}
-.goal-text {
-  font-size: 24px;
-}
-.goal-descr-text {
-  font-size: 20px;
-}
-.md-chip {
-  margin-left: 10px;
-  height: 20px;
-  line-height: 20px;
-}
-.tab-head {
-  margin-top: 3px;
-  display: inline-block;
-  vertical-align: middle;
-}
-.md-speed-dial {
-  position: absolute;
-  transform: translate(0%, 20%);
+  height: 70px;
 }
 </style>
 
@@ -344,7 +195,8 @@ import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
 import ProjectCounter from "../lib/projectCounter";
 import ButtonSet from "./ButtonSet";
-import DonateTab from "./DonateTab";
+import ProjectPicture from "./ProjectPicture";
+import Tabs from "./Tabs";
 import { STATUS_SEARCH } from "../lib/const/status";
 
 export default {
@@ -354,7 +206,8 @@ export default {
     GoalCounter,
     ProjectCounter,
     ButtonSet,
-    DonateTab,
+    ProjectPicture,
+    Tabs,
     DaysCounter
   },
   name: "project",

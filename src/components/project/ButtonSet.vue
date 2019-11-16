@@ -1,8 +1,8 @@
 <template>
   <div v-if="IS_PROJECT_TYPE_LOADED">
-    <md-button v-if="donateAllowed" class="md-raised md-primary custom-button">
+    <v-btn v-if="donateAllowed" color="primary" tile min-width="100" large>
       Поддержать
-    </md-button>
+    </v-btn>
   </div>
 </template>
 

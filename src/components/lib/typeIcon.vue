@@ -1,10 +1,12 @@
 <template>
-  <md-icon v-if="IS_PROJECT_TYPE_LOADED">
-    {{ getIcon }}
-    <md-tooltip v-if="withTooltip" md-direction="bottom">
-      {{ type.name }}
-    </md-tooltip>
-  </md-icon>
+  <v-tooltip v-if="IS_PROJECT_TYPE_LOADED" :disabled="!withTooltip" bottom>
+    <template v-slot:activator="{ on }">
+      <v-icon color="primary" :size="size" v-on="on">
+        {{ getIcon }}
+      </v-icon>
+    </template>
+    <span>{{ type.name }}</span>
+  </v-tooltip>
 </template>
 
 <style scoped></style>
@@ -35,16 +37,17 @@ export default {
   data() {
     return {
       typeIcons: {
-        [TYPE_CAMPAIGN]: "view_quilt",
-        [TYPE_CAMPAIGN_FAIR]: "view_module",
-        [TYPE_EVENT]: "group",
-        [TYPE_EVENT_PLUS]: "group_add"
+        [TYPE_CAMPAIGN]: "mdi-cash",
+        [TYPE_CAMPAIGN_FAIR]: "mdi-account-cash",
+        [TYPE_EVENT]: "mdi-account-multiple",
+        [TYPE_EVENT_PLUS]: "mdi-account-multiple-plus"
       }
     };
   },
   props: {
     typeId: Number,
-    withTooltip: Boolean
+    withTooltip: Boolean,
+    size: Number
   }
 };
 </script>

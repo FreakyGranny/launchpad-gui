@@ -1,7 +1,7 @@
 <template>
-  <span v-if="IS_PROJECT_TYPE_LOADED">
+  <div v-if="IS_PROJECT_TYPE_LOADED">
     {{ getText }}
-  </span>
+  </div>
 </template>
 
 <style></style>

@@ -1,14 +1,28 @@
 <template>
-  <div
-    class="header"
+  <v-container
     v-if="IS_CATEGORY_LOADED"
     v-bind:style="{ 'background-image': 'url(' + imageUrl + ')' }"
+    class="header fill-height"
+    fluid
   >
-    <span class="white-text">{{ text }}</span>
-  </div>
+    <v-row align="center" justify="center">
+      <div class="white--text display-1">
+        {{ text }}
+      </div>
+    </v-row>
+  </v-container>
 </template>
 
-<style></style>
+<style>
+.header {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 150px;
+  text-align: center;
+  line-height: 150px;
+}
+</style>
 
 <script>
 import { mapGetters } from "vuex";

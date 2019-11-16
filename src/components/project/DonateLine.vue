@@ -1,49 +1,39 @@
 <template>
-  <md-card class="md-elevation-0" md-with-hover>
-    <md-card-content>
-      <div class="md-layout md-alignment-center-left">
-        <div class="md-layout-item md-size-20">
-          <md-avatar class="left-offset">
-            <img
-              v-bind:src="donation.user.avatar"
-              alt="Avatar"
-              onerror="this.onerror=null;this.src='/images/avatar.png';"
-            />
-          </md-avatar>
-        </div>
-        <div class="md-layout-item md-size-65">
-          <div class="subheading">
-            {{ donation.user.first_name + " " + donation.user.last_name }}
-          </div>
-        </div>
-        <div class="md-layout-item md-size-15">
-          <md-icon
-            v-bind:class="{ 'md-accent': donation.paid }"
-            v-if="IS_PROJECT_TYPE_LOADED && isMoneyProject"
-          >
-            {{ paymentIcon }}
-            <md-tooltip md-direction="bottom">{{ paymentTooltip }}</md-tooltip>
-          </md-icon>
-        </div>
-      </div>
-    </md-card-content>
-  </md-card>
+  <v-hover v-slot:default="{ hover }">
+    <v-card :elevation="hover ? 3 : 0" class="ma-1" min-width="300" tile>
+      <v-card-text>
+        <v-row align="baseline" no-gutters>
+          <v-col sm="2">
+            <v-avatar size="40">
+              <img
+                v-bind:src="donation.user.avatar"
+                onerror="this.onerror=null;this.src='/images/avatar.png';"
+                alt="Author avatar"
+              />
+            </v-avatar>
+          </v-col>
+          <v-col sm="8">
+            <div class="primarytext--text body-2 font-weight-regular">
+              {{ donation.user.first_name + " " + donation.user.last_name }}
+            </div>
+          </v-col>
+          <v-col sm="2">
+            <v-tooltip v-if="IS_PROJECT_TYPE_LOADED && isMoneyProject" bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon :color="donation.paid ? 'accent' : ''" v-on="on">
+                  {{ paymentIcon }}
+                </v-icon>
+              </template>
+              <span>{{ paymentTooltip }}</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-hover>
 </template>
 
-<style scoped>
-.md-card {
-  width: 360px;
-}
-.md-card-content:last-of-type {
-  padding-bottom: 16px;
-}
-.donation-entry {
-  min-width: 100px;
-}
-.left-offset {
-  margin-left: 5px;
-}
-</style>
+<style></style>
 
 <script>
 import { mapGetters } from "vuex";
@@ -63,8 +53,8 @@ export default {
     },
     paymentIcon() {
       return this.donation.paid
-        ? "check_circle_outline"
-        : "radio_button_unchecked";
+        ? "mdi-check-circle-outline"
+        : "mdi-radiobox-blank";
     },
     paymentTooltip() {
       return this.donation.paid ? "Перевод получен" : "Ожидается перевод";

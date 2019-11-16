@@ -1,42 +1,40 @@
 <template>
-  <div>
-    <form
-      class="md-layout md-alignment-center-center fill-height"
-      @submit.prevent="login"
-    >
-      <md-card
-        class="md-layout-item md-size-40 md-xlarge-30 md-large-40 md-small-size-60 md-xsmall-size-100"
-      >
-        <md-card-content>
-          <div class="md-layout md-alignment-center-center top-spacing">
-            <div class="md-layout-item md-size-15">
-              <md-icon class="md-promary md-size-2x">person</md-icon>
-            </div>
-            <div class="md-layout-item md-size-85">
-              <md-field>
-                <label>Имя пользователя</label>
-                <md-input v-model="username" type="text" />
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-15">
-              <md-icon class="md-promary md-size-2x">vpn_key</md-icon>
-            </div>
-            <div class="md-layout-item md-size-85">
-              <md-field>
-                <label>Пароль</label>
-                <md-input required v-model="password" type="password" />
-              </md-field>
-            </div>
-          </div>
-          <md-card-actions>
-            <md-button type="submit" class="md-raised md-primary"
-              >Войти</md-button
-            >
-          </md-card-actions>
-        </md-card-content>
-      </md-card>
-    </form>
-  </div>
+  <v-content class="backgrnd">
+    <v-container class="fill-height" fluid>
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="8" md="5">
+          <v-card tile>
+            <v-card-text class="px-6 pt-10 pb-4">
+              <v-form>
+                <v-text-field
+                  label="Имя пользователя"
+                  name="login"
+                  prepend-icon="mdi-account"
+                  type="text"
+                  v-model="username"
+                />
+
+                <v-text-field
+                  id="password"
+                  label="Пароль"
+                  name="password"
+                  prepend-icon="mdi-lock"
+                  type="password"
+                  v-model="password"
+                />
+              </v-form>
+            </v-card-text>
+            <v-card-actions class="px-6 pt-0 pb-4">
+              <v-spacer />
+              <v-btn color="primary" @click="login" tile min-width="100" large>
+                войти
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-content>
 </template>
 
 <script>
@@ -62,23 +60,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vue-material/dist/theme/engine";
-
-.md-icon {
-  color: md-get-palette-color(deeppurple, 600) !important;
-}
-.md-card {
-  border-radius: 0px;
-}
-.top-spacing {
-  padding-top: 30px;
-}
-.fill-height {
-  height: calc(100vh - 47px);
+.backgrnd {
+  height: calc(100vh - 64px);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  line-height: calc(100vh - 47px);
+  line-height: calc(100vh - 64px);
   background-image: url("/images/login_background.jpg");
 }
 </style>
