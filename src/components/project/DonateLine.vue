@@ -1,9 +1,9 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card :elevation="hover ? 3 : 0" class="ma-1" min-width="300" tile>
+    <v-card :elevation="hover ? 3 : 0" class="ma-1" min-width="290" tile>
       <v-card-text>
         <v-row align="baseline" no-gutters>
-          <v-col sm="2">
+          <v-col cols="2" class="mr-4">
             <v-avatar size="40">
               <img
                 v-bind:src="donation.user.avatar"
@@ -12,12 +12,14 @@
               />
             </v-avatar>
           </v-col>
-          <v-col sm="8">
-            <div class="primarytext--text body-2 font-weight-regular">
+          <v-col cols="8">
+            <div
+              class="primarytext--text body-2 font-weight-regular text-no-wrap"
+            >
               {{ donation.user.first_name + " " + donation.user.last_name }}
             </div>
           </v-col>
-          <v-col sm="2">
+          <v-col cols="1">
             <v-tooltip v-if="IS_PROJECT_TYPE_LOADED && isMoneyProject" bottom>
               <template v-slot:activator="{ on }">
                 <v-icon :color="donation.paid ? 'accent' : ''" v-on="on">

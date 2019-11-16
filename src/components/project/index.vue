@@ -61,6 +61,7 @@
                       class="primarytext--text headline"
                       :typeId="project.project_type"
                       :count="project.total"
+                      :animate="true"
                       mode="units"
                     />
                     <goal-counter
@@ -136,7 +137,8 @@
               <v-row class="ma-4">
                 <button-set
                   :status="project.status"
-                  :typeId="project.project_type"
+                  :type="PROJECT_TYPE[project.project_type]"
+                  :donation="currentDonation"
                 />
               </v-row>
             </v-col>
@@ -144,7 +146,7 @@
         </v-col>
       </v-row>
       <v-divider></v-divider>
-      <v-row justify="center" no-gutters v-if="!loading">
+      <v-row justify="center" no-gutters v-if="!loading" class="tabs-area">
         <tabs
           :donations="donations"
           :description="project.description"
@@ -184,11 +186,13 @@
 .subtitle-area {
   height: 70px;
 }
+.tabs-area {
+  min-height: 300px;
+}
 </style>
 
 <script>
 import { mapGetters } from "vuex";
-import axios from "axios";
 import LoadSpinner from "../lib/loading";
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
@@ -231,12 +235,20 @@ export default {
     },
     loading() {
       return this.loadingProject || this.loadingDonation;
+    },
+    currentDonation() {
+      for (let donation of this.donations) {
+        if (donation.user.id === this.PROFILE.id) {
+          return donation;
+        }
+      }
+      return null;
     }
   },
   methods: {
     getProject() {
       this.loadingProject = true;
-      axios({ url: "/project/" + this.$route.params.id })
+      this.axios({ url: "/project/" + this.$route.params.id })
         .then(resp => {
           this.project = resp.data;
           this.loadingProject = false;
@@ -248,7 +260,7 @@ export default {
     },
     getDonations() {
       this.loadingDonation = true;
-      axios({ url: "/donation?project_id=" + this.$route.params.id })
+      this.axios({ url: "/donation?project_id=" + this.$route.params.id })
         .then(resp => {
           this.donations = resp.data;
           this.loadingDonation = false;

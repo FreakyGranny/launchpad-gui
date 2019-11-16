@@ -204,7 +204,6 @@ import ProjectCard from "../lib/ProjectCard";
 import LoadSpinner from "../lib/loading";
 import BgHeader from "../lib/bgHeader";
 import EmptyState from "../lib/EmptyState";
-import axios from "axios";
 import { mapGetters } from "vuex";
 
 export default {
@@ -292,7 +291,7 @@ export default {
       this.loading = true;
       this.setQueryParams();
       let projectList = this.projects ? this.projects : [];
-      axios({ url: this.buildProjectUrl() })
+      this.axios({ url: this.buildProjectUrl() })
         .then(resp => {
           for (let project of resp.data.results) {
             projectList.push(project);

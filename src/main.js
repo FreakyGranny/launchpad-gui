@@ -4,10 +4,11 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import "@/assets/kickstarter.css";
-
 import axios from "axios";
+import VueAxios from "vue-axios";
 
 Vue.config.productionTip = false;
+Vue.use(VueAxios, axios);
 
 const token = localStorage.getItem("user-token");
 if (token) {
@@ -22,12 +23,3 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount("#app");
-
-/* eslint-disable no-new */
-// new Vue({
-//   el: "#app",
-//   router,
-//   store,
-//   template: "<App/>",
-//   components: { App }
-// });
