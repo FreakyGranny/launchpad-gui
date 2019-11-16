@@ -1,25 +1,22 @@
 <template>
-  <div class="md-layout md-layout-item md-size-100 md-alignment-center">
-    <md-progress-spinner
-      class="spacing"
-      :md-stroke="3"
-      md-mode="indeterminate"
-    ></md-progress-spinner>
-  </div>
+  <!-- <div class="text-center">
+    <v-progress-circular :size="50" color="primary" indeterminate />
+  </div> -->
+  <v-overlay absolute z-index="5" :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
 </template>
 
-<style scoped>
-.spacing {
-  margin-top: 100px;
-  margin-bottom: 100px;
-}
-</style>
+<style scoped></style>
 
 <script>
 export default {
   name: "LoadSpinner",
   data() {
     return {};
+  },
+  props: {
+    overlay: Boolean
   }
 };
 </script>

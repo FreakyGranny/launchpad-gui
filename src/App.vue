@@ -1,75 +1,83 @@
 <template>
-  <div class="top-of-top">
-    <md-toolbar class="c-toolbar" md-elevation="0">
-      <router-link to="/explore">
-        <img class="logo" src="/images/logo-tr.png" alt="2 KICKSTARTER" />
-      </router-link>
-      <div class="md-layout">
-        <div class="md-layout-item">
-          <div class=" md-toolbar-section-start nav-button">
-            <router-link to="/">
-              <span v-if="$mq === 'lg'" class="nav-link">
-                Как это работает?
-              </span>
-              <md-button
-                v-if="$mq === 'md'"
-                class="md-icon-button md-dense md-primary"
-              >
-                <md-icon>help</md-icon>
-              </md-button>
-            </router-link>
-          </div>
-        </div>
-      </div>
-      <div class=" md-toolbar-section-end">
-        <div class="md-layout md-alignment-center-right">
-          <div v-if="$mq !== 'sm'" class="md-layout-item">
-            <div>
-              <router-link to="/create" v-if="IS_PROFILE_LOADED">
-                <span class="nav-link">Новый проект</span>
-              </router-link>
+  <v-app>
+    <v-app-bar app hide-on-scroll scroll-threshold="20">
+      <div class="d-flex align-center">
+        <router-link to="/explore">
+          <v-img
+            alt="Kickstarter Logo"
+            class="shrink mr-2"
+            contain
+            src="/images/logo-tr.png"
+            width="240"
+          />
+        </router-link>
+        <!-- <router-link to="/" class="hidden-sm-and-down">
+          <v-hover v-slot:default="{ hover }">
+            <div
+              :class="hover ? 'primary--text' : 'secondarytext--text'"
+              class="subtitle-2 font-weight-bold"
+            >
+              Как это работает?
             </div>
-          </div>
-          <div v-if="$mq !== 'sm'" class="md-layout-item">
-            <div class="profile">
-              <router-link to="/login" v-if="!IS_PROFILE_LOADED">
-                <span class="nav-link">Войти</span>
-              </router-link>
-              <router-link to="/account" v-if="IS_PROFILE_LOADED">
-                <md-avatar>
-                  <img
-                    v-bind:src="PROFILE.avatar"
-                    onerror="this.onerror=null;this.src='/images/avatar.png';"
-                    alt="Avatar"
-                  />
-                  <md-tooltip md-direction="bottom">Профиль</md-tooltip>
-                </md-avatar>
-              </router-link>
+          </v-hover>
+        </router-link> -->
+      </div>
+      <v-spacer></v-spacer>
+      <v-row align="center" justify="end" class="me-1 hidden-xs-only">
+        <router-link to="/create" v-if="IS_PROFILE_LOADED">
+          <v-hover v-slot:default="{ hover }">
+            <div
+              :class="hover ? 'primary--text' : 'secondarytext--text'"
+              class="subtitle-2 font-weight-bold"
+            >
+              Новый проект
             </div>
-          </div>
-        </div>
-        <md-button
-          v-if="$mq === 'sm'"
-          class="md-icon-button"
-          @click="showNavigation = !showNavigation"
-        >
-          <md-icon>menu</md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-    <md-list v-if="showNavigation">
-      <md-list-item to="/create" exact>Новый проект</md-list-item>
-      <md-list-item to="/account">Профиль</md-list-item>
-      <md-list-item to="/">Как это работает?</md-list-item>
-    </md-list>
-    <md-content>
-      <div class="main-container">
-        <transition>
-          <router-view />
-        </transition>
-      </div>
-    </md-content>
-  </div>
+          </v-hover>
+        </router-link>
+        <v-divider class="mx-4" vertical />
+        <router-link to="/login" v-if="!IS_PROFILE_LOADED">
+          <v-hover v-slot:default="{ hover }">
+            <div
+              :class="hover ? 'primary--text' : 'secondarytext--text'"
+              class="subtitle-2 font-weight-bold"
+            >
+              Войти
+            </div>
+          </v-hover>
+        </router-link>
+        <v-avatar size="40">
+          <img
+            v-bind:src="PROFILE.avatar"
+            onerror="this.onerror=null;this.src='/images/avatar.png';"
+            alt="Avatar"
+          />
+        </v-avatar>
+        <!-- <router-link to="/account" v-if="IS_PROFILE_LOADED">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-avatar size="40">
+              <img
+                v-on="on"
+                v-bind:src="PROFILE.avatar"
+                onerror="this.onerror=null;this.src='/images/avatar.png';"
+                alt="Avatar"
+              />
+            </v-avatar>
+          </template>
+          <span>Твой профиль</span>
+        </v-tooltip>
+      </router-link> -->
+      </v-row>
+    </v-app-bar>
+
+    <v-content class="white">
+      <router-view />
+    </v-content>
+    <v-footer>
+      <v-spacer></v-spacer>
+      <div>&copy; {{ new Date().getFullYear() }}</div>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
@@ -99,40 +107,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import "~vue-material/dist/theme/engine";
-
-.top-of-top {
-  min-width: 350px;
-}
-.c-toolbar {
-  border-bottom: 1px solid #ddd;
-  padding-left: 10px;
-  min-height: 47px;
-  min-width: 300px;
-}
-.nav-button {
-  margin-left: 15px;
-}
-.profile {
-  border-left: 1px solid #ddd;
-  padding-left: 16px;
-  margin-left: 20px;
-}
-* {
-  text-decoration: none !important;
-}
-.nav-link {
-  color: md-get-palette-color(gray, 700);
-  font-size: 14px;
-  font-weight: 700;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-.nav-link:hover {
-  color: md-get-palette-color(deeppurple, 600);
-}
-.logo {
-  height: 40px;
-}
-</style>
+<style scoped></style>

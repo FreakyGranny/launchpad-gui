@@ -1,14 +1,16 @@
 <template>
-  <div class="md-layout md-alignment-top-left">
-    <div
-      class="md-layout-item md-small-50 md-xsmall-100"
+  <v-row justify-md="start" justify-sm="center" no-gutters class="my-5">
+    <v-col
+      md="6"
+      sm="10"
+      xs="12"
       v-for="(donat, index) in donations"
       :key="'donation_' + index"
-      @click="onClickDonation(donat.user.id)"
     >
+      <!-- @click="onClickDonation(donat.user.id)" -->
       <donate-line :typeId="typeId" :donation="donat" />
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <style scoped></style>

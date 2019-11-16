@@ -1,166 +1,209 @@
 <template>
   <div>
     <bg-header v-if="IS_CATEGORY_LOADED" :categoryId="categoryFilter" />
-    <div class="md-layout explore-grid">
-      <div
-        class="md-layout-item md-xlarge-size-25 md-large-size-25 md-medium-size-30 md-small-hide explore-filter"
-      >
-        <load-spinner
-          v-if="!IS_CATEGORY_LOADED || !IS_PROJECT_TYPE_LOADED"
-        ></load-spinner>
-        <md-list
-          class="md-dense"
-          v-if="IS_CATEGORY_LOADED && IS_PROJECT_TYPE_LOADED"
-        >
-          <md-subheader>КАТЕГОРИИ</md-subheader>
-          <md-list-item
-            class="list-offset"
-            :md-ripple="false"
-            :to="buildFilterLink(typeFilter, null, onlyOpen)"
+    <v-progress-linear
+      :active="loading"
+      :indeterminate="loading"
+      absolute
+      color="secondary"
+    ></v-progress-linear>
+    <v-container fluid>
+      <load-spinner :overlay="!IS_CATEGORY_LOADED || !IS_PROJECT_TYPE_LOADED" />
+      <v-row justify="center" no-gutters>
+        <!-- filters -->
+        <v-col xl="2" lg="2" md="3" class="hidden-sm-and-down">
+          <v-list
+            flat
+            nav
+            dense
+            class="mt-2"
+            v-if="IS_CATEGORY_LOADED && IS_PROJECT_TYPE_LOADED"
           >
-            <span
-              class="list-regular-item"
-              v-bind:class="{
-                'list-selected-item': $route.query.category == null
-              }"
-              >Все проекты</span
+            <v-subheader class="pa-2 secondarytext--text subtitle-1"
+              >КАТЕГОРИИ</v-subheader
             >
-          </md-list-item>
+            <v-divider></v-divider>
 
-          <md-list-item
-            class="list-offset"
-            :md-ripple="false"
-            v-for="(category, index) in CATEGORY"
-            :key="'category_' + index"
-            :to="buildFilterLink(typeFilter, category.id, onlyOpen)"
-          >
-            <span
-              class="list-regular-item"
-              v-bind:class="{
-                'list-selected-item': category.id == $route.query.category
-              }"
+            <v-list-item
+              class="pl-4 ma-0"
+              :ripple="false"
+              :to="buildFilterLink(typeFilter, null, onlyOpen)"
             >
-              {{ category.name }}
-            </span>
-          </md-list-item>
+              <v-list-item-content>
+                <v-list-item-title
+                  class="body-2"
+                  :class="
+                    $route.query.category == null
+                      ? 'accent--text'
+                      : 'secondarytext--text'
+                  "
+                >
+                  Все проекты
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-          <md-divider></md-divider>
-          <md-subheader>ТИП ПРОЕКТА</md-subheader>
-
-          <md-list-item
-            class="list-offset"
-            :md-ripple="false"
-            :to="buildFilterLink(null, categoryFilter, onlyOpen)"
-          >
-            <span
-              class="list-regular-item"
-              v-bind:class="{ 'list-selected-item': $route.query.type == null }"
+            <v-list-item
+              v-for="(category, index) in CATEGORY"
+              :ripple="false"
+              :to="buildFilterLink(typeFilter, category.id, onlyOpen)"
+              :key="'category_' + index"
+              class="pl-4"
             >
-              Любой
-            </span>
-          </md-list-item>
+              <v-list-item-content>
+                <v-list-item-title
+                  class="body-2"
+                  :class="
+                    $route.query.category == category.id
+                      ? 'accent--text'
+                      : 'secondarytext--text'
+                  "
+                >
+                  {{ category.name }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-          <md-list-item
-            class="list-offset"
-            :md-ripple="false"
-            v-for="(type, index) in PROJECT_TYPE"
-            :key="'type_' + index"
-            :to="buildFilterLink(type.id, categoryFilter, onlyOpen)"
-          >
-            <span
-              class="list-regular-item"
-              v-bind:class="{
-                'list-selected-item': type.id == $route.query.type
-              }"
+            <v-subheader class="pa-2 secondarytext--text subtitle-1"
+              >ТИП ПРОЕКТА</v-subheader
             >
-              {{ type.name }}
-            </span>
-          </md-list-item>
+            <v-divider></v-divider>
 
-          <md-divider></md-divider>
-          <md-list-item>
-            <span class="list-regular-item">Только активные</span>
-            <md-switch v-model="onlyOpen" />
-          </md-list-item>
-          <md-button class="md-raised md-primary custom-button" to="/explore">
-            Сбросить фильтры
-          </md-button>
-        </md-list>
-      </div>
-      <div
-        class="md-layout-item md-xlarge-size-75 md-large-size-75 md-medium-size-70 md-small-size-100"
-      >
-        <div :class="cardsAlignment" class="md-layout">
-          <project-card
-            v-for="(project, index) in projects"
-            :key="index"
-            :project="project"
-            :category="CATEGORY[project.category[0]]"
+            <v-list-item
+              class="pl-4 ma-0"
+              :ripple="false"
+              :to="buildFilterLink(null, categoryFilter, onlyOpen)"
+            >
+              <v-list-item-content>
+                <v-list-item-title
+                  class="body-2"
+                  :class="
+                    $route.query.type == null
+                      ? 'accent--text'
+                      : 'secondarytext--text'
+                  "
+                >
+                  Любой
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <!-- hidding new project types for a while -->
+            <v-list-item
+              v-for="(type, index) in PROJECT_TYPE"
+              :key="'type_' + index"
+              class="pl-4"
+              :ripple="false"
+              v-show="type.id < 3"
+              :to="buildFilterLink(type.id, categoryFilter, onlyOpen)"
+            >
+              <v-list-item-content>
+                <v-list-item-title
+                  class="body-2"
+                  :class="
+                    $route.query.type == type.id
+                      ? 'accent--text'
+                      : 'secondarytext--text'
+                  "
+                >
+                  {{ type.name }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-list-item>
+              <v-list-item-content>
+                <div class="secondarytext--text">Только активные</div>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-switch inset :ripple="false" v-model="onlyOpen" />
+              </v-list-item-action>
+            </v-list-item>
+
+            <v-list-item class="pa-0 ma-0" :ripple="false">
+              <v-list-item-content>
+                <v-btn
+                  color="secondary"
+                  to="/explore"
+                  tile
+                  min-width="100"
+                  large
+                >
+                  Сбросить фильтры
+                </v-btn>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-col>
+        <!-- projects -->
+        <v-col xl="8" lg="8" md="9">
+          <empty-state
+            md-icon="help_outline"
+            md-label="Проекты не найдены"
+            md-description="К сожалению, не нашлось проектов удовлетворяющих всем фильтрам."
+            v-if="!loading && projects.length == 0"
           />
-        </div>
-        <div class="md-layout md-alignment-center">
-          <load-spinner v-if="loading"></load-spinner>
-          <div class="spacing" v-if="!loading">
-            <md-empty-state
-              md-icon="help_outline"
-              md-label="Проекты не найдены"
-              md-description="К сожалению, не нашлось проектов удовлетворяющих всем фильтрам."
-              v-if="projects.length == 0"
+          <v-row no-gutters>
+            <v-col
+              class="py-6"
+              v-for="(project, index) in projects"
+              :key="index"
+              align-self="center"
+              xl="3"
+              lg="4"
+              md="4"
+              sm="6"
+              xs="12"
             >
-            </md-empty-state>
-            <md-button
-              class="md-raised md-primary custom-button"
-              v-bind:disabled="isFinalPage"
-              v-on:click="getProjects"
+              <v-row no-gutters justify="center">
+                <project-card
+                  :project="project"
+                  :category="CATEGORY[project.category[0]]"
+                />
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row no-gutters justify="center" class="my-12">
+            <v-btn
+              color="primary"
               v-if="projects.length != 0"
+              :disabled="isFinalPage || loading"
+              :loading="loading"
+              @click="getProjects"
+              tile
+              min-width="100"
+              large
             >
               загрузить еще
-            </md-button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </v-btn>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-btn
+      v-scroll="onScroll"
+      v-show="toTopFab"
+      fab
+      fixed
+      bottom
+      right
+      color="primary"
+      @click="toTop"
+    >
+      <v-icon>mdi-chevron-up</v-icon>
+    </v-btn>
   </div>
 </template>
 
-<style lang="scss" scoped>
-@import "~vue-material/dist/theme/engine";
-
-.explore-grid {
-  padding-top: 30px;
-  margin: auto;
-  max-width: 1200px;
-}
-.explore-filter {
-  padding-right: 10px;
-  padding-right: 40px;
-}
-.spacing {
-  margin-top: 100px;
-  margin-bottom: 100px;
-}
-.md-button-clean {
-  display: inline !important;
-}
-.list-regular-item {
-  color: md-get-palette-color(gray, 800);
-  font-size: 15px;
-  font-weight: 400;
-}
-.list-selected-item {
-  color: md-get-palette-color(green, 700);
-  font-size: 15px;
-  font-weight: 600;
-}
-.list-offset {
-  padding-left: 15px;
-}
-</style>
+<style scoped></style>
 
 <script>
 import ProjectCard from "../lib/ProjectCard";
 import LoadSpinner from "../lib/loading";
 import BgHeader from "../lib/bgHeader";
+import EmptyState from "../lib/EmptyState";
 import axios from "axios";
 import { mapGetters } from "vuex";
 
@@ -168,6 +211,7 @@ export default {
   components: {
     ProjectCard,
     BgHeader,
+    EmptyState,
     LoadSpinner
   },
   name: "dashboard",
@@ -187,12 +231,6 @@ export default {
         return false;
       }
       return this.totalProjects == this.projects.length;
-    },
-    cardsAlignment() {
-      return {
-        "md-alignment-top-left": this.$mq === "lg",
-        "md-alignment-top-center": this.$mq !== "lg"
-      };
     }
   },
   methods: {
@@ -275,6 +313,14 @@ export default {
       this.nextPage = null;
       this.totalProjects = 0;
       this.projects = [];
+    },
+    onScroll(e) {
+      if (typeof window === "undefined") return;
+      const top = window.pageYOffset || e.target.scrollTop || 0;
+      this.toTopFab = top > 750;
+    },
+    toTop() {
+      this.$vuetify.goTo(214);
     }
   },
   beforeRouteUpdate(to, from, next) {
@@ -299,6 +345,7 @@ export default {
   },
   data() {
     return {
+      toTopFab: false,
       typeFilter: null,
       categoryFilter: null,
       onlyOpen: false,

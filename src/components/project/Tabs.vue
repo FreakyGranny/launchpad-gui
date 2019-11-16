@@ -1,0 +1,63 @@
+<template>
+  <v-col xl="5" lg="7" md="9" sm="7" xs="12" class="my-3">
+    <v-tabs v-model="tab" centered grow>
+      <v-tab href="#tab-about">
+        <v-row align="center" justify="center">
+          О проекте
+        </v-row>
+      </v-tab>
+
+      <v-tab href="#tab-members">
+        <v-row align="center" justify="center">
+          Участники
+          <v-chip class="ma-2" color="gray" small>
+            {{ donations.length }}
+          </v-chip>
+        </v-row>
+      </v-tab>
+
+      <v-tab disabled href="#tab-comments" class="hidden-sm-and-down">
+        <v-row align="center" justify="center">
+          Комментарии
+          <v-chip class="ma-2" color="gray" small>
+            Soon
+          </v-chip>
+        </v-row>
+      </v-tab>
+    </v-tabs>
+
+    <v-tabs-items v-model="tab">
+      <v-tab-item value="tab-about">
+        <v-card flat>
+          <v-card-text v-html="description" class="tab-content" />
+        </v-card>
+      </v-tab-item>
+      <v-tab-item value="tab-members">
+        <donate-tab :donations="donations" :typeId="typeId" />
+      </v-tab-item>
+    </v-tabs-items>
+  </v-col>
+</template>
+
+<style scoped></style>
+
+<script>
+import DonateTab from "./DonateTab";
+
+export default {
+  components: {
+    DonateTab
+  },
+  name: "Tabs",
+  data() {
+    return {
+      tab: null
+    };
+  },
+  props: {
+    description: String,
+    donations: Array,
+    typeId: Number
+  }
+};
+</script>

@@ -1,59 +1,64 @@
 <template>
   <div>
-    <div class="header header-create">
-      <span class="white-text">Новый проект</span>
-    </div>
-
-    <div
-      v-if="IS_PROJECT_TYPE_LOADED"
-      class="md-layout md-alignment-top-center create-grid"
-    >
-      <div
-        class="md-layout-item project-type-card"
-        v-for="(project_type, index) in PROJECT_TYPE"
-        :key="index"
-      >
-        <div @click="onClickCard(project_type.id)">
-          <project-type-card
-            :name="project_type.name"
-            :options="project_type.options"
-            :typeId="project_type.id"
-          />
+    <v-parallax height="150" src="/images/create.jpg">
+      <v-row align="center" justify="center">
+        <div class="white--text display-1">
+          Новый проект
         </div>
-      </div>
-    </div>
-    <md-dialog-alert
-      v-if="selectedType"
-      :md-active.sync="modal"
-      :md-title="selectedType.toString()"
-      md-content="Your post <strong>Material Design is awesome</strong> has been created."
-    />
+      </v-row>
+    </v-parallax>
+    <load-spinner :overlay="!IS_PROJECT_TYPE_LOADED" />
+    <v-container
+      class="fill-height type-container"
+      v-if="IS_PROJECT_TYPE_LOADED"
+      fluid
+    >
+      <v-row align="baseline" justify="center">
+        <v-col xl="9" lg="11" md="12" sm="10">
+          <v-row align="center" justify="center">
+            <v-col v-for="(project_type, index) in PROJECT_TYPE" :key="index">
+              <v-row justify="center" no-gutters>
+                <project-type-card
+                  :name="project_type.name"
+                  :options="project_type.options"
+                  :typeId="project_type.id"
+                  @click="onClickCard(project_type.id)"
+                />
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-row justify="center">
+      <v-dialog v-model="dialog" persistent max-width="600px">
+        <create-form
+          :type="PROJECT_TYPE[selectedType]"
+          @close="handleCloseDialog"
+        />
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 
 <style scoped>
-.header-create {
-  background-image: url("/images/create.jpg");
-}
-.project-type-card {
-  padding: 20px;
-  flex: none;
-}
-.create-grid {
-  padding-top: 50px;
-  padding-bottom: 50px;
-  margin: auto;
+.type-container {
+  min-height: calc(100vh - 262px);
 }
 </style>
 
 <script>
 import { mapGetters } from "vuex";
+import LoadSpinner from "../lib/loading";
 import ProjectTypeCard from "./ProjectTypeCard";
+import CreateForm from "./CreateForm";
 
 export default {
   name: "create",
   components: {
-    ProjectTypeCard
+    CreateForm,
+    ProjectTypeCard,
+    LoadSpinner
   },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"])
@@ -61,12 +66,15 @@ export default {
   methods: {
     onClickCard(typeId) {
       this.selectedType = typeId;
-      this.modal = !this.modal;
+      this.dialog = !this.dialog;
+    },
+    handleCloseDialog() {
+      this.dialog = false;
     }
   },
   data() {
     return {
-      modal: false,
+      dialog: false,
       selectedType: null
     };
   }
