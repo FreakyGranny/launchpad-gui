@@ -10,7 +10,7 @@
       <v-tab href="#tab-members">
         <v-row align="center" justify="center">
           Участники
-          <v-chip class="ma-2" color="gray" small>
+          <v-chip class="ma-2" color="secondarytext" small outlined>
             {{ donations.length }}
           </v-chip>
         </v-row>
@@ -19,7 +19,7 @@
       <v-tab disabled href="#tab-comments" class="hidden-sm-and-down">
         <v-row align="center" justify="center">
           Комментарии
-          <v-chip class="ma-2" color="gray" small>
+          <v-chip class="ma-2" color="secondarytext" small outlined>
             Soon
           </v-chip>
         </v-row>
