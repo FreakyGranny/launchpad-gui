@@ -63,8 +63,8 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="red darken-3" text @click="handleClose">Отменить</v-btn>
-      <v-btn color="primary" text>Создать</v-btn>
+      <v-btn color="primary" text @click="handleClose">Отменить</v-btn>
+      <v-btn color="accent" text>Создать</v-btn>
     </v-card-actions>
   </v-card>
 </template>
