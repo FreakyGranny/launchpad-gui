@@ -45,7 +45,7 @@
             </div>
           </v-hover>
         </router-link>
-        <v-avatar size="40">
+        <v-avatar size="40" v-if="IS_PROFILE_LOADED">
           <img
             v-bind:src="PROFILE.avatar"
             onerror="this.onerror=null;this.src='/images/avatar.png';"

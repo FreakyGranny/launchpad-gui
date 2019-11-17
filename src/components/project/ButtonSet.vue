@@ -1,59 +1,80 @@
 <template>
-  <v-fade-transition>
-    <div v-if="IS_USER_DONATIONS_LOADED">
-      <v-tooltip :disabled="!type.goal_by_amount" bottom>
-        <template v-slot:activator="{ on }">
-          <v-scroll-x-transition>
-            <v-chip
-              v-on="on"
-              v-show="!!donation"
-              outlined
-              class="mr-2 my-1 donat"
-              color="primarytext"
-              large
-            >
-              {{ donationText }}
-            </v-chip>
-          </v-scroll-x-transition>
-        </template>
-        <span>Твой вклад</span>
-      </v-tooltip>
-      <v-btn
-        v-if="donateAllowed && !donation"
-        color="accent"
-        tile
-        min-width="100"
-        large
-      >
-        {{ joinButtonText }}
-      </v-btn>
-      <v-btn
-        v-if="donateAllowed && donation && isMoneyType"
-        class="mr-2 my-1"
-        color="accent"
-        outlined
-        tile
-        min-width="100"
-        large
-      >
-        Уточнить
-      </v-btn>
-      <v-btn
-        v-if="donateAllowed && donation"
-        color="primary"
-        class="mr-2 my-1"
-        outlined
-        tile
-        min-width="100"
-        large
-      >
-        Отказаться
-      </v-btn>
-      <v-btn v-if="isDraft" disabled tile min-width="100" large>
-        {{ joinButtonText }}
-      </v-btn>
-    </div>
-  </v-fade-transition>
+  <div v-if="IS_USER_DONATIONS_LOADED">
+    <v-btn
+      v-if="donateAllowed && !donation"
+      class="my-1"
+      color="accent"
+      tile
+      min-width="100"
+      large
+      @click="isMoneyType ? (donatePick = true) : joinProject(0)"
+      :disabled="makeRequest"
+      :loading="makeRequest"
+    >
+      {{ joinButtonText }}
+    </v-btn>
+    <v-tooltip :disabled="!type.goal_by_amount" bottom>
+      <template v-slot:activator="{ on }">
+        <v-fade-transition>
+          <v-chip
+            v-on="on"
+            v-show="!!donation"
+            outlined
+            class="mr-2 my-1 donat"
+            color="primarytext"
+            large
+          >
+            {{ donationText }}
+          </v-chip>
+        </v-fade-transition>
+      </template>
+      <span>Твой вклад</span>
+    </v-tooltip>
+    <v-btn
+      v-if="donateAllowed && donation && isMoneyType"
+      class="mr-2 my-1"
+      color="accent"
+      outlined
+      tile
+      min-width="100"
+      large
+      @click="showSpecify = true"
+      :disabled="makeRequest"
+      :loading="makeRequest"
+    >
+      Уточнить
+    </v-btn>
+    <v-btn
+      v-if="donateAllowed && donation"
+      color="primary"
+      class="mr-2 my-1"
+      outlined
+      tile
+      min-width="100"
+      large
+      @click="leaveConfirm = true"
+      :disabled="makeRequest"
+      :loading="makeRequest"
+    >
+      Отказаться
+    </v-btn>
+    <v-btn class="my-1" v-if="isDraft" disabled tile min-width="100" large>
+      {{ joinButtonText }}
+    </v-btn>
+    <v-dialog v-model="leaveConfirm" max-width="400px">
+      <confirm-dialog @confirm="leaveProject" />
+    </v-dialog>
+    <v-dialog v-model="donatePick" max-width="400px">
+      <donate-dialog @confirm="moneyDonate" :specify="false" />
+    </v-dialog>
+    <v-dialog v-model="showSpecify" max-width="400px">
+      <donate-dialog
+        @confirm="specifyDonate"
+        :sum="currentDonationSum"
+        :specify="true"
+      />
+    </v-dialog>
+  </div>
 </template>
 
 <style>
@@ -67,8 +88,14 @@
 import { mapGetters } from "vuex";
 import { U_DONATIONS_REQUEST } from "../../store/actions/userDonations";
 import { STATUS_DRAFT, STATUS_SEARCH } from "../lib/const/status";
+import ConfirmDialog from "./ConfirmDialog";
+import DonateDialog from "./DonateDialog";
 
 export default {
+  components: {
+    DonateDialog,
+    ConfirmDialog
+  },
   name: "ButtonSet",
   created: async function() {
     if (this.IS_AUTHORIZED) {
@@ -93,7 +120,7 @@ export default {
     joinButtonText() {
       return this.type.goal_by_amount ? "Поддержать" : "Присоединиться";
     },
-    currentDonation() {
+    currentDonationSum() {
       if (!!this.donation && this.USER_DONATIONS) {
         if (this.donation.id in this.USER_DONATIONS) {
           return this.USER_DONATIONS[this.donation.id].payment;
@@ -108,11 +135,74 @@ export default {
       if (this.type.goal_by_people && this.type.goal_by_amount) {
         return "Я в деле!";
       }
-      return this.currentDonation + "₽";
+      return this.currentDonationSum + "₽";
+    }
+  },
+  methods: {
+    joinProject(payment) {
+      this.makeRequest = true;
+      let payload = {
+        project: this.$route.params.id,
+        payment: payment
+      };
+      this.axios
+        .post("/donation", payload)
+        .then(resp => {
+          this.project = resp.data;
+          this.$emit("reload");
+        })
+        .catch(resp => {
+          this.requestError = resp;
+          // window.console.log(resp);
+        });
+      this.makeRequest = false;
+    },
+    leaveProject() {
+      this.leaveConfirm = false;
+      this.makeRequest = true;
+      this.axios
+        .delete("/donation/" + this.donation.id)
+        .then(resp => {
+          this.project = resp.data;
+          this.$emit("reload");
+        })
+        .catch(resp => {
+          this.requestError = resp;
+          // window.console.log(resp);
+        });
+      this.makeRequest = false;
+    },
+    moneyDonate(payment) {
+      this.donatePick = false;
+      this.joinProject(payment);
+      this.$store.dispatch(U_DONATIONS_REQUEST);
+    },
+    specifyDonate(payment) {
+      this.showSpecify = false;
+
+      this.makeRequest = true;
+      this.axios
+        .patch("/donation/" + this.donation.id, { payment: payment })
+        .then(resp => {
+          this.project = resp.data;
+          this.$emit("reload");
+        })
+        .catch(resp => {
+          this.requestError = resp;
+          // window.console.log(resp);
+        });
+      this.makeRequest = false;
+      this.$store.dispatch(U_DONATIONS_REQUEST);
     }
   },
   data() {
-    return {};
+    return {
+      donatePick: false,
+      showSpecify: false,
+      leaveConfirm: false,
+      makeRequest: false,
+      requestError: null
+    };
   },
   props: {
     type: Object,

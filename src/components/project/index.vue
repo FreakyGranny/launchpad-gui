@@ -1,7 +1,7 @@
 <template>
   <div>
     <load-spinner :overlay="!IS_PROJECT_TYPE_LOADED || loading"></load-spinner>
-    <v-container fluid v-if="!loading">
+    <v-container fluid v-if="!!project">
       <v-row justify="center" no-gutters>
         <v-col xl="7" lg="9" md="11" sm="9" xs="12" class="my-3">
           <v-row justify="center" no-gutters>
@@ -139,6 +139,7 @@
                   :status="project.status"
                   :type="PROJECT_TYPE[project.project_type]"
                   :donation="currentDonation"
+                  @reload="reloadData()"
                 />
               </v-row>
             </v-col>
@@ -216,8 +217,8 @@ export default {
   },
   name: "project",
   created() {
-    this.project = this.getProject();
-    this.donations = this.getDonations();
+    this.getProject(true);
+    this.getDonations(true);
   },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE", "PROFILE"]),
@@ -246,29 +247,39 @@ export default {
     }
   },
   methods: {
-    getProject() {
-      this.loadingProject = true;
+    reloadData() {
+      this.getProject(false);
+      this.getDonations(false);
+    },
+    getProject(setLoading) {
+      if (setLoading) {
+        this.loadingProject = true;
+      }
       this.axios({ url: "/project/" + this.$route.params.id })
         .then(resp => {
           this.project = resp.data;
-          this.loadingProject = false;
         })
         .catch(resp => {
           this.error = resp.data;
-          this.loadingProject = false;
         });
+      if (setLoading) {
+        this.loadingProject = false;
+      }
     },
-    getDonations() {
-      this.loadingDonation = true;
+    getDonations(setLoading) {
+      if (setLoading) {
+        this.loadingDonation = true;
+      }
       this.axios({ url: "/donation?project_id=" + this.$route.params.id })
         .then(resp => {
           this.donations = resp.data;
-          this.loadingDonation = false;
         })
         .catch(resp => {
           this.error = resp.data;
-          this.loadingDonation = false;
         });
+      if (setLoading) {
+        this.loadingDonation = false;
+      }
     }
   },
   data() {
