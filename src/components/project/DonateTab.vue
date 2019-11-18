@@ -8,7 +8,7 @@
       :key="'donation_' + index"
     >
       <!-- @click="onClickDonation(donat.user.id)" -->
-      <donate-line :typeId="typeId" :donation="donat" />
+      <donate-line :type="type" :donation="donat" />
     </v-col>
   </v-row>
 </template>
@@ -33,7 +33,7 @@ export default {
   },
   props: {
     donations: Array,
-    typeId: Number
+    type: Object
   }
 };
 </script>

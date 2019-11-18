@@ -1,5 +1,5 @@
 <template>
-  <v-col md="7" sm="12" class="pa-4">
+  <v-row no-gutters>
     <div class="project-image project-image-md hidden-sm-and-down">
       <v-img class="blur" v-bind:src="imageSrc" alt="project background" />
       <v-img contain class="img" v-bind:src="imageSrc" alt="project image" />
@@ -12,7 +12,7 @@
       <v-img class="blur" v-bind:src="imageSrc" alt="project background" />
       <v-img contain class="img" v-bind:src="imageSrc" alt="project image" />
     </div>
-  </v-col>
+  </v-row>
 </template>
 
 <style scoped>

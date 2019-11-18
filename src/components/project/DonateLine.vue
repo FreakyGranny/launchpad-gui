@@ -20,7 +20,7 @@
             </div>
           </v-col>
           <v-col cols="1">
-            <v-tooltip v-if="IS_PROJECT_TYPE_LOADED && isMoneyProject" bottom>
+            <v-tooltip v-if="!!type && isMoneyProject" bottom>
               <template v-slot:activator="{ on }">
                 <v-icon :color="donation.paid ? 'accent' : ''" v-on="on">
                   {{ paymentIcon }}
@@ -38,15 +38,15 @@
 <style></style>
 
 <script>
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 
 export default {
   name: "DonateLine",
   computed: {
-    ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),
-    type() {
-      return this.PROJECT_TYPE[this.typeId];
-    },
+    // ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),
+    // type() {
+    //   return this.PROJECT_TYPE[this.typeId];
+    // },
     isMoneyProject() {
       if (this.type.goal_by_people) {
         return false;
@@ -67,7 +67,7 @@ export default {
   },
   props: {
     donation: Object,
-    typeId: Number
+    type: Object
   }
 };
 </script>

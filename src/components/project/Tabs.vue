@@ -29,11 +29,12 @@
     <v-tabs-items v-model="tab">
       <v-tab-item value="tab-about">
         <v-card flat>
+          <progress-steps :status="status" :type="type" />
           <v-card-text v-html="description" class="tab-content" />
         </v-card>
       </v-tab-item>
       <v-tab-item value="tab-members">
-        <donate-tab :donations="donations" :typeId="typeId" />
+        <donate-tab :donations="donations" :type="type" />
       </v-tab-item>
     </v-tabs-items>
   </v-col>
@@ -43,9 +44,11 @@
 
 <script>
 import DonateTab from "./DonateTab";
+import ProgressSteps from "./ProgressSteps";
 
 export default {
   components: {
+    ProgressSteps,
     DonateTab
   },
   name: "Tabs",
@@ -57,7 +60,8 @@ export default {
   props: {
     description: String,
     donations: Array,
-    typeId: Number
+    status: String,
+    type: Object
   }
 };
 </script>

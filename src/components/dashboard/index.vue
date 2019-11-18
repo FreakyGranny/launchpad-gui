@@ -140,9 +140,9 @@
         <!-- projects -->
         <v-col xl="8" lg="8" md="9">
           <empty-state
-            md-icon="help_outline"
-            md-label="Проекты не найдены"
-            md-description="К сожалению, не нашлось проектов удовлетворяющих всем фильтрам."
+            reason="empty_filter"
+            label="Проекты не найдены"
+            description="К сожалению, не нашлось проектов удовлетворяющих всем фильтрам."
             v-if="!loading && projects.length == 0"
           />
           <v-row no-gutters>

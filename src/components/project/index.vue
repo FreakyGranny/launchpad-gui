@@ -1,11 +1,19 @@
 <template>
   <div>
     <load-spinner :overlay="!IS_PROJECT_TYPE_LOADED || loading"></load-spinner>
+    <empty-state
+      reason="not_found"
+      label="Проект не найден"
+      description="Возможно проект был удален, или еще не опубликован."
+      v-if="isNotFound"
+    />
     <v-container fluid v-if="!!project">
       <v-row justify="center" no-gutters>
         <v-col xl="7" lg="9" md="11" sm="9" xs="12" class="my-3">
           <v-row justify="center" no-gutters>
-            <project-picture :imageSrc="project.image_link" />
+            <v-col md="7" sm="12" class="pa-4">
+              <project-picture :imageSrc="project.image_link" />
+            </v-col>
             <v-col xl="5" lg="5" md="5" sm="12">
               <v-row class="mx-4 mt-3 mb-0">
                 <status
@@ -139,6 +147,7 @@
                   :status="project.status"
                   :type="PROJECT_TYPE[project.project_type]"
                   :donation="currentDonation"
+                  :suggest="suggestAmount"
                   @reload="reloadData()"
                 />
               </v-row>
@@ -151,7 +160,8 @@
         <tabs
           :donations="donations"
           :description="project.description"
-          :typeId="project.project_type"
+          :status="project.status"
+          :type="type"
         />
       </v-row>
     </v-container>
@@ -185,7 +195,7 @@
 
 <style lang="scss" scoped>
 .subtitle-area {
-  height: 70px;
+  min-height: 70px;
 }
 .tabs-area {
   min-height: 300px;
@@ -199,6 +209,7 @@ import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
 import ProjectCounter from "../lib/projectCounter";
+import EmptyState from "../lib/EmptyState";
 import ButtonSet from "./ButtonSet";
 import ProjectPicture from "./ProjectPicture";
 import Tabs from "./Tabs";
@@ -210,6 +221,7 @@ export default {
     Status,
     GoalCounter,
     ProjectCounter,
+    EmptyState,
     ButtonSet,
     ProjectPicture,
     Tabs,
@@ -222,6 +234,12 @@ export default {
   },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE", "PROFILE"]),
+    isNotFound() {
+      if (this.error) {
+        return this.error.request.status == 404;
+      }
+      return false;
+    },
     type() {
       return this.PROJECT_TYPE[this.project.project_type];
     },
@@ -244,6 +262,16 @@ export default {
         }
       }
       return null;
+    },
+    suggestAmount() {
+      if (this.project.goal_by_people == 0) {
+        return 0;
+      }
+      let peoples = this.donations.length;
+      if (this.donations.length < this.project.goal_people) {
+        peoples = this.project.goal_people;
+      }
+      return Math.ceil(this.project.goal_amount / peoples);
     }
   },
   methods: {
@@ -260,7 +288,7 @@ export default {
           this.project = resp.data;
         })
         .catch(resp => {
-          this.error = resp.data;
+          this.error = resp;
         });
       if (setLoading) {
         this.loadingProject = false;
@@ -275,7 +303,7 @@ export default {
           this.donations = resp.data;
         })
         .catch(resp => {
-          this.error = resp.data;
+          this.error = resp;
         });
       if (setLoading) {
         this.loadingDonation = false;
