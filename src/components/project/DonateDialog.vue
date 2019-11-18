@@ -5,7 +5,12 @@
         Твой вклад
       </div>
       <div class="my-5 primarytext--text title text-center">{{ payment }}₽</div>
-      <v-slider v-model="payment" min="100" step="50" max="1000"></v-slider>
+      <v-slider
+        v-model="payment"
+        :min="minimum"
+        step="50"
+        max="1000"
+      ></v-slider>
     </v-card-text>
     <v-card-actions class="pb-6">
       <v-spacer></v-spacer>
@@ -31,6 +36,7 @@ export default {
   name: "DonateDialog",
   data() {
     return {
+      minimum: 100,
       payment: this.sum || 250
     };
   },

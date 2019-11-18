@@ -18,7 +18,7 @@
         <v-fade-transition>
           <v-chip
             v-on="on"
-            v-show="!!donation"
+            v-show="!!donation && !isFail"
             outlined
             class="mr-2 my-1 donat"
             color="primarytext"
@@ -87,7 +87,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { U_DONATIONS_REQUEST } from "../../store/actions/userDonations";
-import { STATUS_DRAFT, STATUS_SEARCH } from "../lib/const/status";
+import { STATUS_DRAFT, STATUS_SEARCH, STATUS_FAIL } from "../lib/const/status";
 import ConfirmDialog from "./ConfirmDialog";
 import DonateDialog from "./DonateDialog";
 
@@ -114,6 +114,9 @@ export default {
     isDraft() {
       return this.status == STATUS_DRAFT;
     },
+    isFail() {
+      return this.status == STATUS_FAIL;
+    },
     isMoneyType() {
       return !this.type.goal_by_people && this.type.goal_by_amount;
     },
@@ -133,7 +136,7 @@ export default {
         return "Я иду!";
       }
       if (this.type.goal_by_people && this.type.goal_by_amount) {
-        return "Я в деле!";
+        return this.suggest + "₽";
       }
       return this.currentDonationSum + "₽";
     }
@@ -205,6 +208,7 @@ export default {
     };
   },
   props: {
+    suggest: Number,
     type: Object,
     donation: Object,
     status: String
