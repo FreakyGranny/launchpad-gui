@@ -2,7 +2,7 @@
   <v-card>
     <v-card-text>
       <div class="pt-6 primarytext--text headline text-center">
-        Твой вклад
+        Выберите сумму
       </div>
       <div class="my-5 primarytext--text title text-center">{{ payment }}₽</div>
       <v-slider

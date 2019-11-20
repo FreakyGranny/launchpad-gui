@@ -43,12 +43,14 @@
               </v-list-item-content>
             </v-list-item>
 
+            <!-- hidding some categories for a while -->
             <v-list-item
               v-for="(category, index) in CATEGORY"
               :ripple="false"
               :to="buildFilterLink(typeFilter, category.id, onlyOpen)"
               :key="'category_' + index"
               class="pl-4"
+              v-show="category.id < 5"
             >
               <v-list-item-content>
                 <v-list-item-title
@@ -182,18 +184,20 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-btn
-      v-scroll="onScroll"
-      v-show="toTopFab"
-      fab
-      fixed
-      bottom
-      right
-      color="primary"
-      @click="toTop"
-    >
-      <v-icon>mdi-chevron-up</v-icon>
-    </v-btn>
+    <v-fab-transition>
+      <v-btn
+        v-scroll="onScroll"
+        v-show="toTopFab"
+        fab
+        fixed
+        bottom
+        right
+        color="primary"
+        @click="toTop"
+      >
+        <v-icon>mdi-chevron-up</v-icon>
+      </v-btn>
+    </v-fab-transition>
   </div>
 </template>
 
