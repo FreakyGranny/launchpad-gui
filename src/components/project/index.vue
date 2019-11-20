@@ -148,7 +148,9 @@
                   :type="PROJECT_TYPE[project.project_type]"
                   :donation="currentDonation"
                   :suggest="suggestAmount"
-                  @reload="reloadData()"
+                  @update="updateDonation"
+                  @delete="deleteDonation"
+                  @create="createDonation"
                 />
               </v-row>
             </v-col>
@@ -165,32 +167,21 @@
         />
       </v-row>
     </v-container>
-  </div>
-  <!--
-    <md-speed-dial
-      v-if="project && isOwner"
-      class="md-top-right"
-      md-direction="bottom"
+    <manage-menu
+      :status="project.status"
+      :donations="donations"
+      :type="type"
+      v-if="project && manageAllowed"
+      @mark="showDonateMark"
+    />
+    <v-dialog
+      v-if="!!project && isMoneyProject && donations"
+      v-model="donateMarkShown"
+      max-width="350px"
     >
-      <md-speed-dial-target class="md-primary">
-        <md-icon>menu</md-icon>
-      </md-speed-dial-target>
-
-      <md-speed-dial-content>
-        <md-button class="md-icon-button">
-          <md-icon>publish</md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button">
-          <md-icon>edit</md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button">
-          <md-icon>delete</md-icon>
-        </md-button>
-      </md-speed-dial-content>
-    </md-speed-dial>
-  </div> -->
+      <donate-mark :donations="donations" :type="type" />
+    </v-dialog>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -213,7 +204,13 @@ import EmptyState from "../lib/EmptyState";
 import ButtonSet from "./ButtonSet";
 import ProjectPicture from "./ProjectPicture";
 import Tabs from "./Tabs";
-import { STATUS_SEARCH } from "../lib/const/status";
+import ManageMenu from "./ManageMenu";
+import DonateMark from "./DonateMark";
+import {
+  STATUS_SEARCH,
+  STATUS_FAIL,
+  STATUS_SUCCESS
+} from "../lib/const/status";
 
 export default {
   components: {
@@ -225,12 +222,14 @@ export default {
     ButtonSet,
     ProjectPicture,
     Tabs,
+    ManageMenu,
+    DonateMark,
     DaysCounter
   },
   name: "project",
   created() {
-    this.getProject(true);
-    this.getDonations(true);
+    this.getProject();
+    this.getDonations();
   },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE", "PROFILE"]),
@@ -252,8 +251,18 @@ export default {
     isOwner() {
       return this.PROFILE.id == this.project.owner.id;
     },
-    loading() {
-      return this.loadingProject || this.loadingDonation;
+    manageAllowed() {
+      if (!this.isOwner) {
+        return false;
+      }
+      if (
+        this.project.status == STATUS_FAIL ||
+        this.project.status == STATUS_SUCCESS ||
+        this.project.status == STATUS_SEARCH
+      ) {
+        return false;
+      }
+      return true;
     },
     currentDonation() {
       for (let donation of this.donations) {
@@ -275,29 +284,47 @@ export default {
     }
   },
   methods: {
-    reloadData() {
-      this.getProject(false);
-      this.getDonations(false);
-    },
-    getProject(setLoading) {
-      if (setLoading) {
-        this.loadingProject = true;
+    recalcPercent() {
+      if (this.isMoneyProject) {
+        this.project.percent = Math.floor(
+          (this.project.total / this.project.goal_amount) * 100
+        );
+      } else {
+        this.project.percent = Math.floor(
+          (this.project.total / this.project.goal_people) * 100
+        );
       }
+    },
+    updateDonation(newPayment) {
+      this.project.total += newPayment;
+      this.recalcPercent();
+    },
+    deleteDonation(wasPayment) {
+      this.project.total -= wasPayment;
+      this.recalcPercent();
+      this.getDonations();
+    },
+    createDonation(payment) {
+      this.project.total += payment;
+      this.recalcPercent();
+      this.getDonations();
+    },
+    showDonateMark() {
+      this.donateMarkShown = true;
+    },
+    getProject() {
+      this.loading = true;
       this.axios({ url: "/project/" + this.$route.params.id })
         .then(resp => {
           this.project = resp.data;
+          this.loading = false;
         })
         .catch(resp => {
           this.error = resp;
+          this.loading = false;
         });
-      if (setLoading) {
-        this.loadingProject = false;
-      }
     },
-    getDonations(setLoading) {
-      if (setLoading) {
-        this.loadingDonation = true;
-      }
+    getDonations() {
       this.axios({ url: "/donation?project_id=" + this.$route.params.id })
         .then(resp => {
           this.donations = resp.data;
@@ -305,15 +332,12 @@ export default {
         .catch(resp => {
           this.error = resp;
         });
-      if (setLoading) {
-        this.loadingDonation = false;
-      }
     }
   },
   data() {
     return {
-      loadingProject: true,
-      loadingDonation: true,
+      donateMarkShown: false,
+      loading: true,
       error: null,
       project: null,
       donations: [],

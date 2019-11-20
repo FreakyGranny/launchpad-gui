@@ -139,6 +139,13 @@ export default {
         return this.suggest + "₽";
       }
       return this.currentDonationSum + "₽";
+    },
+    currentContribution() {
+      let beforeUpdate = 1;
+      if (this.isMoneyType) {
+        beforeUpdate = this.currentDonationSum;
+      }
+      return beforeUpdate;
     }
   },
   methods: {
@@ -152,13 +159,14 @@ export default {
         .post("/donation", payload)
         .then(resp => {
           this.project = resp.data;
-          this.$emit("reload");
+          this.$emit("create", payment > 0 ? payment : 1);
+          this.makeRequest = false;
         })
         .catch(resp => {
           this.requestError = resp;
+          this.makeRequest = false;
           // window.console.log(resp);
         });
-      this.makeRequest = false;
     },
     leaveProject() {
       this.leaveConfirm = false;
@@ -166,14 +174,14 @@ export default {
       this.axios
         .delete("/donation/" + this.donation.id)
         .then(resp => {
-          this.project = resp.data;
-          this.$emit("reload");
+          this.some = resp.data;
+          this.$emit("delete", this.currentContribution);
+          this.makeRequest = false;
         })
         .catch(resp => {
           this.requestError = resp;
-          // window.console.log(resp);
+          this.makeRequest = false;
         });
-      this.makeRequest = false;
     },
     moneyDonate(payment) {
       this.donatePick = false;
@@ -182,20 +190,21 @@ export default {
     },
     specifyDonate(payment) {
       this.showSpecify = false;
-
+      if (payment == this.currentContribution) {
+        return;
+      }
       this.makeRequest = true;
       this.axios
         .patch("/donation/" + this.donation.id, { payment: payment })
         .then(resp => {
-          this.project = resp.data;
-          this.$emit("reload");
+          this.$store.dispatch(U_DONATIONS_REQUEST);
+          this.$emit("update", resp.data.payment - this.currentContribution);
+          this.makeRequest = false;
         })
         .catch(resp => {
           this.requestError = resp;
-          // window.console.log(resp);
+          this.makeRequest = false;
         });
-      this.makeRequest = false;
-      this.$store.dispatch(U_DONATIONS_REQUEST);
     }
   },
   data() {
