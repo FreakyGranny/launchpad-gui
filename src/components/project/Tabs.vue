@@ -30,6 +30,23 @@
       <v-tab-item value="tab-about">
         <v-card flat>
           <progress-steps :status="status" :type="type" />
+          <v-card
+            tile
+            color="lightprimary"
+            class="ma-4"
+            min-width="265"
+            v-if="isMember && showInstructions"
+          >
+            <v-card-text>
+              <div class="mb-2 primarytext--text subtitle-2 text-center">
+                Информация для участников проекта
+              </div>
+              <div
+                v-html="instruction"
+                class="secondarytext--text caption text-center"
+              />
+            </v-card-text>
+          </v-card>
           <v-card-text v-html="description" class="tab-content" />
         </v-card>
       </v-tab-item>
@@ -45,6 +62,7 @@
 <script>
 import DonateTab from "./DonateTab";
 import ProgressSteps from "./ProgressSteps";
+import { STATUS_HARVEST } from "../lib/const/status";
 
 export default {
   components: {
@@ -52,6 +70,11 @@ export default {
     DonateTab
   },
   name: "Tabs",
+  computed: {
+    showInstructions() {
+      return this.status === STATUS_HARVEST;
+    }
+  },
   data() {
     return {
       tab: null
@@ -59,6 +82,8 @@ export default {
   },
   props: {
     description: String,
+    instruction: String,
+    isMember: Boolean,
     donations: Array,
     status: String,
     type: Object
