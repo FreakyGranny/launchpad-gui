@@ -1,5 +1,10 @@
 <template>
   <v-row justify-md="start" justify-sm="center" no-gutters class="my-5">
+    <v-row v-if="donations.length == 0" justify="center" no-gutters>
+      <div class="my-5 secondarytext--text caption text-center">
+        Тут пока никого нет)
+      </div>
+    </v-row>
     <v-col
       md="6"
       sm="10"
