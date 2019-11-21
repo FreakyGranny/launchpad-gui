@@ -1,10 +1,12 @@
 <template>
   <v-card>
     <v-card-title class="px-7">
-      Отметить переводы
+      <div class="primarytext--text title">
+        Отметить переводы
+      </div>
     </v-card-title>
     <v-progress-linear
-      :active="true"
+      :active="makeRequest"
       indeterminate
       absolute
       color="secondary"
@@ -13,7 +15,7 @@
       <v-list-item
         v-for="donation in donations"
         :key="donation.id"
-        @click="markDonation(donation.id)"
+        @click="markDonation(donation.id, donation.paid)"
       >
         <v-list-item-avatar>
           <v-img :src="donation.user.avatar"></v-img>
@@ -42,12 +44,27 @@
 export default {
   name: "DonateMark",
   methods: {
-    markDonation(id) {
-      window.console.log(id);
+    markDonation(id, isPaid) {
+      // window.console.log(id);
+      this.makeRequest = true;
+      this.axios
+        .patch("/donation/" + id, { paid: !isPaid })
+        .then(resp => {
+          this.$emit("mark", id, resp.data.paid);
+          this.makeRequest = false;
+        })
+        .catch(resp => {
+          this.requestError = resp;
+          this.makeRequest = false;
+          // window.console.log(resp);
+        });
     }
   },
   data() {
-    return {};
+    return {
+      makeRequest: false,
+      requestError: null
+    };
   },
   props: {
     dialog: Boolean,

@@ -161,7 +161,9 @@
       <v-row justify="center" no-gutters v-if="!loading" class="tabs-area">
         <tabs
           :donations="donations"
+          :isMember="currentDonation ? true : isOwner"
           :description="project.description"
+          :instruction="project.payment_instructions"
           :status="project.status"
           :type="type"
         />
@@ -179,7 +181,7 @@
       v-model="donateMarkShown"
       max-width="350px"
     >
-      <donate-mark :donations="donations" :type="type" />
+      <donate-mark @mark="markDonation" :donations="donations" :type="type" />
     </v-dialog>
   </div>
 </template>
@@ -308,6 +310,10 @@ export default {
       this.project.total += payment;
       this.recalcPercent();
       this.getDonations();
+    },
+    markDonation(id, mark) {
+      let currentDonation = this.donations.find(donation => donation.id === id);
+      currentDonation.paid = mark;
     },
     showDonateMark() {
       this.donateMarkShown = true;
