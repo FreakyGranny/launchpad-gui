@@ -31,7 +31,7 @@
       </v-row>
     </v-container>
     <v-row justify="center">
-      <v-dialog v-model="dialog" persistent max-width="600px">
+      <v-dialog v-model="dialog" scrollable persistent max-width="650px">
         <create-form
           :type="PROJECT_TYPE[selectedType]"
           @close="handleCloseDialog"

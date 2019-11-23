@@ -1,15 +1,15 @@
 <template>
   <v-row no-gutters>
     <div class="project-image project-image-md hidden-sm-and-down">
-      <v-img class="blur" v-bind:src="imageSrc" alt="project background" />
+      <img class="blur" v-bind:src="imageSrc" alt="project background" />
       <v-img contain class="img" v-bind:src="imageSrc" alt="project image" />
     </div>
     <div class="project-image project-image-sm d-none d-sm-flex d-md-none">
-      <v-img class="blur" v-bind:src="imageSrc" alt="project background" />
+      <img class="blur" v-bind:src="imageSrc" alt="project background" />
       <v-img contain class="img" v-bind:src="imageSrc" alt="project image" />
     </div>
     <div class="project-image project-image-xs hidden-sm-and-up">
-      <v-img class="blur" v-bind:src="imageSrc" alt="project background" />
+      <img class="blur" v-bind:src="imageSrc" alt="project background" />
       <v-img contain class="img" v-bind:src="imageSrc" alt="project image" />
     </div>
   </v-row>
@@ -38,6 +38,7 @@
   object-position: center;
 }
 .project-image {
+  z-index: 1;
   min-width: 270px;
   position: relative;
   width: 100%;

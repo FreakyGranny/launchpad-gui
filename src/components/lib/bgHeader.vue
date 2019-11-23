@@ -19,8 +19,8 @@
   background-position: center;
   background-repeat: no-repeat;
   height: 150px;
-  text-align: center;
-  line-height: 150px;
+  vertical-align: middle;
+  /* line-height: 150px; */
 }
 </style>
 
