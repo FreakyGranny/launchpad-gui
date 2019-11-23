@@ -3,12 +3,20 @@ import App from "./App";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
-import "@/assets/kickstarter.css";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import { TiptapVuetifyPlugin } from "tiptap-vuetify";
+
+import "tiptap-vuetify/dist/main.css";
+import "@/assets/kickstarter.css";
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
+
+Vue.use(TiptapVuetifyPlugin, {
+  vuetify,
+  iconsGroup: "mdi"
+});
 
 const token = localStorage.getItem("user-token");
 if (token) {

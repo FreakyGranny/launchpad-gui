@@ -96,7 +96,7 @@
   </v-hover>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 * {
   text-decoration: none !important;
 }
