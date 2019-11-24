@@ -1,24 +1,10 @@
 <template>
-  <span
-    class="status-text-color"
-    :class="{
-      'status-color-green': !isFail,
-      'status-color-gray': isFail
-    }"
-    >{{ getStatus }}</span
-  >
+  <span :class="isFail ? 'secondarytext--text' : 'accent--text'">{{
+    getStatus
+  }}</span>
 </template>
 
-<style lang="scss" scoped>
-@import "~vue-material/dist/theme/engine";
-
-.status-color-green {
-  color: md-get-palette-color(green, 700);
-}
-.status-color-gray {
-  color: md-get-palette-color(gray, 700);
-}
-</style>
+<style scoped></style>
 
 <script>
 import {
