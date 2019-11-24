@@ -1,14 +1,12 @@
 <template>
   <div>
-    <div class="header header-wellcome">
-      <span class="white-text">Как это работает?</span>
-    </div>
-    <div class="headline">
-      <h1>Wellcome</h1>
-    </div>
-    <a href="/login">
-      <h1 class="md-title">LOGIN</h1>
-    </a>
+    <v-container class="header header-wellcome fill-height" fluid>
+      <v-row align="center" justify="center">
+        <div class="white--text display-1">
+          Как это работает?
+        </div>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

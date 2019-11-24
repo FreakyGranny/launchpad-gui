@@ -1,16 +1,28 @@
 <template>
-  <span v-if="IS_PROJECT_TYPE_LOADED">
-    {{ getText }}
-  </span>
+  <div v-if="IS_PROJECT_TYPE_LOADED">
+    <div v-if="!animate">
+      {{ getText }}
+    </div>
+    <animated-number
+      v-if="animate"
+      :value="count"
+      :formatValue="formatUnits"
+      :duration="500"
+    />
+  </div>
 </template>
 
 <style></style>
 
 <script>
+import AnimatedNumber from "animated-number-vue";
 import { mapGetters } from "vuex";
 
 export default {
   name: "GoalCounter",
+  components: {
+    AnimatedNumber
+  },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),
     type() {
@@ -26,12 +38,7 @@ export default {
         }
       }
       if (this.mode == "units") {
-        if (this.type.goal_by_people) {
-          return this.count;
-        }
-        if (this.type.goal_by_amount) {
-          return this.count + "₽";
-        }
+        return this.formatUnits(this.count);
       }
       if (this.type.goal_by_people) {
         return this.getMembers();
@@ -43,6 +50,15 @@ export default {
     }
   },
   methods: {
+    formatUnits(value) {
+      if (this.type.goal_by_people) {
+        return value.toFixed();
+      }
+      if (this.type.goal_by_amount) {
+        return value.toFixed() + "₽";
+      }
+      return null;
+    },
     getMembers() {
       let cases = [2, 0, 1, 1, 1, 2];
       let titles = ["участник", "участника", "участников"];
@@ -57,6 +73,7 @@ export default {
     return {};
   },
   props: {
+    animate: Boolean,
     count: Number,
     typeId: Number,
     mode: String

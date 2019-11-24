@@ -1,178 +1,110 @@
 <template>
-  <div class="md-layout-item project-card">
-    <div @click="onClickCard()">
-      <md-card :class="{ 'draft-card': markDraft }" md-with-hover>
-        <md-ripple>
-          <md-card-media>
-            <img class="img" v-bind:src="project.image_link" alt="People" />
-          </md-card-media>
-          <md-card-content>
-            <div class="md-layout md-alignment-center">
-              <div class="md-layout-item md-size-90 status-area">
-                <b>
-                  <status
-                    class="status-text"
-                    :sourceStatus="project.status"
-                  ></status>
-                </b>
-              </div>
-              <div class="md-layout-item md-size-10 status-area right-text">
-                <type-icon
-                  class="md-primary"
-                  :typeId="project.project_type"
-                  :withTooltip="true"
-                />
-              </div>
-              <div class="md-layout-item md-size-100">
-                <md-divider></md-divider>
-              </div>
-              <div class="md-layout-item md-size-100 title-area">
-                <b>
-                  <span class="title-text">{{
-                    project.title.length > 25
-                      ? project.title.slice(0, 25) + "..."
-                      : project.title
-                  }}</span>
-                </b>
-              </div>
-              <div class="md-layout-item md-size-100 subtitle-area">
-                <span class="subtitle-text">{{
-                  project.subtitle.length > 50
-                    ? project.subtitle.slice(0, 50) + "..."
-                    : project.subtitle
-                }}</span>
-              </div>
+  <v-hover v-slot:default="{ hover }">
+    <v-card
+      :elevation="hover ? 12 : 2"
+      width="250"
+      height="500"
+      :to="'project/' + project.id"
+      :color="markDraft ? 'lightprimary' : 'white'"
+      tile
+    >
+      <v-img height="250px" v-bind:src="project.image_link" />
+      <v-card-text class="pt-2 px-4">
+        <v-row class="py-1" no-gutters>
+          <v-col cols="10">
+            <status
+              class="caption font-weight-bold"
+              :sourceStatus="project.status"
+            />
+          </v-col>
+          <v-col class="text-end" cols="2">
+            <type-icon
+              :size="20"
+              :typeId="project.project_type"
+              :withTooltip="true"
+            />
+          </v-col>
+        </v-row>
+        <v-divider></v-divider>
+        <div class="primarytext--text subtitle-1 font-weight-bold pt-2 pb-1">
+          {{
+            project.title.length > 25
+              ? project.title.slice(0, 25) + "..."
+              : project.title
+          }}
+        </div>
+        <div class="secondarytext--text body-2 subtitle-area pt-1 pb-1">
+          {{
+            project.subtitle.length > 50
+              ? project.subtitle.slice(0, 50) + "..."
+              : project.subtitle
+          }}
+        </div>
+        <v-row class="pt-2 pb-2" no-gutters v-if="IS_CATEGORY_LOADED">
+          <router-link
+            :to="{
+              path: 'explore',
+              query: { category: category.id.toString() }
+            }"
+          >
+            <v-hover v-slot:default="{ hover }">
               <div
-                v-if="IS_CATEGORY_LOADED"
-                class="md-layout-item md-size-100 category-area"
+                :class="hover ? 'primary--text' : 'primarytext--text'"
+                class="caption font-weight-bold"
               >
-                <b>
-                  <span class="category-text">{{
-                    category.name.toUpperCase()
-                  }}</span>
-                </b>
+                {{ category.name.toUpperCase() }}
               </div>
-              <div class="md-layout-item md-size-100">
-                <div class="md-layout">
-                  <div class="md-layout-item">
-                    <goal-counter
-                      class="goal-count-text"
-                      :typeId="project.project_type"
-                      :count="project.total"
-                      mode="units"
-                    />
-                    <goal-counter
-                      class="goal-units-text"
-                      :typeId="project.project_type"
-                      :count="project.total"
-                    />
-                  </div>
-                  <div class="md-layout-item right-text">
-                    <span class="md-body-1">{{ project.percent }}%</span>
-                  </div>
-                </div>
-                <md-progress-bar
-                  class="md-accent"
-                  md-mode="determinate"
-                  v-bind:md-value="project.percent"
-                ></md-progress-bar>
-              </div>
-              <div class="md-layout-item md-size-100 days-area">
-                <days-counter
-                  class="md-body-1 days-text-centred"
-                  :endDate="project.release_date"
-                  :withIcon="true"
-                  :ended="showDaysCounter"
-                ></days-counter>
-              </div>
-            </div>
-          </md-card-content>
-        </md-ripple>
-      </md-card>
-    </div>
-  </div>
+            </v-hover>
+          </router-link>
+        </v-row>
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <goal-counter
+              class="primarytext--text font-weight-bold"
+              :typeId="project.project_type"
+              :count="project.total"
+              mode="units"
+            />
+          </v-col>
+          <v-col class="pl-1">
+            <goal-counter
+              class="primarytext--text"
+              :typeId="project.project_type"
+              :count="project.total"
+            />
+          </v-col>
+          <v-col cols="3" class="text-end">
+            <div class="primarytext--text body-2">{{ project.percent }}%</div>
+          </v-col>
+        </v-row>
+        <v-progress-linear
+          color="accent"
+          height="8px"
+          rounded
+          v-bind:value="project.percent"
+        />
+        <div class="pt-5">
+          <days-counter
+            class="body-2"
+            :endDate="project.release_date"
+            :withIcon="true"
+            :ended="showDaysCounter"
+          />
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-hover>
 </template>
 
-<style lang="scss" scoped>
-@import "~vue-material/dist/theme/engine";
-
-.project-card {
-  padding: 20px;
-  flex: none;
-}
-.img {
-  object-fit: cover;
-  width: 250px;
-  height: 250px;
-}
-.md-card {
-  object-fit: cover;
-  width: 250px;
-  height: 500px;
-}
-.md-card-content {
-  padding-top: 10px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-.md-progress-bar {
-  height: 8px;
-  border-radius: 4px;
-}
-.status-text {
-  font-size: 12px;
-}
-.title-text {
-  font-size: 15px;
-}
-.subtitle-text {
-  font-size: 13px;
-  color: md-get-palette-color(gray, 600);
-}
-.category-text {
-  font-size: 12px;
-  color: md-get-palette-color(deeppurple, 600);
-}
-.status-area {
-  padding-bottom: 5px;
-}
-.title-area {
-  padding-top: 10px;
-  padding-bottom: 5px;
+<style scoped>
+* {
+  text-decoration: none !important;
 }
 .subtitle-area {
-  padding-top: 5px;
-  padding-bottom: 5px;
   height: 50px;
 }
-.category-area {
-  padding-top: 7px;
-  padding-bottom: 7px;
-}
-.right-text {
-  text-align: right;
-}
-.days-area {
-  padding-top: 20px;
-}
-.goal-count-text {
-  font-size: 14px;
-  font-weight: 800;
-}
-.goal-descr-text {
-  padding-left: 5px;
-  font-size: 12px;
-}
-.md-icon {
-  width: 20px;
-  min-width: 20px;
-  height: 20px;
-  font-size: 20px !important;
-}
-.draft-card {
-  background-color: md-get-palette-color(green, 50) !important;
-}
 </style>
+
 <script>
 import { mapGetters } from "vuex";
 import Status from "../lib/status";
@@ -201,11 +133,6 @@ export default {
         default:
           return true;
       }
-    }
-  },
-  methods: {
-    onClickCard() {
-      this.$router.push({ name: "Project", params: { id: this.project.id } });
     }
   },
   name: "ProjectCard",
