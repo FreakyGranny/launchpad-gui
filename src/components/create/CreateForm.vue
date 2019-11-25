@@ -136,9 +136,17 @@
                   placeholder="Эта информацию получат участники проекта когда он завершится или на стадии сбора средств …"
                   min-height="90"
                 />
-                <div v-if="instructionIsEmpty" class="py-2 error--text body-2">
-                  Слишком коротко...
-                </div>
+                <v-alert
+                  outlined
+                  dense
+                  type="error"
+                  border="left"
+                  v-if="instructionIsEmpty"
+                >
+                  <div class="body-2">
+                    Это поле надо заполнить
+                  </div>
+                </v-alert>
               </v-col>
               <v-col cols="12">
                 <div class="pb-2 primary--text body-1">О проекте</div>
@@ -150,9 +158,17 @@
                   placeholder="Расскажи о своем проекте …"
                   min-height="120"
                 />
-                <div v-if="descriptionIsEmpty" class="py-2 error--text body-2">
-                  Слишком короткое описание
-                </div>
+                <v-alert
+                  outlined
+                  dense
+                  type="error"
+                  border="left"
+                  v-if="descriptionIsEmpty"
+                >
+                  <div class="body-2">
+                    Слишком короткое описание
+                  </div>
+                </v-alert>
               </v-col>
             </v-row>
           </v-container>
