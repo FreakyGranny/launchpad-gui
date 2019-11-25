@@ -73,10 +73,10 @@
     <v-content class="white">
       <router-view />
     </v-content>
-    <v-footer>
+    <!-- <v-footer>
       <v-spacer></v-spacer>
       <div>&copy; {{ new Date().getFullYear() }}</div>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 
