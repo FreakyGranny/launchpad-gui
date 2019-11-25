@@ -2,9 +2,19 @@
   <v-content class="backgrnd">
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="8" md="5">
+        <v-col cols="12" sm="8" md="5" lg="4">
           <v-card tile>
             <v-card-text class="px-6 pt-10 pb-4">
+              <v-alert
+                outlined
+                type="error"
+                prominent
+                border="left"
+                v-if="STORAGE_STATUS == 'error'"
+              >
+                Вы ввели неправильное имя пользователя или пароль, попробуйте
+                снова.
+              </v-alert>
               <v-form ref="loginForm" v-model="fildsFilled">
                 <v-text-field
                   class="py-2"
@@ -53,10 +63,14 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { AUTH_REQUEST } from "../../store/actions/auth";
 
 export default {
   name: "login",
+  computed: {
+    ...mapGetters(["STORAGE_STATUS"])
+  },
   data() {
     return {
       value: String,
