@@ -23,7 +23,7 @@ common:
 
 staging:
   app_name: ronin-dev
-  ssl_domains: "ronin"
+  ssl_domains: "kicktest"
 
 production:
   app_name: ronin
