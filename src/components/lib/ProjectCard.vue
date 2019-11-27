@@ -28,8 +28,8 @@
         <v-divider></v-divider>
         <div class="primarytext--text subtitle-1 font-weight-bold pt-2 pb-1">
           {{
-            project.title.length > 25
-              ? project.title.slice(0, 25) + "..."
+            project.title.length > 22
+              ? project.title.slice(0, 22) + "..."
               : project.title
           }}
         </div>

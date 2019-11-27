@@ -276,7 +276,7 @@ export default {
       }
     },
     buildProjectUrl() {
-      let pUrl = "/project?page_size=9";
+      let pUrl = "/project?page_size=8";
       if (this.nextPage) {
         pUrl += "&page=" + this.nextPage;
       }
