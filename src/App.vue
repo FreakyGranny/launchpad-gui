@@ -7,7 +7,7 @@
             alt="Kickstarter Logo"
             class="shrink mr-2"
             contain
-            src="/images/logo-tr.png"
+            src="/images/logo.png"
             width="240"
           />
         </router-link>
