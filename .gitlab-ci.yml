@@ -59,14 +59,14 @@ stages:
 build-stage-app:
   extends: .build
   variables:
-    VUE_APP_ROOT_API: "https://gaijin-be.k8s.2gis.dev/api"
+    VUE_APP_ROOT_API: "https://samurai-dev.k8s.2gis.dev/api"
   only:
     - branches
 
 build-prod-app:
   extends: .build
   variables:
-    VUE_APP_ROOT_API: "https://samurai-be.k8s.2gis.dev/api"
+    VUE_APP_ROOT_API: "https://samurai.k8s.2gis.dev/api"
   only:
     - tags
 
@@ -83,7 +83,7 @@ build-prod-image:
 deploy-staging:
   environment:
     name: staging
-    url: 'http://gaijin.k8s.2gis.dev'
+    url: "http://kicktest.k8s.2gis.dev"
   extends:
     - .deploy
     - .stage_image_tag
@@ -91,7 +91,7 @@ deploy-staging:
 deploy-prod:
   environment:
     name: production
-    url: 'http://kickstarter.k8s.2gis.dev'
+    url: "http://kickstarter.k8s.2gis.dev"
   extends:
     - .deploy
     - .prod_image_tag
