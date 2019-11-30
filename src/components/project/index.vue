@@ -163,7 +163,7 @@
           :donations="donations"
           :isMember="currentDonation ? true : isOwner"
           :description="project.description"
-          :instruction="project.payment_instructions"
+          :instruction="project.instructions"
           :status="project.status"
           :type="type"
         />
