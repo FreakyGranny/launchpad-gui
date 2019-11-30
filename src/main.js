@@ -23,7 +23,7 @@ if (token) {
   axios.defaults.headers.common["Authorization"] = "Token " + token;
 }
 axios.defaults.baseURL =
-  process.env.VUE_APP_ROOT_API || "https://localhost:8000/api";
+  process.env.VUE_APP_ROOT_API || "http://localhost:8000/api";
 
 new Vue({
   router,
