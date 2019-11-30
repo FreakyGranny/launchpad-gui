@@ -129,11 +129,11 @@
                   Инструкции для участников
                 </div>
                 <tiptap-vuetify
-                  v-model="payload.payment_instructions"
-                  :extensions="extensions"
+                  v-model="payload.instructions"
+                  :extensions="instruction_extensions"
                   :card-props="{ flat: true, color: 'grey lighten-4' }"
                   :toolbar-attributes="{ color: 'grey lighten-4' }"
-                  placeholder="Эта информацию получат участники проекта когда он завершится или на стадии сбора средств …"
+                  :placeholder="instructionPlaceholder"
                   min-height="90"
                 />
                 <v-alert
@@ -260,7 +260,7 @@ export default {
       }
     },
     checkRichFields() {
-      if (this.payload.payment_instructions.length < 10) {
+      if (this.payload.instructions.length < 10) {
         this.instructionIsEmpty = true;
       } else {
         this.instructionIsEmpty = false;
@@ -284,9 +284,6 @@ export default {
         this.payload.goal_people = 0;
       }
       this.payload.project_type = this.type.id;
-
-      // hack
-      this.payload.category = [this.payload.category];
 
       this.makeRequest = true;
       this.axios
@@ -335,6 +332,13 @@ export default {
       } else {
         return "Новое " + this.type.name.toLowerCase();
       }
+    },
+    instructionPlaceholder() {
+      if (this.type.goal_by_amount) {
+        return "Напиши тут как перевести тебе средства, по номеру телефона, карты или ты собираешь наличными.";
+      } else {
+        return "Добавь сюда дополнительную информацию, которую получат участники события в случае успеха.";
+      }
     }
   },
   data: () => ({
@@ -344,6 +348,15 @@ export default {
     valid: true,
     instructionIsEmpty: false,
     descriptionIsEmpty: false,
+    instruction_extensions: [
+      Bold,
+      Italic,
+      Link,
+      BulletList,
+      OrderedList,
+      ListItem,
+      History
+    ],
     extensions: [
       Bold,
       Italic,
@@ -377,7 +390,7 @@ export default {
       goal_people: 4,
       goal_amount: 500,
       image_link: "",
-      payment_instructions: "",
+      instructions: "",
       description: ""
     }
   }),

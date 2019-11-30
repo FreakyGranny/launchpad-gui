@@ -162,7 +162,7 @@
               <v-row no-gutters justify="center">
                 <project-card
                   :project="project"
-                  :category="CATEGORY[project.category[0]]"
+                  :category="CATEGORY[project.category]"
                 />
               </v-row>
             </v-col>
