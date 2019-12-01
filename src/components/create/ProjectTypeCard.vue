@@ -12,12 +12,12 @@
         height="400"
         tile
         @click="handleClick"
-        :disabled="typeId > 2"
+        :disabled="type.id > 2"
       >
         <!-- disabled new project types for a while -->
         <v-card-text class="pt-2 px-4">
           <v-row class="mt-2" justify="center" no-gutters>
-            <type-icon :size="75" :typeId="typeId" :withTooltip="false" />
+            <type-icon :size="75" :type="type" :withTooltip="false" />
           </v-row>
           <v-row class="mb-2" justify="center" no-gutters>
             <div class="primarytext--text subtitle-1 font-weight-bold">
@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     badgeShow() {
-      return this.typeId > 2;
+      return this.type.id > 2;
     }
   },
   methods: {
@@ -65,7 +65,7 @@ export default {
     }
   },
   props: {
-    typeId: Number,
+    type: Object,
     name: String,
     options: Array
   }

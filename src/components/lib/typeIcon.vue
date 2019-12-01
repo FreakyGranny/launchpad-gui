@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip v-if="IS_PROJECT_TYPE_LOADED" :disabled="!withTooltip" bottom>
+  <v-tooltip :disabled="!withTooltip" bottom>
     <template v-slot:activator="{ on }">
       <v-icon color="primary" :size="size" v-on="on">
         {{ getIcon }}
@@ -12,7 +12,6 @@
 <style scoped></style>
 
 <script>
-import { mapGetters } from "vuex";
 import {
   TYPE_CAMPAIGN,
   TYPE_CAMPAIGN_FAIR,
@@ -23,10 +22,6 @@ import {
 export default {
   name: "TypeIcon",
   computed: {
-    ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),
-    type() {
-      return this.PROJECT_TYPE[this.typeId];
-    },
     getIcon() {
       if (this.type.alias in this.typeIcons) {
         return this.typeIcons[this.type.alias];
@@ -45,7 +40,7 @@ export default {
     };
   },
   props: {
-    typeId: Number,
+    type: Object,
     withTooltip: Boolean,
     size: Number
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <load-spinner :overlay="!IS_PROJECT_TYPE_LOADED || loading"></load-spinner>
+    <load-spinner :overlay="loading"></load-spinner>
     <empty-state
       reason="not_found"
       label="Проект не найден"
@@ -62,19 +62,19 @@
                 </v-col>
               </v-row>
 
-              <v-row class="mx-4 mt-2" no-gutters v-if="IS_PROJECT_TYPE_LOADED">
+              <v-row class="mx-4 mt-2" no-gutters>
                 <v-col cols="6" class="pa-0">
                   <v-row align="baseline" no-gutters>
                     <goal-counter
                       class="primarytext--text headline"
-                      :typeId="project.project_type"
+                      :type="project.project_type"
                       :count="project.total"
                       :animate="true"
                       mode="units"
                     />
                     <goal-counter
                       class="primarytext--text body-1 pl-1"
-                      :typeId="project.project_type"
+                      :type="project.project_type"
                       :count="project.total"
                     />
                   </v-row>
@@ -86,7 +86,7 @@
                     </div>
                     <goal-counter
                       class="primarytext--text body-1 pl-1"
-                      :typeId="project.project_type"
+                      :type="project.project_type"
                       :count="donations.length"
                       mode="members"
                     />
@@ -103,7 +103,7 @@
                 />
               </v-row>
 
-              <v-row class="mx-4 mb-4" no-gutters v-if="IS_PROJECT_TYPE_LOADED">
+              <v-row class="mx-4 mb-4" no-gutters>
                 <v-col cols="6" class="pa-0">
                   <v-row align="baseline" no-gutters>
                     <div class="primarytext--text body-1">
@@ -112,14 +112,14 @@
                     <goal-counter
                       v-if="isMoneyProject"
                       class="primarytext--text body-1 pl-1"
-                      :typeId="project.project_type"
+                      :type="project.project_type"
                       :count="project.goal_amount"
                       mode="units"
                     />
                     <goal-counter
                       v-if="!isMoneyProject"
                       class="primarytext--text body-1 px-1"
-                      :typeId="project.project_type"
+                      :type="project.project_type"
                       :count="project.goal_people"
                       mode="units"
                     />
@@ -145,7 +145,7 @@
               <v-row class="ma-4">
                 <button-set
                   :status="project.status"
-                  :type="PROJECT_TYPE[project.project_type]"
+                  :type="project.project_type"
                   :donation="currentDonation"
                   :suggest="suggestAmount"
                   @update="updateDonation"
@@ -165,14 +165,14 @@
           :description="project.description"
           :instruction="project.instructions"
           :status="project.status"
-          :type="type"
+          :type="project.project_type"
         />
       </v-row>
     </v-container>
     <manage-menu
       :status="project.status"
       :donations="donations"
-      :type="type"
+      :type="project.project_type"
       v-if="project && manageAllowed"
       @mark="showDonateMark"
     />
@@ -181,7 +181,11 @@
       v-model="donateMarkShown"
       max-width="350px"
     >
-      <donate-mark @mark="markDonation" :donations="donations" :type="type" />
+      <donate-mark
+        @mark="markDonation"
+        :donations="donations"
+        :type="project.project_type"
+      />
     </v-dialog>
   </div>
 </template>
@@ -234,18 +238,15 @@ export default {
     this.getDonations();
   },
   computed: {
-    ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE", "PROFILE"]),
+    ...mapGetters(["PROFILE"]),
     isNotFound() {
       if (this.error) {
         return this.error.request.status == 404;
       }
       return false;
     },
-    type() {
-      return this.PROJECT_TYPE[this.project.project_type];
-    },
     isMoneyProject() {
-      if (this.type.goal_by_people) {
+      if (this.project.project_type.goal_by_people) {
         return false;
       }
       return true;

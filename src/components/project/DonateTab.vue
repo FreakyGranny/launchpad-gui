@@ -1,5 +1,10 @@
 <template>
-  <v-row justify-md="start" justify-sm="center" no-gutters class="my-5">
+  <v-row
+    justify-md="start"
+    justify-sm="center"
+    no-gutters
+    class="grey lighten-5 my-5"
+  >
     <v-row v-if="donations.length == 0" justify="center" no-gutters>
       <div class="my-5 secondarytext--text caption text-center">
         Тут пока никого нет)
@@ -11,8 +16,8 @@
       xs="12"
       v-for="(donat, index) in donations"
       :key="'donation_' + index"
+      @click="onClickDonation(donat.user.username)"
     >
-      <!-- @click="onClickDonation(donat.user.id)" -->
       <donate-line :type="type" :donation="donat" />
     </v-col>
   </v-row>
@@ -32,8 +37,9 @@ export default {
     return {};
   },
   methods: {
-    onClickDonation(userId) {
-      this.$router.push({ name: "User", params: { id: userId } });
+    onClickDonation(username) {
+      // this.$router.push({ name: "User", params: { id: userId } });
+      window.location.href = "https://planeta.2gis.ru/profile/" + username;
     }
   },
   props: {
