@@ -21,7 +21,7 @@
                 <project-type-card
                   :name="project_type.name"
                   :options="project_type.options"
-                  :typeId="project_type.id"
+                  :type="project_type"
                   @click="onClickCard(project_type.id)"
                 />
               </v-row>

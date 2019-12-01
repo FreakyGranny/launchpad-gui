@@ -1,6 +1,11 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card :elevation="hover ? 3 : 0" class="ma-1" min-width="290" tile>
+    <v-card
+      :elevation="hover ? 3 : 0"
+      class="grey lighten-5 ma-1"
+      min-width="290"
+      tile
+    >
       <v-card-text>
         <v-row align="baseline" no-gutters>
           <v-col cols="2" class="mr-4">

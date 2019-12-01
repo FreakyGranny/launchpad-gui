@@ -1,13 +1,13 @@
 <template>
   <v-col xl="5" lg="7" md="9" sm="7" xs="12" class="my-3">
     <v-tabs v-model="tab" centered grow>
-      <v-tab href="#tab-about">
+      <v-tab href="#tab-about" class="grey lighten-5">
         <v-row align="center" justify="center">
           О проекте
         </v-row>
       </v-tab>
 
-      <v-tab href="#tab-members">
+      <v-tab href="#tab-members" class="grey lighten-5">
         <v-row align="center" justify="center">
           Участники
           <v-chip class="ma-2" color="secondarytext" small outlined>
@@ -16,7 +16,11 @@
         </v-row>
       </v-tab>
 
-      <v-tab disabled href="#tab-comments" class="hidden-sm-and-down">
+      <v-tab
+        disabled
+        href="#tab-comments"
+        class="grey lighten-5 hidden-sm-and-down"
+      >
         <v-row align="center" justify="center">
           Комментарии
           <v-chip class="ma-2" color="secondarytext" small outlined>
@@ -28,7 +32,7 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item value="tab-about">
-        <v-card flat>
+        <v-card flat class="grey lighten-5">
           <progress-steps :status="status" :type="type" />
           <v-card
             tile

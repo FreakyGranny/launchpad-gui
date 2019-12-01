@@ -70,7 +70,7 @@
       </v-row>
     </v-app-bar>
 
-    <v-content class="white">
+    <v-content>
       <router-view />
     </v-content>
     <!-- <v-footer>
