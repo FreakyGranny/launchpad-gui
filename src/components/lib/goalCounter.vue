@@ -1,5 +1,5 @@
 <template>
-  <div v-if="IS_PROJECT_TYPE_LOADED">
+  <div>
     <div v-if="!animate">
       {{ getText }}
     </div>
@@ -16,7 +16,6 @@
 
 <script>
 import AnimatedNumber from "animated-number-vue";
-import { mapGetters } from "vuex";
 
 export default {
   name: "GoalCounter",
@@ -24,10 +23,6 @@ export default {
     AnimatedNumber
   },
   computed: {
-    ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),
-    type() {
-      return this.PROJECT_TYPE[this.typeId];
-    },
     getText() {
       if (this.mode == "members") {
         if (this.type.goal_by_amount) {
@@ -75,7 +70,7 @@ export default {
   props: {
     animate: Boolean,
     count: Number,
-    typeId: Number,
+    type: Object,
     mode: String
   }
 };

@@ -16,7 +16,7 @@
             flat
             nav
             dense
-            class="mt-2"
+            class="grey lighten-5 mt-2"
             v-if="IS_CATEGORY_LOADED && IS_PROJECT_TYPE_LOADED"
           >
             <v-subheader class="pa-2 secondarytext--text subtitle-1"
@@ -160,10 +160,7 @@
               xs="12"
             >
               <v-row no-gutters justify="center">
-                <project-card
-                  :project="project"
-                  :category="CATEGORY[project.category]"
-                />
+                <project-card :project="project" />
               </v-row>
             </v-col>
           </v-row>

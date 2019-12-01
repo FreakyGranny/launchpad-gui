@@ -20,7 +20,7 @@
           <v-col class="text-end" cols="2">
             <type-icon
               :size="20"
-              :typeId="project.project_type"
+              :type="project.project_type"
               :withTooltip="true"
             />
           </v-col>
@@ -40,11 +40,11 @@
               : project.subtitle
           }}
         </div>
-        <v-row class="pt-2 pb-2" no-gutters v-if="IS_CATEGORY_LOADED">
+        <v-row class="pt-2 pb-2" no-gutters>
           <router-link
             :to="{
               path: 'explore',
-              query: { category: category.id.toString() }
+              query: { category: project.category.id.toString() }
             }"
           >
             <v-hover v-slot:default="{ hover }">
@@ -52,7 +52,7 @@
                 :class="hover ? 'primary--text' : 'primarytext--text'"
                 class="caption font-weight-bold"
               >
-                {{ category.name.toUpperCase() }}
+                {{ project.category.name.toUpperCase() }}
               </div>
             </v-hover>
           </router-link>
@@ -61,7 +61,7 @@
           <v-col cols="auto">
             <goal-counter
               class="primarytext--text font-weight-bold"
-              :typeId="project.project_type"
+              :type="project.project_type"
               :count="project.total"
               mode="units"
             />
@@ -69,7 +69,7 @@
           <v-col class="pl-1">
             <goal-counter
               class="primarytext--text"
-              :typeId="project.project_type"
+              :type="project.project_type"
               :count="project.total"
             />
           </v-col>
@@ -106,7 +106,6 @@
 </style>
 
 <script>
-import { mapGetters } from "vuex";
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
@@ -121,7 +120,6 @@ export default {
     TypeIcon
   },
   computed: {
-    ...mapGetters(["IS_CATEGORY_LOADED"]),
     markDraft() {
       return this.project.status == STATUS_DRAFT;
     },
@@ -137,8 +135,7 @@ export default {
   },
   name: "ProjectCard",
   props: {
-    project: Object,
-    category: Object
+    project: Object
   }
 };
 </script>
