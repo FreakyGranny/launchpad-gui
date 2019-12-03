@@ -12,7 +12,7 @@
         height="400"
         tile
         @click="handleClick"
-        :disabled="type.id > 2"
+        :disabled="type.id > 3"
       >
         <!-- disabled new project types for a while -->
         <v-card-text class="pt-2 px-4">
@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     badgeShow() {
-      return this.type.id > 2;
+      return this.type.id > 3;
     }
   },
   methods: {
