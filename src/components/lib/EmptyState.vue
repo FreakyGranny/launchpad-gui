@@ -39,7 +39,7 @@
 
 <style scoped>
 .nf-area {
-  height: 60vh;
+  height: 50vh;
 }
 </style>
 

@@ -16,7 +16,6 @@
       xs="12"
       v-for="(donat, index) in donations"
       :key="'donation_' + index"
-      @click="onClickDonation(donat.user.username)"
     >
       <donate-line :type="type" :donation="donat" />
     </v-col>
@@ -35,12 +34,6 @@ export default {
   name: "DonateTab",
   data() {
     return {};
-  },
-  methods: {
-    onClickDonation(username) {
-      // this.$router.push({ name: "User", params: { id: userId } });
-      window.location.href = "https://planeta.2gis.ru/profile/" + username;
-    }
   },
   props: {
     donations: Array,
