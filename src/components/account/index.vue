@@ -1,100 +1,110 @@
 <template>
   <div>
-    <load-spinner v-if="!IS_PROFILE_LOADED" />
-    <user-card :user="PROFILE" v-if="IS_PROFILE_LOADED" />
-    <div
-      v-if="IS_PROFILE_LOADED"
-      class="md-layout projects-grid md-alignment-top-center"
-    >
-      <md-tabs md-alignment="fixed">
-        <template slot="md-tab" slot-scope="{ tab }">
-          <span class="md-subheading tab-head">{{ tab.label }} </span>
-          <md-chip v-if="tab.data.badge">{{ tab.data.badge }} </md-chip>
-        </template>
+    <load-spinner
+      :overlay="!IS_PROFILE_LOADED || !IS_USER_DONATIONS_LOADED"
+    ></load-spinner>
+    <v-parallax
+      height="200"
+      src="/images/owner.jpg"
+      class="hidden-sm-and-down"
+    />
 
-        <md-tab
-          id="tab-owned"
-          md-label="Я автор"
-          :md-template-data="{ badge: projectsOwned.length }"
+    <v-container class="pa-0" :style="userCardStyle">
+      <v-row justify="center" no-gutters>
+        <v-col xl="6" lg="8" md="10" sm="12">
+          <v-card
+            color="white"
+            height="250px"
+            elevation="0"
+            v-if="!IS_PROFILE_LOADED || !IS_USER_DONATIONS_LOADED"
+          />
+          <user-card
+            v-if="IS_PROFILE_LOADED && IS_USER_DONATIONS_LOADED"
+            :user="PROFILE"
+            :totalDonation="getSpentAmount"
+          />
+          <v-progress-linear
+            :active="loading"
+            :indeterminate="loading"
+            color="secondary"
+          />
+        </v-col>
+      </v-row>
+
+      <v-row justify="center" no-gutters v-if="!loading && IS_PROFILE_LOADED">
+        <v-tabs
+          v-model="tab"
+          class="mt-10"
+          background-color="grey lighten-5"
+          centered
+          fixed-tabs
         >
-          <md-content class="tab-content">
-            <load-spinner v-if="loading" />
-            <div class="md-layout md-alignment-top-center">
-              <div class="spacing" v-if="!loading">
-                <md-empty-state
-                  md-icon="help_outline"
-                  md-label="Проекты не найдены"
-                  md-description="Вы пока не являетесь автором ни одного проекта."
-                  v-if="projectsOwned.length == 0"
-                />
-              </div>
-              <project-card
-                v-for="(project, index) in projectsOwned"
-                :key="index"
-                :project="project"
-                :category="CATEGORY[project.category[0]]"
+          <v-tab href="#tab-owned">
+            <v-row align="center" justify="center">
+              Я автор
+            </v-row>
+          </v-tab>
+
+          <v-tab href="#tab-contributed">
+            <v-row align="center" justify="center">
+              Я участник
+            </v-row>
+          </v-tab>
+        </v-tabs>
+        <v-sheet :max-width="slideAreaWidth">
+          <v-tabs-items v-model="tab" class="grey lighten-5">
+            <v-tab-item value="tab-owned">
+              <empty-state
+                reason="empty_filter"
+                label="Проекты не найдены"
+                description="Ты пока не являешься автором ни одного проекта"
+                v-if="!loading && projectsOwned.length == 0"
               />
-            </div>
-          </md-content>
-        </md-tab>
-
-        <md-tab
-          id="tab-member"
-          md-label="Я участник"
-          :md-template-data="{ badge: projectsContributed.length }"
-        >
-          <md-content class="tab-content">
-            <div class="md-layout md-alignment-top-center">
-              <div class="spacing" v-if="!loading">
-                <md-empty-state
-                  md-icon="help_outline"
-                  md-label="Проекты не найдены"
-                  md-description="Вы пока не поддержали ни один проект."
-                  v-if="projectsContributed.length == 0"
-                />
-              </div>
-              <project-card
-                v-for="(project, index) in projectsContributed"
-                :key="index"
-                :project="project"
-                :category="CATEGORY[project.category[0]]"
+              <v-slide-group class="pa-4" v-if="projectsOwned">
+                <v-slide-item
+                  v-for="project in projectsOwned"
+                  :key="project.id"
+                >
+                  <v-sheet width="250" class="ma-4">
+                    <project-card :project="project" />
+                  </v-sheet>
+                </v-slide-item>
+              </v-slide-group>
+            </v-tab-item>
+            <v-tab-item value="tab-contributed">
+              <empty-state
+                reason="empty_filter"
+                label="Проекты не найдены"
+                description="Ты пока что не участвуешь ни в одном из проектов."
+                v-if="!loading && projectsContributed.length == 0"
               />
-            </div>
-          </md-content>
-        </md-tab>
-
-        <md-tab
-          id="tab-likes"
-          md-label="Мне понравилось"
-          :md-template-data="{ badge: '0' }"
-          md-disabled
-        >
-          <md-content class="tab-content"> </md-content>
-        </md-tab>
-      </md-tabs>
-    </div>
+              <v-slide-group class="pa-4" v-if="projectsContributed">
+                <v-slide-item
+                  v-for="project in projectsContributed"
+                  :key="project.id"
+                >
+                  <v-sheet width="250" class="ma-4">
+                    <project-card :project="project" />
+                  </v-sheet>
+                </v-slide-item>
+              </v-slide-group>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-sheet>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
-<style scoped>
-.projects-grid {
-  padding-top: 30px;
-  margin: auto;
-  max-width: 1500px;
-}
-.md-chip {
-  margin-left: 10px;
-  height: 20px;
-  line-height: 20px;
-}
-</style>
+<style scoped></style>
 
 <script>
 import ProjectCard from "../lib/ProjectCard";
 import UserCard from "../lib/UserCard";
 import LoadSpinner from "../lib/loading";
-import axios from "axios";
+import EmptyState from "../lib/EmptyState";
 import { mapGetters } from "vuex";
+import { U_DONATIONS_REQUEST } from "../../store/actions/userDonations";
 
 export const FILTER_OWNED = "owned";
 export const FILTER_CONTRIBUTED = "contributed";
@@ -103,23 +113,54 @@ export default {
   components: {
     ProjectCard,
     UserCard,
+    EmptyState,
     LoadSpinner
   },
   name: "account",
   created: async function() {
+    if (this.IS_AUTHORIZED) {
+      await this.$store.dispatch(U_DONATIONS_REQUEST);
+    }
     this.getProjects(FILTER_OWNED);
     this.getProjects(FILTER_CONTRIBUTED);
   },
   computed: {
     ...mapGetters([
-      "STORAGE_STATUS",
-      "IS_CATEGORY_LOADED",
       "IS_PROJECT_TYPE_LOADED",
       "IS_PROFILE_LOADED",
-      "CATEGORY",
+      "IS_AUTHORIZED",
+      "IS_USER_DONATIONS_LOADED",
+      "USER_DONATIONS",
       "PROJECT_TYPE",
       "PROFILE"
-    ])
+    ]),
+    getSpentAmount() {
+      let spent = 0;
+      for (let donation of Object.values(this.USER_DONATIONS)) {
+        if (donation.paid) {
+          spent += donation.payment;
+        }
+      }
+      return spent;
+    },
+    userCardStyle() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return { marginTop: "4px" };
+        case "sm":
+          return { marginTop: "0px" };
+        default:
+          return { marginTop: "-125px" };
+      }
+    },
+    slideAreaWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "100%";
+        default:
+          return "90%";
+      }
+    }
   },
   methods: {
     buildProjectUrl(filter) {
@@ -134,9 +175,8 @@ export default {
     },
     getProjects(filter) {
       this.loading = true;
-      axios({ url: this.buildProjectUrl(filter) })
+      this.axios({ url: this.buildProjectUrl(filter) })
         .then(resp => {
-          this.loading = false;
           if (filter == FILTER_OWNED) {
             this.projectsOwned = resp.data.results;
             // window.console.log(resp);
@@ -144,6 +184,7 @@ export default {
           if (filter == FILTER_CONTRIBUTED) {
             this.projectsContributed = resp.data.results;
           }
+          this.loading = false;
         })
         .catch(resp => {
           this.error = resp.data;
@@ -153,8 +194,10 @@ export default {
   },
   data() {
     return {
+      sl: true,
       loading: true,
       error: null,
+      tab: null,
       projectsOwned: [],
       projectsContributed: []
     };

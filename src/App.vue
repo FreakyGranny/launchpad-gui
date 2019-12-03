@@ -48,13 +48,13 @@
           >
             Новый проект
           </v-list-item>
-          <!-- <v-list-item 
+          <v-list-item
             v-if="IS_PROFILE_LOADED"
             class="justify-end primarytext--text"
-            :to="{ name: 'Account'}"
+            :to="{ name: 'Account' }"
           >
             Мой профиль
-          </v-list-item> -->
+          </v-list-item>
         </v-list>
       </v-menu>
       <v-btn
@@ -90,28 +90,28 @@
             </div>
           </v-hover>
         </router-link>
-        <v-avatar size="40" v-if="IS_PROFILE_LOADED">
+        <!-- <v-avatar size="40" v-if="IS_PROFILE_LOADED">
           <img
             v-bind:src="PROFILE.avatar"
             onerror="this.onerror=null;this.src='/images/avatar.png';"
             alt="Avatar"
           />
-        </v-avatar>
-        <!-- <router-link to="/account" v-if="IS_PROFILE_LOADED">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-avatar size="40">
-              <img
-                v-on="on"
-                v-bind:src="PROFILE.avatar"
-                onerror="this.onerror=null;this.src='/images/avatar.png';"
-                alt="Avatar"
-              />
-            </v-avatar>
-          </template>
-          <span>Мой профиль</span>
-        </v-tooltip>
-      </router-link> -->
+        </v-avatar> -->
+        <router-link :to="{ name: 'Account' }" v-if="IS_PROFILE_LOADED">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-avatar size="40">
+                <img
+                  v-on="on"
+                  v-bind:src="PROFILE.avatar"
+                  onerror="this.onerror=null;this.src='/images/avatar.png';"
+                  alt="Avatar"
+                />
+              </v-avatar>
+            </template>
+            <span>Мой профиль</span>
+          </v-tooltip>
+        </router-link>
       </v-row>
     </v-app-bar>
 

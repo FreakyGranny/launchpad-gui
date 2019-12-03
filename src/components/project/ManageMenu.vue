@@ -57,8 +57,14 @@
 
       <v-tooltip left v-if="isHarvest">
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" fab small color="accent" @click="$emit('mark')">
-            <v-icon>mdi-credit-card-outline</v-icon>
+          <v-btn
+            v-on="on"
+            fab
+            small
+            color="lightprimary"
+            @click="$emit('mark')"
+          >
+            <v-icon color="primarytext">mdi-credit-card-outline</v-icon>
           </v-btn>
         </template>
         <span>Отметить переводы</span>
