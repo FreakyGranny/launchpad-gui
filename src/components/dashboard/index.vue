@@ -43,14 +43,12 @@
               </v-list-item-content>
             </v-list-item>
 
-            <!-- hidding some categories for a while -->
             <v-list-item
               v-for="(category, index) in CATEGORY"
               :ripple="false"
               :to="buildFilterLink(typeFilter, category.id, onlyOpen)"
               :key="'category_' + index"
               class="pl-4"
-              v-show="category.id < 5"
             >
               <v-list-item-content>
                 <v-list-item-title
@@ -96,7 +94,7 @@
               :key="'type_' + index"
               class="pl-4"
               :ripple="false"
-              v-show="type.id < 3"
+              v-show="type.id < 4"
               :to="buildFilterLink(type.id, categoryFilter, onlyOpen)"
             >
               <v-list-item-content>
@@ -132,6 +130,7 @@
                   tile
                   min-width="100"
                   large
+                  :disabled="!(typeFilter || categoryFilter)"
                 >
                   Сбросить фильтры
                 </v-btn>
