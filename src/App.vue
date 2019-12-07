@@ -23,8 +23,53 @@
         </router-link> -->
       </div>
       <v-spacer></v-spacer>
+      <v-menu
+        offset-y
+        v-model="showNavigation"
+        :position-x="0"
+        :position-y="56"
+        min-width="100%"
+        transition="slide-y-transition"
+        z-index="5"
+        absolute
+      >
+        <v-list flat>
+          <v-list-item
+            v-if="!IS_PROFILE_LOADED"
+            class="justify-end primarytext--text"
+            :to="{ name: 'Login' }"
+          >
+            Войти
+          </v-list-item>
+          <v-list-item
+            v-if="IS_PROFILE_LOADED"
+            class="justify-end primarytext--text"
+            :to="{ name: 'Create' }"
+          >
+            Новый проект
+          </v-list-item>
+          <!-- <v-list-item 
+            v-if="IS_PROFILE_LOADED"
+            class="justify-end primarytext--text"
+            :to="{ name: 'Account'}"
+          >
+            Мой профиль
+          </v-list-item> -->
+        </v-list>
+      </v-menu>
+      <v-btn
+        color="primary"
+        text
+        icon
+        large
+        :ripple="false"
+        class="hidden-sm-and-up"
+        @click="showNavigation = true"
+      >
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
       <v-row align="center" justify="end" class="me-1 hidden-xs-only">
-        <router-link to="/create" v-if="IS_PROFILE_LOADED">
+        <router-link :to="{ name: 'Create' }" v-if="IS_PROFILE_LOADED">
           <v-hover v-slot:default="{ hover }">
             <div
               :class="hover ? 'primary--text' : 'secondarytext--text'"
@@ -35,7 +80,7 @@
           </v-hover>
         </router-link>
         <v-divider class="mx-4" vertical />
-        <router-link to="/login" v-if="!IS_PROFILE_LOADED">
+        <router-link :to="{ name: 'Login' }" v-if="!IS_PROFILE_LOADED">
           <v-hover v-slot:default="{ hover }">
             <div
               :class="hover ? 'primary--text' : 'secondarytext--text'"
@@ -64,7 +109,7 @@
               />
             </v-avatar>
           </template>
-          <span>Твой профиль</span>
+          <span>Мой профиль</span>
         </v-tooltip>
       </router-link> -->
       </v-row>
