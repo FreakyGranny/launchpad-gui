@@ -11,3 +11,6 @@ html {
 .v-dialog {
   border-radius: 0px !important;
 }
+.v-menu__content {
+  border-radius: 0px !important;
+}
