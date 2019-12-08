@@ -5,6 +5,7 @@ export default {
   lightprimary: colors.deepPurple.lighten5,
   secondary: colors.deepPurple.darken3,
   accent: colors.green.darken2,
+  error: colors.red.darken3,
   secondarytext: colors.grey.darken2,
   primarytext: colors.grey.darken3
 };

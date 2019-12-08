@@ -42,13 +42,12 @@
                 </v-avatar>
                 <v-col cols="9" class="pa-0">
                   <v-row class="mx-4">
-                    <!-- hide author profile for a while -->
-                    <!-- <router-link v-bind:to="'/user/' + project.owner.id"> -->
-                    <div class="primarytext--text title font-weight-regular">
-                      {{ project.owner.first_name }}
-                      {{ project.owner.last_name }}
-                    </div>
-                    <!-- </router-link> -->
+                    <router-link v-bind:to="'/user/' + project.owner.id">
+                      <div class="primarytext--text title font-weight-regular">
+                        {{ project.owner.first_name }}
+                        {{ project.owner.last_name }}
+                      </div>
+                    </router-link>
                   </v-row>
                   <v-row class="mx-4">
                     <div class="primarytext--text body-1 font-weight-medium">

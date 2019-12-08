@@ -18,11 +18,13 @@
             </v-avatar>
           </v-col>
           <v-col cols="8">
-            <div
-              class="primarytext--text body-2 font-weight-regular text-no-wrap"
-            >
-              {{ donation.user.first_name + " " + donation.user.last_name }}
-            </div>
+            <router-link v-bind:to="'/user/' + donation.user.id">
+              <div
+                class="primarytext--text body-2 font-weight-regular text-no-wrap"
+              >
+                {{ donation.user.first_name + " " + donation.user.last_name }}
+              </div>
+            </router-link>
           </v-col>
           <v-col cols="1">
             <v-tooltip v-if="!!type && isMoneyProject" bottom>
@@ -43,15 +45,9 @@
 <style></style>
 
 <script>
-// import { mapGetters } from "vuex";
-
 export default {
   name: "DonateLine",
   computed: {
-    // ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),
-    // type() {
-    //   return this.PROJECT_TYPE[this.typeId];
-    // },
     isMoneyProject() {
       if (this.type.goal_by_people) {
         return false;

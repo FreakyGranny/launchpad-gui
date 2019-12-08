@@ -2,13 +2,36 @@
   <v-hover v-slot:default="{ hover }">
     <v-card
       :elevation="hover ? 12 : 2"
-      width="250"
+      min-width="250"
+      width="88%"
       height="500"
-      :to="'project/' + project.id"
-      :color="markDraft ? 'lightprimary' : 'white'"
+      :to="{ name: 'Project', params: { id: project.id } }"
       tile
     >
-      <v-img height="250px" v-bind:src="project.image_link" />
+      <v-img height="250px" width="100%" v-bind:src="project.image_link">
+        <!-- <v-btn
+        fab
+        absolute
+        top
+        right
+        :ripple="false"
+        class="mt-10"
+        color="error"
+      >
+        <v-icon>mdi-circle-edit-outline</v-icon>
+      </v-btn> -->
+        <v-row no-gutters justify="center">
+          <v-sheet
+            class="pa-4 error"
+            style="margin-top: 99px;"
+            v-if="markDraft"
+          >
+            <div class="white--text body-2 font-weight-bold">
+              НЕ ОПУБЛИКОВАН
+            </div>
+          </v-sheet>
+        </v-row>
+      </v-img>
       <v-card-text class="pt-2 px-4">
         <v-row class="py-1" no-gutters>
           <v-col cols="10">
