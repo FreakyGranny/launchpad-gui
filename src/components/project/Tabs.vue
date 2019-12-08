@@ -1,6 +1,6 @@
 <template>
   <v-col xl="5" lg="7" md="9" sm="7" xs="12" class="my-3">
-    <v-tabs v-model="tab" centered grow>
+    <v-tabs v-model="tab" centered fixed-tabs>
       <v-tab href="#tab-about" class="grey lighten-5">
         <v-row align="center" justify="center">
           О проекте
