@@ -35,14 +35,14 @@
       >
         <v-list flat>
           <v-list-item
-            v-if="!IS_PROFILE_LOADED"
+            v-if="!IS_AUTHORIZED"
             class="justify-end primarytext--text"
             :to="{ name: 'Login' }"
           >
             Войти
           </v-list-item>
           <v-list-item
-            v-if="IS_PROFILE_LOADED"
+            v-if="IS_AUTHORIZED"
             class="justify-end primarytext--text"
             :to="{ name: 'Create' }"
           >
@@ -69,7 +69,7 @@
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <v-row align="center" justify="end" class="me-1 hidden-xs-only">
-        <router-link :to="{ name: 'Create' }" v-if="IS_PROFILE_LOADED">
+        <router-link :to="{ name: 'Create' }" v-if="IS_AUTHORIZED">
           <v-hover v-slot:default="{ hover }">
             <div
               :class="hover ? 'primary--text' : 'secondarytext--text'"
@@ -80,7 +80,7 @@
           </v-hover>
         </router-link>
         <v-divider class="mx-4" vertical />
-        <router-link :to="{ name: 'Login' }" v-if="!IS_PROFILE_LOADED">
+        <router-link :to="{ name: 'Login' }" v-if="!IS_AUTHORIZED">
           <v-hover v-slot:default="{ hover }">
             <div
               :class="hover ? 'primary--text' : 'secondarytext--text'"
@@ -90,14 +90,7 @@
             </div>
           </v-hover>
         </router-link>
-        <!-- <v-avatar size="40" v-if="IS_PROFILE_LOADED">
-          <img
-            v-bind:src="PROFILE.avatar"
-            onerror="this.onerror=null;this.src='/images/avatar.png';"
-            alt="Avatar"
-          />
-        </v-avatar> -->
-        <router-link :to="{ name: 'Account' }" v-if="IS_PROFILE_LOADED">
+        <router-link :to="{ name: 'Account' }" v-if="IS_AUTHORIZED">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-avatar size="40">
@@ -106,6 +99,13 @@
                   v-bind:src="PROFILE.avatar"
                   onerror="this.onerror=null;this.src='/images/avatar.png';"
                   alt="Avatar"
+                  v-if="IS_PROFILE_LOADED"
+                />
+                <img
+                  v-on="on"
+                  src="/images/avatar.png"
+                  alt="Avatar"
+                  v-if="!IS_PROFILE_LOADED"
                 />
               </v-avatar>
             </template>
@@ -118,10 +118,37 @@
     <v-content>
       <router-view />
     </v-content>
-    <!-- <v-footer>
-      <v-spacer></v-spacer>
-      <div>&copy; {{ new Date().getFullYear() }}</div>
-    </v-footer> -->
+    <v-footer v-if="$route.name != 'Login'" class="grey lighten-5">
+      <v-col class="pa-0">
+        <v-divider />
+        <v-row justify="center" class="mt-3">
+          <v-btn
+            text
+            icon
+            x-small
+            link
+            href="https://rnd2gis.slack.com/archives/CKNPN7DEX"
+            target="_blank"
+          >
+            <v-icon>mdi-slack</v-icon>
+          </v-btn>
+          <v-btn
+            text
+            icon
+            x-small
+            href="https://gitlab.2gis.ru/pet-projects"
+            target="_blank"
+          >
+            <v-icon>mdi-gitlab</v-icon>
+          </v-btn>
+        </v-row>
+        <v-row justify="center">
+          <div class="secondarytext--text overline pt-1 mb-3">
+            KICKTEAM {{ new Date().getFullYear() }}
+          </div>
+        </v-row>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 

@@ -141,7 +141,8 @@
         <!-- projects -->
         <v-col xl="8" lg="8" md="9">
           <empty-state
-            reason="empty_filter"
+            :heightPercent="90"
+            icon="mdi-toy-brick-search-outline"
             label="Проекты не найдены"
             description="К сожалению, не нашлось проектов удовлетворяющих всем фильтрам."
             v-if="!loading && projects.length == 0"

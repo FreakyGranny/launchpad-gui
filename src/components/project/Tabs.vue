@@ -34,23 +34,26 @@
       <v-tab-item value="tab-about">
         <v-card flat class="grey lighten-5">
           <progress-steps :status="status" :type="type" />
-          <v-card
-            tile
-            color="lightprimary"
-            class="ma-4"
-            min-width="265"
-            v-if="isMember && showInstructions"
-          >
-            <v-card-text>
-              <div class="mb-2 primarytext--text subtitle-2 text-center">
-                Информация для участников проекта
-              </div>
-              <div
-                v-html="instruction"
-                class="secondarytext--text caption text-center"
-              />
-            </v-card-text>
-          </v-card>
+          <v-sheet tile class="ma-4" v-if="isMember && showInstructions">
+            <v-expansion-panels>
+              <v-expansion-panel tile>
+                <v-expansion-panel-header>
+                  <div class="primarytext--text subtitle-2 text-center">
+                    Информация для участников проекта
+                  </div>
+                  <template v-slot:actions>
+                    <v-icon color="secondary">mdi-chevron-down</v-icon>
+                  </template>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <div
+                    v-html="instruction"
+                    class="secondarytext--text caption text-center"
+                  />
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-sheet>
           <v-card-text v-html="description" class="tab-content" />
         </v-card>
       </v-tab-item>
