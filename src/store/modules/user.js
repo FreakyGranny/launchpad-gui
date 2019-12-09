@@ -4,11 +4,16 @@ import axios from "axios";
 import Vue from "vue";
 import { AUTH_LOGOUT } from "../actions/auth";
 
-const state = { status: "", profile: {} };
+const state = {
+  uid: localStorage.getItem("user-id") || null,
+  status: "",
+  profile: {}
+};
 
 const getters = {
   PROFILE: state => state.profile,
-  IS_PROFILE_LOADED: state => !!state.profile.username
+  IS_PROFILE_LOADED: state => !!state.profile.username,
+  UID: state => state.uid
 };
 
 const actions = {
@@ -33,12 +38,16 @@ const mutations = {
   [USER_SUCCESS]: (state, resp) => {
     state.status = "success";
     Vue.set(state, "profile", resp.data);
+    Vue.set(state, "uid", resp.data.id);
+    localStorage.setItem("user-id", resp.data.id);
   },
   [USER_ERROR]: state => {
     state.status = "error";
   },
   [AUTH_LOGOUT]: state => {
     state.profile = {};
+    state.uid = null;
+    localStorage.removeItem("user-id");
   }
 };
 
