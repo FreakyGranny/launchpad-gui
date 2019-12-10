@@ -6,9 +6,16 @@
     class="grey lighten-5 my-5"
   >
     <v-row v-if="donations.length == 0" justify="center" no-gutters>
-      <div class="my-5 secondarytext--text caption text-center">
-        Тут пока никого нет)
-      </div>
+      <v-col class="my-11">
+        <v-row justify="center">
+          <v-icon size="80" color="secondarytext">
+            mdi-human-greeting
+          </v-icon>
+        </v-row>
+        <div class="secondarytext--text caption text-center">
+          Стань первым участником!
+        </div>
+      </v-col>
     </v-row>
     <v-col
       md="6"
@@ -22,7 +29,12 @@
   </v-row>
 </template>
 
-<style scoped></style>
+<style scoped>
+.circle {
+  border-radius: 10px;
+  color: red;
+}
+</style>
 
 <script>
 import DonateLine from "./DonateLine";

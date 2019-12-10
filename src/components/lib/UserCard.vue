@@ -31,11 +31,29 @@
                     color="secondary"
                     :href="'https://planeta.2gis.ru/profile/' + user.username"
                     target="_blank"
+                    v-if="totalDonation == null"
                   >
                     <v-icon size="22">mdi-earth</v-icon>
                   </v-btn>
+                  <v-btn
+                    class="mb-1"
+                    v-on="on"
+                    text
+                    icon
+                    color="secondary"
+                    v-if="totalDonation != null"
+                    @click="logout"
+                  >
+                    <v-icon size="22">mdi-location-exit</v-icon>
+                  </v-btn>
                 </template>
-                <span>Открыть профиль на планете</span>
+                <span>
+                  {{
+                    totalDonation == null
+                      ? "Открыть профиль на планете"
+                      : "Выйти"
+                  }}
+                </span>
               </v-tooltip>
             </div>
           </v-row>
@@ -148,6 +166,7 @@
 import { mapGetters } from "vuex";
 import TypeIcon from "../lib/typeIcon";
 import AnimatedNumber from "animated-number-vue";
+import { AUTH_LOGOUT } from "../../store/actions/auth";
 
 export default {
   name: "UserCard",
@@ -179,6 +198,10 @@ export default {
         }
       }
       return 0;
+    },
+    logout() {
+      this.$store.dispatch(AUTH_LOGOUT);
+      this.$router.push("/login");
     }
   },
   data() {

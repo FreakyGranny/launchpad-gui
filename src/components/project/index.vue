@@ -2,7 +2,8 @@
   <div>
     <load-spinner :overlay="loading"></load-spinner>
     <empty-state
-      reason="not_found"
+      :heightPercent="100"
+      icon="mdi-death-star-variant"
       label="Проект не найден"
       description="Возможно проект был удален, или еще не опубликован."
       v-if="isNotFound"
