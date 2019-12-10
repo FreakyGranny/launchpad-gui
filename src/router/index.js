@@ -27,6 +27,16 @@ const ifAuthenticated = (to, from, next) => {
   next("/login");
 };
 
+const ifSameUser = (to, from, next) => {
+  if (store.getters.IS_AUTHORIZED) {
+    if (to.params.id != store.getters.UID) {
+      next();
+      return;
+    }
+  }
+  next("/account");
+};
+
 export default new Router({
   mode: "history",
   scrollBehavior(to, from, savedPosition) {
@@ -82,7 +92,7 @@ export default new Router({
       path: "/user/:id",
       name: "User",
       component: User,
-      beforeEnter: ifAuthenticated
+      beforeEnter: ifSameUser
     },
     {
       path: "/login",

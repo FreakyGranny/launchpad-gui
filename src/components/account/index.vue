@@ -51,13 +51,14 @@
             </v-row>
           </v-tab>
         </v-tabs>
-        <v-sheet :max-width="slideAreaWidth">
+        <v-sheet class="mb-5" :max-width="slideAreaWidth">
           <v-tabs-items v-model="tab" class="grey lighten-5">
             <v-tab-item value="tab-owned">
               <empty-state
-                reason="empty_filter"
-                label="Проекты не найдены"
-                description="Ты пока не являешься автором ни одного проекта"
+                :heightPercent="50"
+                icon="mdi-toy-brick-outline"
+                label="Хм, тут ничего нет"
+                description="Ты не являешься автором ни одного проекта"
                 v-if="!loading && projectsOwned.length == 0"
               />
               <v-slide-group class="pa-4" v-if="projectsOwned">
@@ -65,7 +66,7 @@
                   v-for="project in projectsOwned"
                   :key="project.id"
                 >
-                  <v-sheet width="250" class="ma-4">
+                  <v-sheet width="250" class="mx-4 mt-6 mb-8">
                     <project-card :project="project" />
                   </v-sheet>
                 </v-slide-item>
@@ -73,9 +74,10 @@
             </v-tab-item>
             <v-tab-item value="tab-contributed">
               <empty-state
-                reason="empty_filter"
-                label="Проекты не найдены"
-                description="Ты пока что не участвуешь ни в одном из проектов."
+                :heightPercent="50"
+                icon="mdi-toy-brick"
+                label="Тут пока пусто"
+                description="Ты пока что не участвуешь ни в одном из проектов"
                 v-if="!loading && projectsContributed.length == 0"
               />
               <v-slide-group class="pa-4" v-if="projectsContributed">

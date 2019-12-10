@@ -14,3 +14,6 @@ html {
 .v-menu__content {
   border-radius: 0px !important;
 }
+.v-expansion-panels {
+  border-radius: 0px !important;
+}

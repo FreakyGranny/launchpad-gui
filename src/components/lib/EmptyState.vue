@@ -1,34 +1,21 @@
 <template>
-  <v-container fluid>
-    <v-row class="nf-area" justify="center" align="center" no-gutters>
+  <v-container fluid class="my-auto">
+    <v-row :style="mainStyle" justify="center" align="center" no-gutters>
       <v-col cols="12">
         <v-row no-gutters justify="center">
-          <v-img
-            alt="empty results"
-            class="shrink mt-12"
-            contain
-            src="/images/box.svg"
-            width="240"
-            v-if="reason == 'not_found'"
-          />
-          <v-img
-            alt="empty results"
-            class="shrink ml-8"
-            contain
-            src="/images/file.svg"
-            width="160"
-            v-if="reason == 'empty_filter'"
-          />
+          <v-icon :size="100" color="secondarytext">
+            {{ icon }}
+          </v-icon>
         </v-row>
         <v-row no-gutters justify="center">
           <div
-            class="my-4 primarytext--text headline font-weight-bold text-center"
+            class="mb-1 primarytext--text title font-weight-bold text-center"
           >
             {{ label }}
           </div>
         </v-row>
         <v-row no-gutters justify="center">
-          <div class="secondarytext--text text-center">
+          <div class="secondarytext--text body-2 text-center">
             {{ description }}
           </div>
         </v-row>
@@ -37,22 +24,24 @@
   </v-container>
 </template>
 
-<style scoped>
-.nf-area {
-  height: 50vh;
-}
-</style>
+<style scoped></style>
 
 <script>
 export default {
   name: "EmptyState",
+  computed: {
+    mainStyle() {
+      return { height: "calc(" + this.heightPercent + "vh - 140px)" };
+    }
+  },
   data() {
     return {};
   },
   props: {
     label: String,
     description: String,
-    reason: String
+    heightPercent: Number,
+    icon: String
   }
 };
 </script>

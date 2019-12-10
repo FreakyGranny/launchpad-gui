@@ -36,14 +36,15 @@
       <v-row justify="center" no-gutters>
         <v-sheet :max-width="slideAreaWidth" class="grey lighten-5">
           <empty-state
-            reason="empty_filter"
+            :heightPercent="40"
+            icon="mdi-space-invaders"
             label="Проекты не найдены"
             description="Пользователь пока что не является автором ни одного проекта."
             v-if="!loadingProjects && projects.length == 0"
           />
           <v-slide-group class="pa-4" v-if="projects">
             <v-slide-item v-for="project in projects" :key="project.id">
-              <v-sheet width="250" class="ma-4">
+              <v-sheet width="250" class="mx-4 mt-6 mb-8">
                 <project-card :project="project" />
               </v-sheet>
             </v-slide-item>
