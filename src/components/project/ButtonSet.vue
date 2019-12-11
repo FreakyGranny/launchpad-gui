@@ -65,13 +65,18 @@
       <confirm-dialog @confirm="leaveProject" />
     </v-dialog>
     <v-dialog v-model="donatePick" max-width="400px">
-      <donate-dialog @confirm="moneyDonate" :specify="false" />
+      <donate-dialog
+        @confirm="moneyDonate"
+        :specify="false"
+        :limit="donateLimit"
+      />
     </v-dialog>
     <v-dialog v-model="showSpecify" max-width="400px">
       <donate-dialog
         @confirm="specifyDonate"
         :sum="currentDonationSum"
         :specify="true"
+        :limit="donateLimit"
       />
     </v-dialog>
   </div>
@@ -218,6 +223,7 @@ export default {
   },
   props: {
     suggest: Number,
+    donateLimit: Number,
     type: Object,
     donation: Object,
     status: String
