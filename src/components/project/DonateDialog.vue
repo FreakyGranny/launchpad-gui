@@ -8,9 +8,22 @@
       <v-slider
         v-model="payment"
         :min="minimum"
-        step="50"
-        max="1000"
-      ></v-slider>
+        :max="limit > lowTarget ? limit : lowTarget"
+        track-color="secondarytext"
+        :step="step"
+      >
+        <template v-slot:prepend v-if="limit > highTarget">
+          <v-icon color="primary" @click="decrement">
+            mdi-minus
+          </v-icon>
+        </template>
+
+        <template v-slot:append v-if="limit > highTarget">
+          <v-icon color="primary" @click="increment">
+            mdi-plus
+          </v-icon>
+        </template>
+      </v-slider>
     </v-card-text>
     <v-card-actions class="pb-6">
       <v-spacer></v-spacer>
@@ -37,11 +50,30 @@ export default {
   data() {
     return {
       minimum: 100,
-      payment: this.sum || 250
+      lowTarget: 500,
+      highTarget: 1000,
+      payment: this.sum || 200
     };
+  },
+  computed: {
+    step() {
+      if (this.limit >= this.highTarget) {
+        return 100;
+      }
+      return 50;
+    }
+  },
+  methods: {
+    decrement() {
+      this.payment -= this.step;
+    },
+    increment() {
+      this.payment += this.step;
+    }
   },
   props: {
     sum: Number,
+    limit: Number,
     specify: Boolean,
     dialog: Boolean
   }

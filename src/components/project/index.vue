@@ -148,6 +148,7 @@
                   :type="project.project_type"
                   :donation="currentDonation"
                   :suggest="suggestAmount"
+                  :donateLimit="project.goal_amount - project.total"
                   @update="updateDonation"
                   @delete="deleteDonation"
                   @create="createDonation"
