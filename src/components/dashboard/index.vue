@@ -10,136 +10,31 @@
     <v-container fluid>
       <load-spinner :overlay="!IS_CATEGORY_LOADED || !IS_PROJECT_TYPE_LOADED" />
       <v-row justify="center" no-gutters>
-        <!-- filters -->
         <v-col xl="2" lg="2" md="3" class="hidden-sm-and-down">
-          <v-list
-            flat
-            nav
-            dense
-            class="grey lighten-5 mt-2"
-            v-if="IS_CATEGORY_LOADED && IS_PROJECT_TYPE_LOADED"
-          >
-            <v-subheader class="pa-2 secondarytext--text subtitle-1"
-              >КАТЕГОРИИ</v-subheader
-            >
-            <v-divider></v-divider>
-
-            <v-list-item
-              class="pl-4 ma-0"
-              :ripple="false"
-              :to="buildFilterLink(typeFilter, null, onlyOpen)"
-            >
-              <v-list-item-content>
-                <v-list-item-title
-                  class="body-2"
-                  :class="
-                    $route.query.category == null
-                      ? 'accent--text'
-                      : 'secondarytext--text'
-                  "
-                >
-                  Все проекты
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item
-              v-for="(category, index) in CATEGORY"
-              :ripple="false"
-              :to="buildFilterLink(typeFilter, category.id, onlyOpen)"
-              :key="'category_' + index"
-              class="pl-4"
-            >
-              <v-list-item-content>
-                <v-list-item-title
-                  class="body-2"
-                  :class="
-                    $route.query.category == category.id
-                      ? 'accent--text'
-                      : 'secondarytext--text'
-                  "
-                >
-                  {{ category.name }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-subheader class="pa-2 secondarytext--text subtitle-1"
-              >ТИП ПРОЕКТА</v-subheader
-            >
-            <v-divider></v-divider>
-
-            <v-list-item
-              class="pl-4 ma-0"
-              :ripple="false"
-              :to="buildFilterLink(null, categoryFilter, onlyOpen)"
-            >
-              <v-list-item-content>
-                <v-list-item-title
-                  class="body-2"
-                  :class="
-                    $route.query.type == null
-                      ? 'accent--text'
-                      : 'secondarytext--text'
-                  "
-                >
-                  Любой
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <!-- hidding new project types for a while -->
-            <v-list-item
-              v-for="(type, index) in PROJECT_TYPE"
-              :key="'type_' + index"
-              class="pl-4"
-              :ripple="false"
-              v-show="type.id < 4"
-              :to="buildFilterLink(type.id, categoryFilter, onlyOpen)"
-            >
-              <v-list-item-content>
-                <v-list-item-title
-                  class="body-2"
-                  :class="
-                    $route.query.type == type.id
-                      ? 'accent--text'
-                      : 'secondarytext--text'
-                  "
-                >
-                  {{ type.name }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-divider></v-divider>
-
-            <v-list-item>
-              <v-list-item-content>
-                <div class="secondarytext--text">Только активные</div>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-switch inset :ripple="false" v-model="onlyOpen" />
-              </v-list-item-action>
-            </v-list-item>
-
-            <v-list-item class="pa-0 ma-0" :ripple="false">
-              <v-list-item-content>
-                <v-btn
-                  color="secondary"
-                  to="/explore"
-                  tile
-                  min-width="100"
-                  large
-                  :disabled="!(typeFilter || categoryFilter)"
-                >
-                  Сбросить фильтры
-                </v-btn>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+          <filters
+            class="mt-2"
+            :selectedType="typeFilter"
+            :selectedCategory="categoryFilter"
+            :selectedOnlyOpen="onlyOpenFilter"
+            @clickCategory="filteringByCategory"
+            @clickType="filteringByType"
+            @clickOpen="filteringByOpen"
+          />
         </v-col>
         <!-- projects -->
         <v-col xl="8" lg="8" md="9">
+          <v-row no-gutters justify="center" class="hidden-sm-and-up">
+            <v-btn
+              color="secondary"
+              outlined
+              tile
+              large
+              width="88%"
+              @click="filterDialog = !filterDialog"
+            >
+              фильтры
+            </v-btn>
+          </v-row>
           <empty-state
             :heightPercent="90"
             icon="mdi-toy-brick-search-outline"
@@ -164,10 +59,14 @@
               </v-row>
             </v-col>
           </v-row>
-          <v-row no-gutters justify="center" class="my-12">
+          <v-row
+            no-gutters
+            justify="center"
+            class="my-12"
+            v-if="projects.length != 0"
+          >
             <v-btn
               color="primary"
-              v-if="projects.length != 0"
               :disabled="isFinalPage || loading"
               :loading="loading"
               @click="getProjects"
@@ -195,6 +94,31 @@
         <v-icon>mdi-chevron-up</v-icon>
       </v-btn>
     </v-fab-transition>
+
+    <v-dialog
+      v-model="filterDialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click="filterDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Фильтры</v-toolbar-title>
+        </v-toolbar>
+        <filters
+          class="px-5"
+          :selectedType="typeFilter"
+          :selectedCategory="categoryFilter"
+          :selectedOnlyOpen="onlyOpenFilter"
+          @clickCategory="filteringByCategory"
+          @clickType="filteringByType"
+          @clickOpen="filteringByOpen"
+        />
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -205,6 +129,7 @@ import ProjectCard from "../lib/ProjectCard";
 import LoadSpinner from "../lib/loading";
 import BgHeader from "../lib/bgHeader";
 import EmptyState from "../lib/EmptyState";
+import Filters from "./Filters";
 import { mapGetters } from "vuex";
 
 export default {
@@ -212,6 +137,7 @@ export default {
     ProjectCard,
     BgHeader,
     EmptyState,
+    Filters,
     LoadSpinner
   },
   name: "dashboard",
@@ -234,6 +160,29 @@ export default {
     }
   },
   methods: {
+    filteringByCategory(clickedCategory) {
+      this.$router.push(
+        this.buildFilterLink(
+          this.typeFilter,
+          clickedCategory,
+          this.onlyOpenFilter
+        )
+      );
+    },
+    filteringByType(clickedType) {
+      this.$router.push(
+        this.buildFilterLink(
+          clickedType,
+          this.categoryFilter,
+          this.onlyOpenFilter
+        )
+      );
+    },
+    filteringByOpen(clickedOpen) {
+      this.$router.push(
+        this.buildFilterLink(this.typeFilter, this.categoryFilter, clickedOpen)
+      );
+    },
     buildFilterLink(typeId, categoryId, openFilter) {
       let filterUrl = "/explore";
       let params = {};
@@ -267,9 +216,9 @@ export default {
         this.categoryFilter = null;
       }
       if (this.$route.query.filter) {
-        this.onlyOpen = true;
+        this.onlyOpenFilter = true;
       } else {
-        this.onlyOpen = false;
+        this.onlyOpenFilter = false;
       }
     },
     buildProjectUrl() {
@@ -283,12 +232,13 @@ export default {
       if (this.typeFilter) {
         pUrl += "&type=" + this.typeFilter;
       }
-      if (this.onlyOpen) {
+      if (this.onlyOpenFilter) {
         pUrl += "&filter=open";
       }
       return pUrl;
     },
     getProjects() {
+      this.filterDialog = false;
       this.loading = true;
       this.setQueryParams();
       let projectList = this.projects ? this.projects : [];
@@ -332,23 +282,13 @@ export default {
 
     next();
   },
-  watch: {
-    onlyOpen() {
-      this.$router.push(
-        this.buildFilterLink(
-          this.typeFilter,
-          this.categoryFilter,
-          this.onlyOpen
-        )
-      );
-    }
-  },
   data() {
     return {
+      filterDialog: false,
       toTopFab: false,
       typeFilter: null,
       categoryFilter: null,
-      onlyOpen: false,
+      onlyOpenFilter: false,
       loading: true,
       error: null,
       nextPage: null,

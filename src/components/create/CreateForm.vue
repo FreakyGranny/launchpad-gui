@@ -243,11 +243,17 @@ import {
   HorizontalRule,
   History
 } from "tiptap-vuetify";
+import { CATEGORY_REQUEST } from "../../store/actions/category";
 
 export default {
   name: "createForm",
   components: {
     TiptapVuetify
+  },
+  created() {
+    if (!this.IS_CATEGORY_LOADED) {
+      this.$store.dispatch(CATEGORY_REQUEST);
+    }
   },
   methods: {
     handleClose() {
