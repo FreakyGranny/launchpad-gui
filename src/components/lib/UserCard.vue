@@ -167,12 +167,18 @@ import { mapGetters } from "vuex";
 import TypeIcon from "../lib/typeIcon";
 import AnimatedNumber from "animated-number-vue";
 import { AUTH_LOGOUT } from "../../store/actions/auth";
+import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
 
 export default {
   name: "UserCard",
   components: {
     TypeIcon,
     AnimatedNumber
+  },
+  created() {
+    if (!this.IS_PROJECT_TYPE_LOADED) {
+      this.$store.dispatch(PROJECT_TYPE_REQUEST);
+    }
   },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"]),

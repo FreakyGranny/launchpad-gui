@@ -155,8 +155,6 @@
 <script>
 import { mapGetters } from "vuex";
 import { USER_REQUEST } from "./store/actions/user";
-import { PROJECT_TYPE_REQUEST } from "./store/actions/projectType";
-import { CATEGORY_REQUEST } from "./store/actions/category";
 
 export default {
   components: {},
@@ -166,8 +164,6 @@ export default {
   },
   created: async function() {
     if (this.IS_AUTHORIZED) {
-      await this.$store.dispatch(PROJECT_TYPE_REQUEST);
-      await this.$store.dispatch(CATEGORY_REQUEST);
       await this.$store.dispatch(USER_REQUEST);
     }
   },

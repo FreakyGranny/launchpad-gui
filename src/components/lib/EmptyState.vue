@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="my-auto">
+  <v-container fluid class="my-auto" :style="{ minheight: '200px' }">
     <v-row :style="mainStyle" justify="center" align="center" no-gutters>
       <v-col cols="12">
         <v-row no-gutters justify="center">
@@ -31,7 +31,12 @@ export default {
   name: "EmptyState",
   computed: {
     mainStyle() {
-      return { height: "calc(" + this.heightPercent + "vh - 140px)" };
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return { height: "calc(" + this.heightPercent + "vh)" };
+        default:
+          return { height: "calc(" + this.heightPercent + "vh - 140px)" };
+      }
     }
   },
   data() {

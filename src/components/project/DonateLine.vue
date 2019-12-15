@@ -26,8 +26,14 @@
               </div>
             </router-link>
           </v-col>
-          <v-col cols="1">
-            <v-tooltip v-if="!!type && isMoneyProject" bottom>
+          <v-col cols="1" v-if="!!type">
+            <v-icon
+              v-if="!isMoneyProject"
+              :color="donation.paid ? 'accent' : ''"
+            >
+              mdi-ticket-outline
+            </v-icon>
+            <v-tooltip v-if="isMoneyProject" bottom>
               <template v-slot:activator="{ on }">
                 <v-icon :color="donation.paid ? 'accent' : ''" v-on="on">
                   {{ paymentIcon }}
@@ -56,8 +62,8 @@ export default {
     },
     paymentIcon() {
       return this.donation.paid
-        ? "mdi-check-circle-outline"
-        : "mdi-radiobox-blank";
+        ? "mdi-credit-card"
+        : "mdi-credit-card-clock-outline";
     },
     paymentTooltip() {
       return this.donation.paid ? "Перевод получен" : "Ожидается перевод";
