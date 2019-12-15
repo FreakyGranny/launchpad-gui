@@ -8,7 +8,7 @@
       <v-slider
         v-model="payment"
         :min="minimum"
-        :max="limit > lowTarget ? limit : lowTarget"
+        :max="maximum"
         track-color="secondarytext"
         :step="step"
       >
@@ -61,6 +61,10 @@ export default {
         return 100;
       }
       return 50;
+    },
+    maximum() {
+      let lim = this.limit + this.sum;
+      return lim > this.lowTarget ? lim : this.lowTarget;
     }
   },
   methods: {
