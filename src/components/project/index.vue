@@ -2,7 +2,7 @@
   <div>
     <load-spinner :overlay="loading"></load-spinner>
     <empty-state
-      :heightPercent="100"
+      :heightPercent="95"
       icon="mdi-death-star-variant"
       label="Проект не найден"
       description="Возможно проект был удален, или еще не опубликован."

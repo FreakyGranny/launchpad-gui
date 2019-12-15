@@ -24,7 +24,12 @@ const ifAuthenticated = (to, from, next) => {
     next();
     return;
   }
-  next("/login");
+  next({
+    path: "/login",
+    query: {
+      redirect: to.fullPath
+    }
+  });
 };
 
 const ifSameUser = (to, from, next) => {
