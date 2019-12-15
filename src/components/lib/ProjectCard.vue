@@ -1,7 +1,7 @@
 <template>
   <v-hover v-slot:default="{ hover }">
     <v-card
-      :elevation="hover ? 12 : 2"
+      :elevation="hover ? 8 : 2"
       min-width="250"
       width="88%"
       height="500"
@@ -9,17 +9,6 @@
       tile
     >
       <v-img height="250px" width="100%" v-bind:src="project.image_link">
-        <!-- <v-btn
-        fab
-        absolute
-        top
-        right
-        :ripple="false"
-        class="mt-10"
-        color="error"
-      >
-        <v-icon>mdi-circle-edit-outline</v-icon>
-      </v-btn> -->
         <v-row no-gutters justify="center">
           <v-sheet
             class="pa-4 error"

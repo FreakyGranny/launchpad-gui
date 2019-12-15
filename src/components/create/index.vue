@@ -52,6 +52,7 @@ import { mapGetters } from "vuex";
 import LoadSpinner from "../lib/loading";
 import ProjectTypeCard from "./ProjectTypeCard";
 import CreateForm from "./CreateForm";
+import { PROJECT_TYPE_REQUEST } from "../../store/actions/projectType";
 
 export default {
   name: "create",
@@ -59,6 +60,11 @@ export default {
     CreateForm,
     ProjectTypeCard,
     LoadSpinner
+  },
+  created() {
+    if (!this.IS_PROJECT_TYPE_LOADED) {
+      this.$store.dispatch(PROJECT_TYPE_REQUEST);
+    }
   },
   computed: {
     ...mapGetters(["IS_PROJECT_TYPE_LOADED", "PROJECT_TYPE"])
