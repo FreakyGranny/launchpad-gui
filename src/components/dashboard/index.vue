@@ -23,7 +23,12 @@
         </v-col>
         <!-- projects -->
         <v-col xl="8" lg="8" md="9">
-          <v-row no-gutters justify="center" class="hidden-sm-and-up">
+          <v-row
+            no-gutters
+            justify="center"
+            v-if="!loading"
+            class="hidden-sm-and-up"
+          >
             <v-btn
               color="secondary"
               outlined
