@@ -137,10 +137,11 @@
                   min-height="90"
                 />
                 <v-alert
-                  outlined
+                  text
+                  tile
                   dense
                   type="error"
-                  border="left"
+                  icon="mdi-text-subject"
                   v-if="instructionIsEmpty"
                 >
                   <div class="body-2">
@@ -159,10 +160,11 @@
                   min-height="120"
                 />
                 <v-alert
-                  outlined
+                  text
+                  tile
                   dense
                   type="error"
-                  border="left"
+                  icon="mdi-text-subject"
                   v-if="descriptionIsEmpty"
                 >
                   <div class="body-2">
@@ -176,47 +178,61 @@
       </v-window-item>
     </v-window>
     <v-card-actions class="pa-7 pt-0">
-      <v-btn
-        color="primary"
-        tile
-        outlined
-        min-width="100"
-        large
-        @click="handleClose"
-        >Отменить</v-btn
-      >
-      <v-spacer></v-spacer>
-      <v-btn
-        color="accent"
-        v-if="step == 1"
-        tile
-        outlined
-        min-width="100"
-        large
-        @click="validate"
-        >Далее</v-btn
-      >
-      <v-btn
-        class="hidden-sm-and-down"
-        color="secondarytext"
-        v-if="step == 2"
-        tile
-        outlined
-        min-width="100"
-        large
-        @click="step = 1"
-        >Назад</v-btn
-      >
-      <v-btn
-        color="accent"
-        v-if="step == 2"
-        tile
-        min-width="100"
-        large
-        @click="create"
-        :loading="makeRequest"
-        >Создать</v-btn
-      >
+      <v-col class="pa-0">
+        <v-alert
+          outlined
+          dense
+          type="error"
+          prominent
+          border="left"
+          v-if="requestError"
+        >
+          {{ requestError }}
+        </v-alert>
+        <v-row no-gutters>
+          <v-btn
+            color="primary"
+            tile
+            outlined
+            min-width="100"
+            large
+            @click="handleClose"
+            >Отменить</v-btn
+          >
+          <v-spacer></v-spacer>
+          <v-btn
+            color="accent"
+            v-if="step == 1"
+            tile
+            outlined
+            min-width="100"
+            large
+            @click="validate"
+            >Далее</v-btn
+          >
+          <v-btn
+            class="hidden-sm-and-down"
+            color="secondarytext"
+            v-if="step == 2"
+            tile
+            outlined
+            min-width="100"
+            large
+            @click="step = 1"
+            >Назад</v-btn
+          >
+          <v-btn
+            color="accent"
+            v-if="step == 2"
+            tile
+            min-width="100"
+            large
+            @click="create"
+            :loading="makeRequest"
+            >Создать</v-btn
+          >
+        </v-row>
+      </v-col>
     </v-card-actions>
   </v-card>
 </template>
@@ -258,6 +274,7 @@ export default {
   methods: {
     handleClose() {
       this.$emit("close");
+      this.requestError = null;
       this.step = 1;
     },
     validate() {
@@ -298,11 +315,14 @@ export default {
           this.makeRequest = false;
           this.$router.push({ name: "Project", params: { id: resp.data.id } });
         })
-        .catch(resp => {
-          window.console.log(resp);
+        .catch(error => {
+          if (error.response.data) {
+            this.requestError = error.response.data;
+          } else {
+            this.requestError = "Теперь надо делать всё с полной уверенностью. Я уверен, что нам полный ***ц!"
+          }
           this.makeRequest = false;
         });
-      // window.console.log(this.payload);
     },
     checkLink(value) {
       if (value === null) {
@@ -350,6 +370,7 @@ export default {
   data: () => ({
     step: 1,
     makeRequest: false,
+    requestError: null,
     menu: false,
     valid: true,
     instructionIsEmpty: false,
