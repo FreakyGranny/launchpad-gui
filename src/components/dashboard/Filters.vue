@@ -66,13 +66,11 @@
         </v-list-item-content>
       </v-list-item>
 
-      <!-- hidding new project types for a while -->
       <v-list-item
         v-for="(type, index) in PROJECT_TYPE"
         :key="'type_' + index"
         class="pl-4"
         :ripple="false"
-        v-show="type.id < 4"
         @click="$emit('clickType', type.id)"
       >
         <v-list-item-content>
