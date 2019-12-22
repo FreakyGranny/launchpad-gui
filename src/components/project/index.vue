@@ -247,10 +247,10 @@ export default {
       return false;
     },
     isMoneyProject() {
-      if (this.project.project_type.goal_by_people) {
-        return false;
+      if (this.project.project_type.goal_by_amount) {
+        return true;
       }
-      return true;
+      return false;
     },
     isOwner() {
       return this.PROFILE.id == this.project.owner.id;
