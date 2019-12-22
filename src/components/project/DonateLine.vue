@@ -55,10 +55,10 @@ export default {
   name: "DonateLine",
   computed: {
     isMoneyProject() {
-      if (this.type.goal_by_people) {
-        return false;
+      if (this.type.goal_by_amount) {
+        return true;
       }
-      return true;
+      return false;
     },
     paymentIcon() {
       return this.donation.paid

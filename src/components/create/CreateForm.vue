@@ -69,7 +69,7 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="payload.release_date"
-                        prepend-icon="mdi-calendar-question"
+                        prepend-icon="mdi-calendar-today"
                         hint="Дата завершения"
                         persistent-hint
                         readonly
@@ -142,10 +142,10 @@
                   dense
                   type="error"
                   icon="mdi-text-subject"
-                  v-if="instructionIsEmpty"
+                  v-if="instructionInvalid"
                 >
                   <div class="body-2">
-                    Это поле надо заполнить
+                    {{ checkInstructions() }}
                   </div>
                 </v-alert>
               </v-col>
@@ -156,7 +156,7 @@
                   :extensions="extensions"
                   :card-props="{ flat: true, color: 'grey lighten-4' }"
                   :toolbar-attributes="{ color: 'grey lighten-4' }"
-                  placeholder="Расскажи о своем проекте …"
+                  placeholder="Расскажи о своем проекте, очень важно описать проект как можно подробнее."
                   min-height="120"
                 />
                 <v-alert
@@ -165,10 +165,10 @@
                   dense
                   type="error"
                   icon="mdi-text-subject"
-                  v-if="descriptionIsEmpty"
+                  v-if="descriptionInvalid"
                 >
                   <div class="body-2">
-                    Слишком короткое описание
+                    {{ checkDescription() }}
                   </div>
                 </v-alert>
               </v-col>
@@ -282,18 +282,32 @@ export default {
         this.step++;
       }
     },
-    checkRichFields() {
+    checkInstructions() {
       if (this.payload.instructions.length < 10) {
-        this.instructionIsEmpty = true;
-      } else {
-        this.instructionIsEmpty = false;
+        this.instructionInvalid = true;
+        return "Это поле надо заполнить, его получат участники в письме.";
       }
-      if (this.payload.description.length < 20) {
-        this.descriptionIsEmpty = true;
-      } else {
-        this.descriptionIsEmpty = false;
+      if (this.payload.instructions.length > 500) {
+        this.instructionInvalid = true;
+        return "Ой, перебор. Надо покороче.";
       }
-      return this.instructionIsEmpty || this.descriptionIsEmpty;
+      this.instructionInvalid = false;
+    },
+    checkDescription() {
+      if (this.payload.description.length < 50) {
+        this.descriptionInvalid = true;
+        return "Слишком короткое описание. Потенциальным участникам может быть не понятна суть проекта.";
+      }
+      if (this.payload.description.length > 1000) {
+        this.descriptionInvalid = true;
+        return "Не хочется тебя огорчать, но превышено максимальное количество символов.";
+      }
+      this.descriptionInvalid = false;
+    },
+    checkRichFields() {
+      this.checkInstructions();
+      this.checkDescription();
+      return this.instructionInvalid || this.descriptionInvalid;
     },
     create() {
       if (this.checkRichFields()) {
@@ -319,7 +333,8 @@ export default {
           if (error.response.data) {
             this.requestError = error.response.data;
           } else {
-            this.requestError = "Теперь надо делать всё с полной уверенностью. Я уверен, что нам полный ***ц!"
+            this.requestError =
+              "Теперь надо делать всё с полной уверенностью. Я уверен, что нам полный ***ц!";
           }
           this.makeRequest = false;
         });
@@ -373,8 +388,8 @@ export default {
     requestError: null,
     menu: false,
     valid: true,
-    instructionIsEmpty: false,
-    descriptionIsEmpty: false,
+    instructionInvalid: false,
+    descriptionInvalid: false,
     instruction_extensions: [
       Bold,
       Italic,
