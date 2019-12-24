@@ -19,8 +19,9 @@
       <v-tab
         disabled
         href="#tab-comments"
-        class="grey lighten-5 hidden-sm-and-down"
+        class="grey lighten-4 hidden-sm-and-down"
       >
+      <!-- lighten-4 потому что disabled -->
         <v-row align="center" justify="center">
           Комментарии
           <v-chip class="ma-2" color="secondarytext" small outlined>
@@ -36,9 +37,9 @@
           <progress-steps :status="status" :type="type" />
           <v-sheet tile class="ma-4" v-if="isMember && showInstructions">
             <v-expansion-panels>
-              <v-expansion-panel tile>
+              <v-expansion-panel tile class="bordered">
                 <v-expansion-panel-header>
-                  <div class="primarytext--text subtitle-2 text-center">
+                  <div class="pl-6 primarytext--text body-2 text-center">
                     Информация для участников проекта
                   </div>
                   <template v-slot:actions>
@@ -54,7 +55,14 @@
               </v-expansion-panel>
             </v-expansion-panels>
           </v-sheet>
-          <v-card-text v-html="description" class="tab-content" />
+          <v-card outlined tile class="ma-4" min-width="265">
+            <v-card-subtitle>
+              <div class="accent--text subtitle-2 text-center">
+                ОПИСАНИЕ
+              </div>
+            </v-card-subtitle>
+            <v-card-text v-html="description" class="tab-content" />
+          </v-card>
         </v-card>
       </v-tab-item>
       <v-tab-item value="tab-members">
@@ -64,7 +72,11 @@
   </v-col>
 </template>
 
-<style scoped></style>
+<style scoped>
+.bordered {
+  border: 1px solid #e0e0e0;
+}
+</style>
 
 <script>
 import DonateTab from "./DonateTab";
