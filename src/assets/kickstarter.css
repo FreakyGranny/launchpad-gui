@@ -17,3 +17,9 @@ html {
 .v-expansion-panels {
   border-radius: 0px !important;
 }
+.v-expansion-panel--active {
+  border-radius: 0px !important;
+}
+.v-expansion-panel::before {
+  box-shadow: none;
+}

@@ -22,7 +22,7 @@ export default {
       let map = {};
       (map[STATUS_DRAFT] = "ЧЕРНОВИК"),
         (map[STATUS_SUCCESS] = "УСПЕШЕН"),
-        (map[STATUS_FAIL] = "ЗАКРЫТ"),
+        (map[STATUS_FAIL] = "ЗАВЕРШЁН"),
         (map[STATUS_SEARCH] = "ПОИСК УЧАСТНИКОВ"),
         (map[STATUS_HARVEST] = "СБОР СРЕДСТВ");
       return map;
