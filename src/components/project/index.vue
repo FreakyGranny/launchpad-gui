@@ -17,10 +17,9 @@
             </v-col>
             <v-col xl="5" lg="5" md="5" sm="12">
               <v-row class="mx-4 mt-3 mb-0">
-                <status
-                  class="subtitle-2 font-weight-bold"
-                  :sourceStatus="project.status"
-                />
+                <div class="subtitle-2 font-weight-bold accent--text">
+                  {{ project.project_type.name.toUpperCase() }}
+                </div>
               </v-row>
               <v-row class="mx-4 mt-1">
                 <div class="primarytext--text display-1">
@@ -169,6 +168,31 @@
           :type="project.project_type"
         />
       </v-row>
+      <v-row justify="center" no-gutters v-if="!loading">
+        <v-icon>mdi-pac-man</v-icon>
+        <v-icon>mdi-circle-small</v-icon>
+        <v-icon>mdi-circle-medium</v-icon>
+        <v-icon>mdi-circle-small</v-icon>
+      </v-row>
+      <v-row justify="center" no-gutters v-if="!loading">
+        <div class="mt-4 secondarytext--text body-2 font-weight-regular">
+          Еще проекты в категории
+        </div>
+      </v-row>
+      <v-row justify="center" no-gutters v-if="!loading">
+        <v-btn
+          color="primary"
+          small
+          text
+          tile
+          :to="{
+            name: 'Dashboard',
+            query: { category: project.category.id.toString() }
+          }"
+        >
+          {{ project.category.name.toUpperCase() }}
+        </v-btn>
+      </v-row>
     </v-container>
     <manage-menu
       :status="project.status"
@@ -203,7 +227,6 @@
 <script>
 import { mapGetters } from "vuex";
 import LoadSpinner from "../lib/loading";
-import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
 import GoalCounter from "../lib/goalCounter";
 import ProjectCounter from "../lib/projectCounter";
@@ -222,7 +245,6 @@ import {
 export default {
   components: {
     LoadSpinner,
-    Status,
     GoalCounter,
     ProjectCounter,
     EmptyState,
