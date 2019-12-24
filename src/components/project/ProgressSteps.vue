@@ -15,7 +15,7 @@
       </v-row>
       </v-card>
     </template> -->
-  <v-card tile class="ma-4 mt-6" min-width="265">
+  <v-card outlined tile class="ma-4 mt-6" min-width="265">
     <v-stepper
       class="elevation-0"
       :alt-labels="true"
@@ -69,7 +69,7 @@
       <v-stepper-items>
         <v-stepper-content class="pt-0 pb-7" step="fail">
           <div class="primarytext--text subtitle-2 text-center">
-            Проект завершен.
+            Проект завершён.
           </div>
           <div class="secondarytext--text caption text-center">
             Проект не нашел достаточно участников.
