@@ -162,6 +162,18 @@ export default {
         return false;
       }
       return this.totalProjects == this.projects.length;
+    },
+    projectsOnPage() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 5;
+        case "lg":
+          return 6;
+        case "xl":
+          return 8;
+        default:
+          return 6;
+      }
     }
   },
   methods: {
@@ -227,7 +239,7 @@ export default {
       }
     },
     buildProjectUrl() {
-      let pUrl = "/project?page_size=8";
+      let pUrl = "/project?page_size=" + this.projectsOnPage;
       if (this.nextPage) {
         pUrl += "&page=" + this.nextPage;
       }

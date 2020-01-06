@@ -15,7 +15,10 @@
       </div>
     </v-col>
     <v-col cols="auto" v-if="!ended">
-      <div class="primarytext--text ml-1">
+      <div
+        class="ml-1"
+        :class="daysLeft < 0 ? 'error--text' : 'primarytext--text'"
+      >
         {{ getText }}
       </div>
     </v-col>
@@ -33,10 +36,12 @@ export default {
   computed: {
     daysLeft() {
       let release = moment(this.endDate, "YYYY-MM-DD");
-      let daysDiff = release.diff(moment(), "day");
-      return daysDiff > 0 ? daysDiff : 0;
+      return release.diff(moment(), "day");
     },
     getText() {
+      if (this.daysLeft < 0) {
+        return "время вышло";
+      }
       if (this.daysLeft == 0) {
         return "последний день";
       }

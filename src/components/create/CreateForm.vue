@@ -50,6 +50,7 @@
                     v-if="IS_CATEGORY_LOADED"
                     :items="categoryArray"
                     :rules="[rules.required]"
+                    no-data-text="no category"
                     item-text="name"
                     item-value="id"
                     label="Категория проекта"
@@ -145,7 +146,7 @@
                   v-if="instructionInvalid"
                 >
                   <div class="body-2">
-                    {{ checkInstructions() }}
+                    {{ checkInstructions(payload.instructions) }}
                   </div>
                 </v-alert>
               </v-col>
@@ -168,7 +169,7 @@
                   v-if="descriptionInvalid"
                 >
                   <div class="body-2">
-                    {{ checkDescription() }}
+                    {{ checkDescription(payload.description) }}
                   </div>
                 </v-alert>
               </v-col>
@@ -244,33 +245,13 @@
 </style>
 
 <script>
-import { mapGetters } from "vuex";
+import projectFields from "../lib/projectFields";
 import moment from "moment";
 import "moment/locale/ru";
-import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Link,
-  HorizontalRule,
-  History
-} from "tiptap-vuetify";
-import { CATEGORY_REQUEST } from "../../store/actions/category";
 
 export default {
   name: "createForm",
-  components: {
-    TiptapVuetify
-  },
-  created() {
-    if (!this.IS_CATEGORY_LOADED) {
-      this.$store.dispatch(CATEGORY_REQUEST);
-    }
-  },
+  extends: projectFields,
   methods: {
     handleClose() {
       this.$emit("close");
@@ -282,35 +263,13 @@ export default {
         this.step++;
       }
     },
-    checkInstructions() {
-      if (this.payload.instructions.length < 10) {
-        this.instructionInvalid = true;
-        return "Это поле надо заполнить, его получат участники в письме.";
-      }
-      if (this.payload.instructions.length > 500) {
-        this.instructionInvalid = true;
-        return "Ой, перебор. Надо покороче.";
-      }
-      this.instructionInvalid = false;
-    },
-    checkDescription() {
-      if (this.payload.description.length < 50) {
-        this.descriptionInvalid = true;
-        return "Слишком короткое описание. Потенциальным участникам может быть не понятна суть проекта.";
-      }
-      if (this.payload.description.length > 1000) {
-        this.descriptionInvalid = true;
-        return "Не хочется тебя огорчать, но превышено максимальное количество символов.";
-      }
-      this.descriptionInvalid = false;
-    },
-    checkRichFields() {
-      this.checkInstructions();
-      this.checkDescription();
-      return this.instructionInvalid || this.descriptionInvalid;
-    },
     create() {
-      if (this.checkRichFields()) {
+      if (
+        this.checkRichFields(
+          this.payload.instructions,
+          this.payload.description
+        )
+      ) {
         return;
       }
 
@@ -338,47 +297,14 @@ export default {
           }
           this.makeRequest = false;
         });
-    },
-    checkLink(value) {
-      if (value === null) {
-        return true;
-      }
-      if (!value.includes("https://")) {
-        return "Ссылка должна начинаться с https";
-      }
-      if (value.length < 15) {
-        return "Слишком короткая ссылка";
-      }
-      return true;
     }
   },
   computed: {
-    ...mapGetters(["IS_CATEGORY_LOADED", "CATEGORY"]),
-    categoryArray() {
-      return Object.values(this.CATEGORY);
-    },
-    minAllowedDate() {
-      return moment()
-        .add(1, "day")
-        .format("YYYY-MM-DD");
-    },
-    maxAllowedDate() {
-      return moment()
-        .add(1, "month")
-        .format("YYYY-MM-DD");
-    },
     title() {
       if (this.type.goal_by_amount) {
         return "Новая " + this.type.name.toLowerCase();
       } else {
         return "Новое " + this.type.name.toLowerCase();
-      }
-    },
-    instructionPlaceholder() {
-      if (this.type.goal_by_amount) {
-        return "Напиши тут как перевести тебе средства, по номеру телефона, карты или ты собираешь наличными.";
-      } else {
-        return "Добавь сюда дополнительную информацию, которую получат участники события в случае успеха.";
       }
     }
   },
@@ -388,40 +314,6 @@ export default {
     requestError: null,
     menu: false,
     valid: true,
-    instructionInvalid: false,
-    descriptionInvalid: false,
-    instruction_extensions: [
-      Bold,
-      Italic,
-      Link,
-      BulletList,
-      OrderedList,
-      ListItem,
-      History
-    ],
-    extensions: [
-      Bold,
-      Italic,
-      Link,
-      BulletList,
-      OrderedList,
-      ListItem,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3]
-          }
-        }
-      ],
-      HorizontalRule,
-      History
-    ],
-    rules: {
-      required: value => !!value || "Поле обязательное",
-      minPeople: value => value > 2 || "Грустное событие получится",
-      minAmount: value => value >= 100 || "Маловато будет"
-    },
     payload: {
       title: "",
       subtitle: "",
@@ -435,9 +327,6 @@ export default {
       instructions: "",
       description: ""
     }
-  }),
-  props: {
-    type: Object
-  }
+  })
 };
 </script>
