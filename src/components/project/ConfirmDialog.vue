@@ -1,12 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <div class="pt-6 primarytext--text headline text-center">
-        Вы уверены?
-      </div>
-      <div class="mt-5 primarytext--text body-1 text-center">
-        Вы собираетесь отказаться от участия в проекте.
-      </div>
+      <slot></slot>
     </v-card-text>
     <v-card-actions class="pb-6">
       <v-spacer></v-spacer>
@@ -31,9 +26,6 @@ export default {
   name: "ConfirmDialog",
   data() {
     return {};
-  },
-  props: {
-    dialog: Boolean
   }
 };
 </script>

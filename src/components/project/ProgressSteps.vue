@@ -45,7 +45,7 @@
           step="harvest"
           v-if="type.goal_by_amount"
           complete
-          complete-icon="mdi-cash-multiple"
+          complete-icon="mdi-piggy-bank"
           :color="harvestColor"
         >
           <div class="secondarytext--text caption text-center">
@@ -58,7 +58,7 @@
         <v-stepper-step
           step="done"
           complete
-          complete-icon="mdi-party-popper"
+          complete-icon="mdi-trophy-variant"
           :color="doneColor"
         >
           <div class="secondarytext--text caption text-center">

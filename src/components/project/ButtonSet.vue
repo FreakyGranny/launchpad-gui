@@ -62,7 +62,14 @@
       {{ joinButtonText }}
     </v-btn>
     <v-dialog v-model="leaveConfirm" max-width="400px">
-      <confirm-dialog @confirm="leaveProject" />
+      <confirm-dialog @confirm="leaveProject">
+        <div class="pt-6 primarytext--text headline text-center">
+          Вы уверены?
+        </div>
+        <div class="mt-5 primarytext--text body-1 text-center">
+          Вы собираетесь отказаться от участия в проекте.
+        </div>
+      </confirm-dialog>
     </v-dialog>
     <v-dialog v-model="donatePick" max-width="400px">
       <donate-dialog

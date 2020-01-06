@@ -21,25 +21,28 @@
 
       <v-tooltip left v-if="isDraft">
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" fab dark small color="secondary">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-        </template>
-        <span>Редактировать</span>
-      </v-tooltip>
-
-      <v-tooltip left v-if="isDraft">
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" fab small color="accent">
+          <v-btn
+            v-on="on"
+            fab
+            small
+            color="lightprimary"
+            @click="$emit('publish')"
+          >
             <v-icon>mdi-publish</v-icon>
           </v-btn>
         </template>
         <span>Опубликовать</span>
       </v-tooltip>
-
       <v-tooltip left v-if="isDraft">
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" fab dark small color="red">
+          <v-btn
+            v-on="on"
+            fab
+            dark
+            small
+            color="error"
+            @click="$emit('delete')"
+          >
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </template>
