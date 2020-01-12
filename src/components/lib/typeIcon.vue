@@ -26,7 +26,7 @@ export default {
       if (this.type.alias in this.typeIcons) {
         return this.typeIcons[this.type.alias];
       }
-      return "error_outline";
+      return "help-rhombus-outline";
     }
   },
   data() {
