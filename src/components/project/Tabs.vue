@@ -21,7 +21,7 @@
         href="#tab-comments"
         class="grey lighten-4 hidden-sm-and-down"
       >
-      <!-- lighten-4 потому что disabled -->
+        <!-- lighten-4 потому что disabled -->
         <v-row align="center" justify="center">
           Комментарии
           <v-chip class="ma-2" color="secondarytext" small outlined>
@@ -36,7 +36,7 @@
         <v-card flat class="grey lighten-5">
           <progress-steps :status="status" :type="type" />
           <v-sheet tile class="ma-4" v-if="isMember && showInstructions">
-            <v-expansion-panels>
+            <v-expansion-panels v-model="expPanel" :multiple="isEditable">
               <v-expansion-panel tile class="bordered">
                 <v-expansion-panel-header>
                   <div class="pl-6 primarytext--text body-2 text-center">
@@ -47,21 +47,41 @@
                   </template>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <div
-                    v-html="instruction"
-                    class="secondarytext--text caption text-center"
-                  />
+                  <edit-popup
+                    :editable="isEditable"
+                    fieldType="instructions"
+                    fieldName="instructions"
+                    :type="type"
+                    :value="instruction"
+                    @reload="$emit('reload')"
+                  >
+                    <div
+                      v-html="instruction"
+                      class="secondarytext--text caption"
+                    />
+                  </edit-popup>
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
           </v-sheet>
           <v-card outlined tile class="ma-4" min-width="265">
-            <v-card-subtitle>
+            <v-card-subtitle class="pb-0">
               <div class="accent--text subtitle-2 text-center">
                 ОПИСАНИЕ
               </div>
             </v-card-subtitle>
-            <v-card-text v-html="description" class="tab-content" />
+            <v-card-text class="px-6 pt-2">
+              <edit-popup
+                :editable="isEditable"
+                fieldType="description"
+                fieldName="description"
+                :value="description"
+                @reload="$emit('reload')"
+                @error="passError"
+              >
+                <div class="secondarytext--text body-2" v-html="description" />
+              </edit-popup>
+            </v-card-text>
           </v-card>
         </v-card>
       </v-tab-item>
@@ -80,22 +100,33 @@
 
 <script>
 import DonateTab from "./DonateTab";
+import EditPopup from "./EditPopup";
 import ProgressSteps from "./ProgressSteps";
-import { STATUS_HARVEST } from "../lib/const/status";
+import { STATUS_HARVEST, STATUS_DRAFT } from "../lib/const/status";
 
 export default {
   components: {
     ProgressSteps,
+    EditPopup,
     DonateTab
   },
   name: "Tabs",
   computed: {
     showInstructions() {
-      return this.status === STATUS_HARVEST;
+      return this.status === STATUS_HARVEST || this.status === STATUS_DRAFT;
+    },
+    isEditable() {
+      return this.status === STATUS_DRAFT;
+    }
+  },
+  methods: {
+    passError(data) {
+      this.$emit("error", data);
     }
   },
   data() {
     return {
+      expPanel: [0],
       tab: null
     };
   },
