@@ -12,10 +12,12 @@
         <v-tooltip left>
           <template v-slot:activator="{ on }">
             <v-btn v-model="fab" color="primary" v-on="on" fab>
-              <v-icon>{{ fab ? "mdi-close" : "mdi-settings" }}</v-icon>
+              <v-icon>{{
+                fab ? "mdi-chevron-double-up" : "mdi-settings"
+              }}</v-icon>
             </v-btn>
           </template>
-          <span>Управление проектом</span>
+          <span>{{ fab ? "Свернуть управление" : "Управление проектом" }}</span>
         </v-tooltip>
       </template>
 
@@ -24,8 +26,9 @@
           <v-btn
             v-on="on"
             fab
+            dark
             small
-            color="lightprimary"
+            color="accent"
             @click="$emit('publish')"
           >
             <v-icon>mdi-publish</v-icon>
@@ -60,14 +63,8 @@
 
       <v-tooltip left v-if="isHarvest">
         <template v-slot:activator="{ on }">
-          <v-btn
-            v-on="on"
-            fab
-            small
-            color="lightprimary"
-            @click="$emit('mark')"
-          >
-            <v-icon color="primarytext">mdi-credit-card-outline</v-icon>
+          <v-btn v-on="on" fab small color="accent" @click="$emit('mark')">
+            <v-icon>mdi-credit-card-outline</v-icon>
           </v-btn>
         </template>
         <span>Отметить переводы</span>
@@ -89,7 +86,7 @@ export default {
   name: "ManageMenu",
   data() {
     return {
-      fab: false
+      fab: this.menuExpanded()
     };
   },
   computed: {
@@ -101,6 +98,18 @@ export default {
     },
     isHarvest() {
       return this.status == STATUS_HARVEST;
+    }
+  },
+  methods: {
+    menuExpanded() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return false;
+        case "sm":
+          return false;
+        default:
+          return true;
+      }
     }
   },
   props: {
