@@ -4,24 +4,22 @@
     :justify="justifyEnd ? 'end' : 'start'"
     no-gutters
   >
-    <v-col cols="1" v-if="withIcon">
-      <v-icon size="18" color="primarytext">
-        {{ ended ? "mdi-timer-off" : "mdi-timer" }}
-      </v-icon>
-    </v-col>
-    <v-col cols="auto" v-if="daysLeft > 0 && !ended">
-      <div class="primarytext--text font-weight-bold ml-1">
-        {{ daysLeft }}
-      </div>
-    </v-col>
-    <v-col cols="auto" v-if="!ended">
-      <div
-        class="ml-1"
-        :class="daysLeft < 0 ? 'error--text' : 'primarytext--text'"
-      >
-        {{ getText }}
-      </div>
-    </v-col>
+    <v-icon v-if="withIcon" size="18" color="primarytext">
+      {{ ended ? "mdi-timer-off" : "mdi-timer" }}
+    </v-icon>
+    <div
+      v-if="daysLeft > 0 && !ended"
+      class="primarytext--text font-weight-bold ml-1"
+    >
+      {{ daysLeft }}
+    </div>
+    <div
+      v-if="!ended"
+      class="ml-1"
+      :class="daysLeft < 0 ? 'error--text' : 'primarytext--text'"
+    >
+      {{ getText }}
+    </div>
   </v-row>
 </template>
 
