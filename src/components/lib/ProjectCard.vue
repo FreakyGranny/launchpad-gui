@@ -96,12 +96,19 @@
           v-bind:value="project.percent"
         />
         <div class="pt-5">
-          <days-counter
-            class="body-2"
-            :endDate="project.release_date"
-            :withIcon="true"
-            :ended="showDaysCounter"
-          />
+          <v-row align="baseline" no-gutters>
+            <days-counter
+              class="body-2"
+              :endDate="project.release_date"
+              :withIcon="true"
+              :ended="showDaysCounter"
+            />
+            <datetime
+              v-if="!project.project_type.goal_by_amount && project.event_date"
+              :compact="true"
+              :datetime="project.event_date"
+            />
+          </v-row>
         </div>
       </v-card-text>
     </v-card>
@@ -120,6 +127,7 @@
 <script>
 import Status from "../lib/status";
 import DaysCounter from "../lib/daysCounter";
+import Datetime from "../lib/datetime";
 import GoalCounter from "../lib/goalCounter";
 import TypeIcon from "../lib/typeIcon";
 import { STATUS_SEARCH, STATUS_DRAFT } from "../lib/const/status";
@@ -128,6 +136,7 @@ export default {
   components: {
     Status,
     DaysCounter,
+    Datetime,
     GoalCounter,
     TypeIcon
   },

@@ -59,33 +59,26 @@
                   ></v-select>
                 </v-col>
                 <v-col cols="12" sm="4" md="4">
-                  <v-menu
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
+                  <v-dialog v-model="releaseDateDialog" width="290px">
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="payload.release_date"
-                        prepend-icon="mdi-calendar-today"
-                        hint="Дата завершения"
+                        prepend-icon="mdi-calendar-search"
+                        hint="Дата завершения поиска"
                         persistent-hint
                         readonly
                         v-on="on"
-                      ></v-text-field>
+                      />
                     </template>
                     <v-date-picker
                       v-model="payload.release_date"
                       locale="ru-ru"
                       :first-day-of-week="1"
-                      @input="menu = false"
+                      @input="releaseDateDialog = false"
                       :min="minAllowedDate"
                       :max="maxAllowedDate"
                     />
-                  </v-menu>
+                  </v-dialog>
                 </v-col>
                 <v-col cols="12" sm="4" md="4" v-if="type.goal_by_amount">
                   <v-text-field
@@ -113,6 +106,49 @@
                     persistent-hint
                     required
                   ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4" md="4" v-if="!type.goal_by_amount">
+                  <v-dialog v-model="eventDateDialog" width="290px">
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="payload.event_date"
+                        prepend-icon="mdi-calendar-today"
+                        hint="Дата/время проведения"
+                        persistent-hint
+                        readonly
+                        v-on="on"
+                      />
+                    </template>
+                    <datetime-picker
+                      v-model="payload.event_date"
+                      clearText="Сбросить"
+                      okText="Подтвердить"
+                      @input="eventDateDialog = false"
+                      :datePickerProps="{
+                        firstDayOfWeek: 1,
+                        min: minAllowedDate,
+                        max: maxAllowedDate,
+                        locale: 'ru-ru'
+                      }"
+                      :time-picker-props="{
+                        format: '24hr',
+                        allowedMinutes: [
+                          0,
+                          5,
+                          10,
+                          15,
+                          20,
+                          25,
+                          30,
+                          35,
+                          40,
+                          45,
+                          50,
+                          55
+                        ]
+                      }"
+                    />
+                  </v-dialog>
                 </v-col>
               </v-row>
             </v-container>
@@ -246,12 +282,16 @@
 
 <script>
 import projectFields from "../lib/projectFields";
+import DatetimePicker from "../lib/DateTimePicker";
 import moment from "moment";
 import "moment/locale/ru";
 
 export default {
   name: "createForm",
   extends: projectFields,
+  components: {
+    DatetimePicker
+  },
   methods: {
     handleClose() {
       this.$emit("close");
@@ -278,6 +318,9 @@ export default {
       }
       if (!this.type.goal_by_people) {
         this.payload.goal_people = 0;
+      }
+      if (this.type.goal_by_amount) {
+        this.payload.event_date = null;
       }
       this.payload.project_type = this.type.id;
 
@@ -312,7 +355,8 @@ export default {
     step: 1,
     makeRequest: false,
     requestError: null,
-    menu: false,
+    releaseDateDialog: false,
+    eventDateDialog: false,
     valid: true,
     payload: {
       title: "",
@@ -320,6 +364,7 @@ export default {
       release_date: moment()
         .add(7, "day")
         .format("YYYY-MM-DD"),
+      event_date: null,
       category: "",
       goal_people: 4,
       goal_amount: 500,

@@ -1,6 +1,9 @@
 <template>
   <v-row no-gutters>
-    <div class="project-image project-image-md hidden-sm-and-down">
+    <div
+      :style="heightControl"
+      class="project-image project-image-md hidden-sm-and-down"
+    >
       <img class="blur" v-bind:src="imageSrc" alt="project background" />
       <v-img contain class="img" v-bind:src="imageSrc" alt="project image" />
     </div>
@@ -21,7 +24,7 @@
   /* top: 50%;
   left: 50%; */
   transform: translate(-5%, -5%);
-  display: block;
+  /* display: block; */
   width: 110%;
   height: 110%;
   max-width: 110%;
@@ -31,7 +34,7 @@
 }
 .img {
   position: relative;
-  display: block;
+  /* display: block; */
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -39,25 +42,25 @@
 }
 .project-image {
   z-index: 1;
-  min-width: 270px;
+  min-width: 264px;
   position: relative;
   width: 100%;
   overflow: hidden;
 }
 .project-image-md {
   min-height: 200px;
-  max-height: 400px;
+  max-height: 356px;
   height: 37vw;
 }
 .project-image-sm {
   min-height: 200px;
-  max-height: 400px;
+  max-height: 356px;
   height: 42vw;
 }
 .project-image-xs {
-  min-height: 180px;
-  max-height: 66vw;
-  height: 60vw;
+  min-height: 160px;
+  max-height: 55vw;
+  height: 50vw;
 }
 </style>
 
@@ -67,8 +70,23 @@ export default {
   data() {
     return {};
   },
+  computed: {
+    heightControl() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "md":
+          return { maxHeight: "362px" };
+        default:
+          if (this.withOffset) {
+            return { maxHeight: "316px" };
+          } else {
+            return { maxHeight: "362px" };
+          }
+      }
+    }
+  },
   props: {
-    imageSrc: String
+    imageSrc: String,
+    withOffset: Boolean
   }
 };
 </script>
