@@ -8,6 +8,9 @@ html {
 .v-sheet {
   border-radius: 0px !important;
 }
+.v-picker {
+  border-radius: 0px !important;
+}
 .v-dialog {
   border-radius: 0px !important;
 }
