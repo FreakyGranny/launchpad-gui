@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app hide-on-scroll scroll-threshold="20">
+    <v-app-bar height="64" max-height="64" elevation="2">
       <div class="d-flex align-center">
         <router-link to="/explore">
           <v-img

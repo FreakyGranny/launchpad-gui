@@ -21,8 +21,31 @@
                 @reload="reloadProject"
                 @error="showError"
               >
-                <project-picture :imageSrc="project.image_link" />
+                <project-picture
+                  :withOffset="showEventDate"
+                  :imageSrc="project.image_link"
+                />
               </edit-popup>
+              <edit-dialog
+                :editable="isEditable"
+                fieldType="datetime"
+                fieldName="event_date"
+                :value="project.event_date"
+                @reload="reloadProject"
+                @error="showError"
+              >
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-sheet v-on="on" color="primary" v-if="showEventDate">
+                      <datetime
+                        :compact="false"
+                        :datetime="project.event_date"
+                      />
+                    </v-sheet>
+                  </template>
+                  <span>Дата и время проведения</span>
+                </v-tooltip>
+              </edit-dialog>
             </v-col>
             <v-col xl="5" lg="5" md="5" sm="12">
               <v-row class="mx-4 mt-3 mb-0">
@@ -210,7 +233,7 @@
                   </edit-goal-popup>
                 </v-col>
                 <v-col cols="6" class="pa-0">
-                  <edit-popup
+                  <edit-dialog
                     :editable="isEditable"
                     fieldType="date"
                     fieldName="release_date"
@@ -226,7 +249,7 @@
                       :alignBottom="true"
                       :justifyEnd="true"
                     />
-                  </edit-popup>
+                  </edit-dialog>
                 </v-col>
               </v-row>
               <v-row class="ma-4">
@@ -346,17 +369,24 @@
 .tabs-area {
   min-height: 300px;
 }
+.date-plank {
+  position: relative;
+  z-index: 2;
+  margin-top: -44px;
+}
 </style>
 
 <script>
 import { mapGetters } from "vuex";
 import LoadSpinner from "../lib/loading";
 import DaysCounter from "../lib/daysCounter";
+import Datetime from "../lib/datetime";
 import GoalCounter from "../lib/goalCounter";
 import ProjectCounter from "../lib/projectCounter";
 import EmptyState from "../lib/EmptyState";
 import CategoryIcon from "../lib/categoryIcon";
 import EditPopup from "./EditPopup";
+import EditDialog from "./EditDialog";
 import EditGoalPopup from "./EditGoalPopup";
 import EditSelectPopup from "./EditSelectPopup";
 import ButtonSet from "./ButtonSet";
@@ -380,6 +410,7 @@ export default {
     EmptyState,
     CategoryIcon,
     EditPopup,
+    EditDialog,
     EditGoalPopup,
     EditSelectPopup,
     ButtonSet,
@@ -388,6 +419,7 @@ export default {
     ManageMenu,
     DonateMark,
     ConfirmDialog,
+    Datetime,
     DaysCounter
   },
   name: "project",
@@ -397,6 +429,18 @@ export default {
   },
   computed: {
     ...mapGetters(["PROFILE"]),
+    showEventDate() {
+      if (this.isMoneyProject) {
+        return false;
+      }
+      if (this.isEditable) {
+        return true;
+      }
+      if (this.project.event_date) {
+        return true;
+      }
+      return false;
+    },
     isEditable() {
       return this.project.status === STATUS_DRAFT;
     },
