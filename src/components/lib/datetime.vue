@@ -8,13 +8,13 @@
     </div>
     <v-col class="pa-2" v-if="!compact" cols="12" sm="6" xs="12">
       <v-row no-gutters justify="center">
-        <v-icon size="30" color="white">
+        <v-icon size="29" color="white">
           mdi-calendar-today
         </v-icon>
         <div class="ml-1 my-auto white--text">
           {{ formatDate }}
         </div>
-        <v-icon class="ml-6" size="30" color="white">
+        <v-icon class="ml-6" size="29" color="white">
           mdi-clock-outline
         </v-icon>
         <div class="ml-1 my-auto white--text">
