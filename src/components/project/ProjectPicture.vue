@@ -77,7 +77,7 @@ export default {
           return { maxHeight: "362px" };
         default:
           if (this.withOffset) {
-            return { maxHeight: "316px" };
+            return { maxHeight: "318px" };
           } else {
             return { maxHeight: "362px" };
           }
