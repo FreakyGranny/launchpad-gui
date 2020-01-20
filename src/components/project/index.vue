@@ -433,6 +433,9 @@ export default {
       if (this.isMoneyProject) {
         return false;
       }
+      if (this.isFailed) {
+        return false;
+      }
       if (this.isEditable) {
         return true;
       }
@@ -443,6 +446,9 @@ export default {
     },
     isEditable() {
       return this.project.status === STATUS_DRAFT;
+    },
+    isFailed() {
+      return this.project.status === STATUS_FAIL;
     },
     daysShow() {
       return !(this.isEditable || this.project.status == STATUS_SEARCH);

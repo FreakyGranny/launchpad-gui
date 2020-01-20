@@ -104,7 +104,11 @@
               :ended="showDaysCounter"
             />
             <datetime
-              v-if="!project.project_type.goal_by_amount && project.event_date"
+              v-if="
+                !project.project_type.goal_by_amount &&
+                  project.event_date &&
+                  !isFailed
+              "
               :compact="true"
               :datetime="project.event_date"
             />
@@ -130,7 +134,7 @@ import DaysCounter from "../lib/daysCounter";
 import Datetime from "../lib/datetime";
 import GoalCounter from "../lib/goalCounter";
 import TypeIcon from "../lib/typeIcon";
-import { STATUS_SEARCH, STATUS_DRAFT } from "../lib/const/status";
+import { STATUS_SEARCH, STATUS_DRAFT, STATUS_FAIL } from "../lib/const/status";
 
 export default {
   components: {
@@ -143,6 +147,9 @@ export default {
   computed: {
     markDraft() {
       return this.project.status == STATUS_DRAFT;
+    },
+    isFailed() {
+      return this.project.status == STATUS_FAIL;
     },
     showDaysCounter() {
       switch (this.project.status) {
