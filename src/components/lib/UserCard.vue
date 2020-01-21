@@ -66,8 +66,8 @@
                     <v-sheet v-on="on">
                       <v-rating
                         background-color="primary"
-                        :value="user.profile.success_rate * 7"
-                        length="7"
+                        :value="user.profile.success_rate * 5"
+                        length="5"
                         half-increments
                         readonly
                       >
