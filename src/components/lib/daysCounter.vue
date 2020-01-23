@@ -8,7 +8,7 @@
       {{ ended ? "mdi-timer-off" : "mdi-timer" }}
     </v-icon>
     <div
-      v-if="daysLeft > 0 && !ended"
+      v-if="daysLeft > 1 && !ended"
       class="primarytext--text font-weight-bold ml-1"
     >
       {{ daysLeft }}
@@ -16,7 +16,7 @@
     <div
       v-if="!ended"
       class="ml-1"
-      :class="daysLeft < 0 ? 'error--text' : 'primarytext--text'"
+      :class="daysLeft < 1 ? 'error--text' : 'primarytext--text'"
     >
       {{ getText }}
     </div>
@@ -34,13 +34,13 @@ export default {
   computed: {
     daysLeft() {
       let release = moment(this.endDate, "YYYY-MM-DD");
-      return release.diff(moment(), "day");
+      return release.add(2, "day").diff(moment(), "day");
     },
     getText() {
-      if (this.daysLeft < 0) {
+      if (this.daysLeft <= 0) {
         return "время вышло";
       }
-      if (this.daysLeft == 0) {
+      if (this.daysLeft == 1) {
         return "последний день";
       }
       let cases = [2, 0, 1, 1, 1, 2];

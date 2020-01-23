@@ -58,12 +58,38 @@
                     @reload="reloadProject"
                     @error="showError"
                   >
-                    <div class="subtitle-2 font-weight-bold accent--text">
-                      {{ project.project_type.name.toUpperCase() }}
-                    </div>
+                    <v-tooltip
+                      bottom
+                      max-width="300"
+                      color="rgba(50, 50, 50)"
+                      :disabled="isEditable"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <div
+                          v-on="on"
+                          class="subtitle-2 font-weight-bold accent--text"
+                        >
+                          {{ project.project_type.name.toUpperCase() }}
+                        </div>
+                      </template>
+                      <v-sheet color="transparent">
+                        <div class="white--text caption">
+                          <ul>
+                            <li
+                              class="py-1"
+                              v-for="(option, index) in project.project_type
+                                .options"
+                              :key="index"
+                            >
+                              <span>{{ option }}</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </v-sheet>
+                    </v-tooltip>
                   </edit-select-popup>
                 </v-col>
-                <v-col class="pa-0">
+                <v-col class="pa-0" cols="5">
                   <edit-select-popup
                     :editable="isEditable"
                     fieldType="category"
