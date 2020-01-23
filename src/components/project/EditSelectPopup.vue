@@ -53,6 +53,17 @@
                     outlined
                     required
                   ></v-select>
+                  <v-sheet class="secondarytext--text caption" max-width="480">
+                    <ul>
+                      <li
+                        class="py-1"
+                        v-for="(option, index) in currentType.options"
+                        :key="index"
+                      >
+                        <span>{{ option }}</span>
+                      </li>
+                    </ul>
+                  </v-sheet>
                 </v-col>
               </v-row>
             </v-container>
@@ -116,6 +127,13 @@ export default {
     },
     changed() {
       return this.value !== this.newValue;
+    },
+    currentType() {
+      if (typeof this.newValue == "number") {
+        return this.PROJECT_TYPE[this.newValue];
+      } else {
+        return this.newValue;
+      }
     }
   },
   methods: {
