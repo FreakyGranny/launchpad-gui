@@ -21,7 +21,7 @@
           <v-row no-gutters class="px-4">
             <div class="primarytext--text headline font-weight-medium">
               {{ user.first_name }} {{ user.last_name }}
-              <v-tooltip right>
+              <v-tooltip right transition="fade-transition">
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="mb-1"
@@ -61,7 +61,7 @@
           <v-row no-gutters>
             <v-col>
               <v-row no-gutters align="center" class="pt-2 px-2">
-                <v-tooltip right>
+                <v-tooltip right transition="fade-transition">
                   <template v-slot:activator="{ on }">
                     <v-sheet v-on="on">
                       <v-rating

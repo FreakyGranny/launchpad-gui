@@ -34,7 +34,7 @@
                 @reload="reloadProject"
                 @error="showError"
               >
-                <v-tooltip bottom>
+                <v-tooltip bottom transition="fade-transition">
                   <template v-slot:activator="{ on }">
                     <v-sheet v-on="on" color="primary" v-if="showEventDate">
                       <datetime
@@ -61,7 +61,8 @@
                     <v-tooltip
                       bottom
                       max-width="300"
-                      color="rgba(50, 50, 50)"
+                      color="lightprimary"
+                      transition="fade-transition"
                       :disabled="isEditable"
                     >
                       <template v-slot:activator="{ on }">
@@ -73,7 +74,7 @@
                         </div>
                       </template>
                       <v-sheet color="transparent">
-                        <div class="white--text caption">
+                        <div class="black--text caption">
                           <ul>
                             <li
                               class="py-1"
