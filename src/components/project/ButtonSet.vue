@@ -13,7 +13,11 @@
     >
       {{ joinButtonText }}
     </v-btn>
-    <v-tooltip :disabled="!type.goal_by_amount" bottom>
+    <v-tooltip
+      :disabled="!type.goal_by_amount"
+      bottom
+      transition="fade-transition"
+    >
       <template v-slot:activator="{ on }">
         <v-fade-transition>
           <v-chip

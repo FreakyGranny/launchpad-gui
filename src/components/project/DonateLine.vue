@@ -33,7 +33,11 @@
             >
               mdi-ticket-outline
             </v-icon>
-            <v-tooltip v-if="isMoneyProject" bottom>
+            <v-tooltip
+              v-if="isMoneyProject"
+              bottom
+              transition="fade-transition"
+            >
               <template v-slot:activator="{ on }">
                 <v-icon :color="donation.paid ? 'accent' : ''" v-on="on">
                   {{ paymentIcon }}

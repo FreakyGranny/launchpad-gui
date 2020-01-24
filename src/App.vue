@@ -91,7 +91,7 @@
           </v-hover>
         </router-link>
         <router-link :to="{ name: 'Account' }" v-if="IS_AUTHORIZED">
-          <v-tooltip bottom>
+          <v-tooltip bottom transition="fade-transition">
             <template v-slot:activator="{ on }">
               <v-avatar size="40">
                 <img

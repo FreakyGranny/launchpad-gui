@@ -9,7 +9,7 @@
       transition="slide-y-transition"
     >
       <template v-slot:activator>
-        <v-tooltip left>
+        <v-tooltip left transition="fade-transition">
           <template v-slot:activator="{ on }">
             <v-btn v-model="fab" color="primary" v-on="on" fab>
               <v-icon>{{
@@ -21,7 +21,7 @@
         </v-tooltip>
       </template>
 
-      <v-tooltip left v-if="isDraft">
+      <v-tooltip left v-if="isDraft" transition="fade-transition">
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
@@ -36,7 +36,7 @@
         </template>
         <span>Опубликовать</span>
       </v-tooltip>
-      <v-tooltip left v-if="isDraft">
+      <v-tooltip left v-if="isDraft" transition="fade-transition">
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
@@ -52,7 +52,7 @@
         <span>Удалить</span>
       </v-tooltip>
 
-      <v-tooltip left v-if="isSearch">
+      <v-tooltip left v-if="isSearch" transition="fade-transition">
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" fab dark small color="secondary">
             <v-icon>mdi-progress-clock</v-icon>
@@ -61,7 +61,7 @@
         <span>Продлить</span>
       </v-tooltip>
 
-      <v-tooltip left v-if="isHarvest">
+      <v-tooltip left v-if="isHarvest" transition="fade-transition">
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" fab small color="accent" @click="$emit('mark')">
             <v-icon>mdi-credit-card-outline</v-icon>

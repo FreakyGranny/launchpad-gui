@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip :disabled="!withTooltip" bottom>
+  <v-tooltip :disabled="!withTooltip" bottom transition="fade-transition">
     <template v-slot:activator="{ on }">
       <v-icon color="primary" :size="size" v-on="on">
         {{ getIcon }}
