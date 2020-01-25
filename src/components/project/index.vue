@@ -30,6 +30,7 @@
                 :editable="isEditable"
                 fieldType="datetime"
                 fieldName="event_date"
+                :minDate="project.release_date"
                 :value="project.event_date"
                 @reload="reloadProject"
                 @error="showError"
@@ -58,12 +59,10 @@
                     @reload="reloadProject"
                     @error="showError"
                   >
-                    <v-tooltip
-                      bottom
-                      max-width="300"
-                      color="lightprimary"
-                      transition="fade-transition"
+                    <v-menu
+                      open-on-hover
                       :disabled="isEditable"
+                      close-delay="400"
                     >
                       <template v-slot:activator="{ on }">
                         <div
@@ -73,8 +72,19 @@
                           {{ project.project_type.name.toUpperCase() }}
                         </div>
                       </template>
-                      <v-sheet color="transparent">
-                        <div class="black--text caption">
+                      <v-card tile width="300" color="lightprimary">
+                        <v-card-subtitle class="pb-2">
+                          <v-row no-gutters>
+                            <type-icon
+                              :type="project.project_type"
+                              :withTooltip="false"
+                            />
+                            <div class="ml-1 my-auto font-weight-medium">
+                              {{ project.project_type.name.toUpperCase() }}
+                            </div>
+                          </v-row>
+                        </v-card-subtitle>
+                        <v-card-text class="pl-5 primarytext--text caption">
                           <ul>
                             <li
                               class="py-1"
@@ -85,9 +95,9 @@
                               <span>{{ option }}</span>
                             </li>
                           </ul>
-                        </div>
-                      </v-sheet>
-                    </v-tooltip>
+                        </v-card-text>
+                      </v-card>
+                    </v-menu>
                   </edit-select-popup>
                 </v-col>
                 <v-col class="pa-0" cols="5">
@@ -384,7 +394,7 @@
       </confirm-dialog>
     </v-dialog>
     <v-snackbar v-model="messagePopup" :multi-line="true">
-      <div v-html="message" class="mt-3 caption text-center" />
+      <div v-html="message" class="caption text-center" />
     </v-snackbar>
   </div>
 </template>
@@ -405,6 +415,8 @@
 
 <script>
 import { mapGetters } from "vuex";
+import moment from "moment";
+import TypeIcon from "../lib/typeIcon";
 import LoadSpinner from "../lib/loading";
 import DaysCounter from "../lib/daysCounter";
 import Datetime from "../lib/datetime";
@@ -432,6 +444,7 @@ import {
 export default {
   components: {
     LoadSpinner,
+    TypeIcon,
     GoalCounter,
     ProjectCounter,
     EmptyState,
@@ -470,6 +483,12 @@ export default {
         return true;
       }
       return false;
+    },
+    pageTitle() {
+      if (this.project) {
+        return this.project.title + " (" + this.project.project_type.name + ")";
+      }
+      return "Проект не найден";
     },
     isEditable() {
       return this.project.status === STATUS_DRAFT;
@@ -578,6 +597,20 @@ export default {
           this.publishConfirmShown = false;
           return;
         }
+      } else {
+        if (this.project.event_date) {
+          if (
+            moment(this.project.event_date).diff(
+              moment(this.project.release_date),
+              "day"
+            ) <= 0
+          ) {
+            this.showError(
+              "Дата проведения должна быть больше даты окончания поиска"
+            );
+            return;
+          }
+        }
       }
       if (this.project.project_type.goal_by_people) {
         if (this.project.goal_people <= 0) {
@@ -650,6 +683,11 @@ export default {
         .catch(resp => {
           this.showError(resp);
         });
+    }
+  },
+  watch: {
+    pageTitle() {
+      document.title = this.pageTitle;
     }
   },
   data() {
