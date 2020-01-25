@@ -114,6 +114,7 @@
                         v-model="payload.event_date"
                         prepend-icon="mdi-calendar-today"
                         hint="Дата/время проведения"
+                        :rules="[checkEventDate]"
                         persistent-hint
                         readonly
                         v-on="on"
@@ -126,7 +127,7 @@
                       @input="eventDateDialog = false"
                       :datePickerProps="{
                         firstDayOfWeek: 1,
-                        min: minAllowedDate,
+                        min: minAllowedEventDate(payload.release_date),
                         max: maxAllowedDate,
                         locale: 'ru-ru'
                       }"
@@ -293,6 +294,15 @@ export default {
     DatetimePicker
   },
   methods: {
+    checkEventDate(value) {
+      if (value === null) {
+        return true;
+      }
+      if (moment(value).diff(moment(this.payload.release_date), "day") <= 0) {
+        return "Дата проведения должна быть больше даты окончания поиска";
+      }
+      return true;
+    },
     handleClose() {
       this.$emit("close");
       this.requestError = null;

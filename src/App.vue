@@ -167,6 +167,15 @@ export default {
       await this.$store.dispatch(USER_REQUEST);
     }
   },
+  watch: {
+    $route: {
+      // eslint-disable-next-line no-unused-vars
+      handler: (to, from) => {
+        document.title = to.meta.title || "2GIS KICKSTARTER";
+      },
+      immediate: true
+    }
+  },
   data() {
     return {
       showNavigation: false

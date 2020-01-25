@@ -93,6 +93,17 @@ export default {
         default:
           return "90%";
       }
+    },
+    pageTitle() {
+      if (this.userData) {
+        return (
+          "Пользователь: " +
+          this.userData.first_name +
+          " " +
+          this.userData.last_name
+        );
+      }
+      return "Пользователь не найден";
     }
   },
   methods: {
@@ -119,6 +130,11 @@ export default {
           this.error = resp.data;
           this.loadingProjects = false;
         });
+    }
+  },
+  watch: {
+    pageTitle() {
+      document.title = this.pageTitle;
     }
   },
   data() {

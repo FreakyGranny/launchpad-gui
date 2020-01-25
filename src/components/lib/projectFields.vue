@@ -56,6 +56,11 @@ export default {
     }
   },
   methods: {
+    minAllowedEventDate(minDate) {
+      return moment(minDate)
+        .add(1, "day")
+        .format("YYYY-MM-DD");
+    },
     checkLink(value) {
       if (value === null) {
         return true;

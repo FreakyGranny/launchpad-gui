@@ -35,7 +35,7 @@
         @input="validate"
         :datePickerProps="{
           firstDayOfWeek: 1,
-          min: minAllowedDate,
+          min: minAllowedEventDate(minDate),
           max: maxAllowedDate,
           locale: 'ru-ru'
         }"
@@ -76,6 +76,7 @@ export default {
     fieldType: String,
     fieldName: String,
     maxLength: Number,
+    minDate: String,
     value: String
   },
   computed: {

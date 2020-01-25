@@ -75,19 +75,28 @@ export default new Router({
       path: "/create",
       name: "Create",
       component: Create,
-      beforeEnter: ifAuthenticated
+      beforeEnter: ifAuthenticated,
+      meta: {
+        title: "Новый проект"
+      }
     },
     {
       path: "/explore",
       name: "Dashboard",
       component: Dashboard,
-      beforeEnter: ifAuthenticated
+      beforeEnter: ifAuthenticated,
+      meta: {
+        title: "Проекты"
+      }
     },
     {
       path: "/account",
       name: "Account",
       component: Account,
-      beforeEnter: ifAuthenticated
+      beforeEnter: ifAuthenticated,
+      meta: {
+        title: "Твой профиль"
+      }
     },
     {
       path: "/user",
@@ -103,7 +112,10 @@ export default new Router({
       path: "/login",
       name: "Login",
       component: Login,
-      beforeEnter: ifNotAuthenticated
+      beforeEnter: ifNotAuthenticated,
+      meta: {
+        title: "Войти"
+      }
     }
   ]
 });
