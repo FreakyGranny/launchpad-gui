@@ -24,9 +24,9 @@
         <!-- lighten-4 потому что disabled -->
         <v-row align="center" justify="center">
           Комментарии
-          <v-chip class="ma-2" color="secondarytext" small outlined>
-            Soon
-          </v-chip>
+          <!-- <v-chip class="ma-2" color="secondarytext" small outlined>
+            ZERO
+          </v-chip> -->
         </v-row>
       </v-tab>
     </v-tabs>
