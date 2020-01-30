@@ -1,32 +1,18 @@
 <template>
   <v-col xl="5" lg="7" md="9" sm="7" xs="12" class="my-3">
-    <v-tabs v-model="tab" centered fixed-tabs>
-      <v-tab href="#tab-about" class="grey lighten-5">
-        <v-row align="center" justify="center">
+    <v-tabs v-model="tab" background-color="grey lighten-5" class="mx-4">
+      <v-tab href="#tab-about">
+        <v-row align="center" justify="center" :class="tabClass">
           О проекте
         </v-row>
       </v-tab>
 
-      <v-tab href="#tab-members" class="grey lighten-5">
-        <v-row align="center" justify="center">
+      <v-tab href="#tab-members">
+        <v-row align="center" justify="center" :class="tabClass">
           Участники
           <v-chip class="ma-2" color="secondarytext" small outlined>
             {{ donations.length }}
           </v-chip>
-        </v-row>
-      </v-tab>
-
-      <v-tab
-        disabled
-        href="#tab-comments"
-        class="grey lighten-4 hidden-sm-and-down"
-      >
-        <!-- lighten-4 потому что disabled -->
-        <v-row align="center" justify="center">
-          Комментарии
-          <!-- <v-chip class="ma-2" color="secondarytext" small outlined>
-            ZERO
-          </v-chip> -->
         </v-row>
       </v-tab>
     </v-tabs>
@@ -117,6 +103,14 @@ export default {
     },
     isEditable() {
       return this.status === STATUS_DRAFT;
+    },
+    tabClass() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "px-3";
+        default:
+          return "px-10";
+      }
     }
   },
   methods: {
