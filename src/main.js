@@ -6,6 +6,7 @@ import vuetify from "./plugins/vuetify";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import { TiptapVuetifyPlugin } from "tiptap-vuetify";
+import VueQRCodeComponent from "vue-qrcode-component";
 
 import "tiptap-vuetify/dist/main.css";
 import "@/assets/kickstarter.css";
@@ -17,6 +18,8 @@ Vue.use(TiptapVuetifyPlugin, {
   vuetify,
   iconsGroup: "mdi"
 });
+
+Vue.component("qr-code", VueQRCodeComponent);
 
 const token = localStorage.getItem("user-token");
 if (token) {

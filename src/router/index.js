@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 // import Wellcome from "../components/wellcome";
+import Promo from "../components/promo";
 import Project from "../components/project";
 import Dashboard from "../components/dashboard";
 import Account from "../components/account";
@@ -57,6 +58,14 @@ export default new Router({
     //   name: "Wellcome",
     //   component: Wellcome
     // },
+    {
+      path: "/promo",
+      name: "Promo",
+      component: Promo,
+      meta: {
+        title: "Новое на 2gis.kickstater"
+      }
+    },
     {
       path: "/",
       redirect: "/explore"
