@@ -196,7 +196,6 @@ export default {
   },
   data() {
     return {
-      sl: true,
       loading: true,
       error: null,
       tab: null,

@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar height="64" max-height="64" elevation="2">
+    <v-app-bar
+      v-if="$route.name != 'Promo'"
+      height="64"
+      max-height="64"
+      elevation="2"
+    >
       <div class="d-flex align-center">
         <router-link to="/explore">
           <v-img
@@ -118,7 +123,10 @@
     <v-content>
       <router-view />
     </v-content>
-    <v-footer v-if="$route.name != 'Login'" class="grey lighten-5">
+    <v-footer
+      v-if="$route.name != 'Login' && $route.name != 'Promo'"
+      class="grey lighten-5"
+    >
       <v-col class="pa-0">
         <v-divider />
         <v-row justify="center" class="mt-3">
