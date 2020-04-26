@@ -1,7 +1,7 @@
 <template>
-  <span :class="isFail ? 'secondarytext--text' : 'accent--text'">{{
-    getStatus
-  }}</span>
+  <div :class="statusClass">
+    {{ getStatus }}
+  </div>
 </template>
 
 <style scoped></style>
@@ -38,11 +38,20 @@ export default {
         return true;
       }
       return false;
+    },
+    statusClass() {
+      if (this.noColor) {
+        return "white--text";
+      }
+      return this.isFail ? "secondarytext--text" : "accent--text";
     }
   },
   data() {
     return {};
   },
-  props: { sourceStatus: String }
+  props: {
+    sourceStatus: String,
+    noColor: Boolean
+  }
 };
 </script>
