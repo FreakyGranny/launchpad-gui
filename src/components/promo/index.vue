@@ -5,7 +5,7 @@
     <v-container class="fill-height" fluid>
       <v-row no-gutters justify="center">
         <v-img
-          alt="Kickstarter Logo"
+          alt="Launchpad Logo"
           class="shrink mr-2"
           contain
           src="/images/logo.png"

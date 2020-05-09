@@ -29,11 +29,11 @@
                     text
                     icon
                     color="secondary"
-                    :href="'https://planeta.2gis.ru/profile/' + user.username"
+                    :href="'https://vk.com/' + user.username"
                     target="_blank"
                     v-if="totalDonation == null"
                   >
-                    <v-icon size="22">mdi-earth</v-icon>
+                    <v-icon size="22">mdi-vk</v-icon>
                   </v-btn>
                   <v-btn
                     class="mb-1"
@@ -66,7 +66,7 @@
                     <v-sheet v-on="on">
                       <v-rating
                         background-color="primary"
-                        :value="user.profile.success_rate * 5"
+                        :value="user.success_rate * 5"
                         length="5"
                         half-increments
                         readonly
@@ -75,8 +75,7 @@
                     </v-sheet>
                   </template>
                   <span
-                    >Успешность проектов
-                    {{ user.profile.success_rate * 100 }}%</span
+                    >Успешность проектов {{ user.success_rate * 100 }}%</span
                   >
                 </v-tooltip>
               </v-row>
@@ -88,7 +87,7 @@
                 <div
                   class="ml-2 pt-2 secondarytext--text title font-weight-bold"
                 >
-                  {{ user.profile.project_count }}
+                  {{ user.project_count }}
                 </div>
               </v-row>
 
@@ -198,7 +197,8 @@ export default {
       return value.toFixed() + "₽";
     },
     get_count(project_type) {
-      for (let obj of this.user.profile.participation) {
+      // for (let obj of this.user.profile.participation) {
+      for (let obj of []) {
         if (obj.id == project_type.id) {
           return obj.count;
         }
