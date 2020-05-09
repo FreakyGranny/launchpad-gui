@@ -28,7 +28,7 @@ const ifAuthenticated = (to, from, next) => {
   next({
     path: "/login",
     query: {
-      redirect: to.fullPath
+      state: to.fullPath
     }
   });
 };
@@ -63,16 +63,16 @@ export default new Router({
       name: "Promo",
       component: Promo,
       meta: {
-        title: "Новое на 2gis.kickstater"
+        title: "Новое на Launchpad"
       }
     },
     {
       path: "/",
-      redirect: "/explore"
+      state: "/explore"
     },
     {
       path: "/project",
-      redirect: "/explore"
+      state: "/explore"
     },
     {
       path: "/project/:id",
@@ -109,7 +109,7 @@ export default new Router({
     },
     {
       path: "/user",
-      redirect: "/account"
+      state: "/account"
     },
     {
       path: "/user/:id",

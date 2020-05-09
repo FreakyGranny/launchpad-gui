@@ -25,16 +25,14 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit(AUTH_REQUEST);
       axios({
-        url: "/token",
+        url: "/login",
         data: user,
         method: "POST"
       })
         .then(resp => {
           localStorage.setItem("user-token", resp.data.token);
-          // Here set the header of your ajax library to the token value.
-          // example with axios
           axios.defaults.headers.common["Authorization"] =
-            "Token " + resp.data.token;
+            "Bearer " + resp.data.token;
           commit(AUTH_SUCCESS, resp);
           dispatch(USER_REQUEST);
           resolve(resp);

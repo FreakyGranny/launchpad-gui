@@ -12,48 +12,18 @@
                 border="left"
                 v-if="STORAGE_STATUS == 'error'"
               >
-                Вы ввели неправильное имя пользователя или пароль, попробуйте
-                снова.
+                Ой, ошибочка вышла :(
               </v-alert>
-              <v-form ref="loginForm" v-model="fildsFilled">
-                <v-text-field
-                  class="py-2"
-                  label="Имя пользователя"
-                  name="login"
-                  prepend-icon="mdi-account"
-                  type="text"
-                  v-model="username"
-                  :rules="[rules.required]"
-                  required
-                />
-
-                <v-text-field
-                  class="py-2"
-                  id="password"
-                  label="Пароль"
-                  name="password"
-                  prepend-icon="mdi-lock"
-                  v-model="password"
-                  @keyup.enter="validate"
-                  :rules="[rules.required]"
-                  :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="() => (value = !value)"
-                  :type="value ? 'password' : 'text'"
-                  required
-                />
-              </v-form>
+              <div class="pb-3 primarytext--text body-1 text-center">
+                Войти через социальную сеть
+              </div>
             </v-card-text>
-            <v-card-actions class="px-6 pt-0 pb-4">
+            <v-card-actions class="px-6 pt-0 pb-8">
               <v-spacer />
-              <v-btn
-                color="primary"
-                @click="validate"
-                tile
-                min-width="100"
-                large
-              >
-                Войти
+              <v-btn :href="authUrl" color="primary" fab x-large>
+                <v-icon>mdi-vk</v-icon>
               </v-btn>
+              <v-spacer />
             </v-card-actions>
           </v-card>
         </v-col>
@@ -68,30 +38,40 @@ import { AUTH_REQUEST } from "../../store/actions/auth";
 
 export default {
   name: "login",
-  computed: {
-    ...mapGetters(["STORAGE_STATUS"])
+  created: async function() {
+    this.setCode();
   },
-  data() {
-    return {
-      value: String,
-      fildsFilled: true,
-      username: "",
-      password: "",
-      rules: {
-        required: value => !!value || "Ой ёй, полюшко то не заполнено!"
+  computed: {
+    ...mapGetters(["STORAGE_STATUS"]),
+    authUrl() {
+      const authUrl = "https://oauth.vk.com/authorize";
+      const params = new URLSearchParams();
+      params.append("display", "page");
+      params.append("scope", "email");
+      params.append("response_type", "code");
+      params.append("v", "5.103");
+      params.append("client_id", process.env.VUE_APP_VK_CLIENT_ID);
+      params.append(
+        "redirect_uri",
+        (process.env.VUE_APP_VK_REDIRECT_URI || "http://localhost:8080") +
+          "/login"
+      );
+      if (this.$route.query.state) {
+        params.append("state", this.$route.query.state);
       }
-    };
+
+      return authUrl + "?" + params.toString();
+    }
   },
   methods: {
-    validate() {
-      if (this.$refs.loginForm.validate()) {
-        this.login();
+    setCode() {
+      if (this.$route.query.code) {
+        this.login(this.$route.query.code);
       }
     },
-    login() {
-      const { username, password } = this;
-      this.$store.dispatch(AUTH_REQUEST, { username, password }).then(() => {
-        this.$router.push(this.$route.query.redirect || "/explore");
+    login(code) {
+      this.$store.dispatch(AUTH_REQUEST, { code }).then(() => {
+        this.$router.push(this.$route.query.state || "/explore");
       });
     }
   }
