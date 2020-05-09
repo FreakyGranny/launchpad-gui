@@ -36,7 +36,7 @@
           <v-row no-gutters>
             <qr-code
               size="300"
-              :text="'https://kickstarter.k8s.2gis.dev/project/' + project.id"
+              :text="'https://I_FORGOT_THIS/project/' + project.id"
             ></qr-code>
             <v-col class="py-5" :class="barClass">
               <status

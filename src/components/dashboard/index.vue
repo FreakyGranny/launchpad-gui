@@ -72,7 +72,7 @@
           >
             <v-btn
               color="primary"
-              :disabled="isFinalPage || loading"
+              :disabled="loading || !hasNextPage"
               :loading="loading"
               @click="getProjects"
               tile
@@ -157,12 +157,12 @@ export default {
       "CATEGORY",
       "PROJECT_TYPE"
     ]),
-    isFinalPage() {
-      if (typeof this.projects === "undefined") {
-        return false;
-      }
-      return this.totalProjects == this.projects.length;
-    },
+    // isFinalPage() {
+    //   if (typeof this.projects === "undefined") {
+    //     return false;
+    //   }
+    //   return this.totalProjects == this.projects.length;
+    // },
     projectsOnPage() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -266,7 +266,7 @@ export default {
           }
           this.projects = projectList;
           this.nextPage = resp.data.next;
-          this.totalProjects = resp.data.total;
+          this.hasNextPage = resp.data.has_next;
           this.loading = false;
         })
         .catch(resp => {
@@ -278,7 +278,7 @@ export default {
       this.loading = true;
       this.error = null;
       this.nextPage = null;
-      this.totalProjects = 0;
+      this.hasNextPage = false;
       this.projects = [];
     },
     onScroll(e) {
@@ -309,7 +309,7 @@ export default {
       loading: true,
       error: null,
       nextPage: null,
-      totalProjects: 0,
+      hasNextPage: false,
       projects: []
     };
   }

@@ -9,7 +9,7 @@
       <div class="d-flex align-center">
         <router-link to="/explore">
           <v-img
-            alt="Kickstarter Logo"
+            alt="Launchpad Logo"
             class="shrink mr-2"
             contain
             src="/images/logo.png"
@@ -130,29 +130,29 @@
       <v-col class="pa-0">
         <v-divider />
         <v-row justify="center" class="mt-3">
-          <v-btn
+          <!-- <v-btn
             text
             icon
             x-small
             link
-            href="https://rnd2gis.slack.com/archives/CKNPN7DEX"
+            href="link_to_your_slack_channel"
             target="_blank"
           >
             <v-icon>mdi-slack</v-icon>
-          </v-btn>
+          </v-btn> -->
           <v-btn
             text
             icon
             x-small
-            href="https://gitlab.2gis.ru/pet-projects"
+            href="https://github.com/FreakyGranny/launchpad-gui"
             target="_blank"
           >
-            <v-icon>mdi-gitlab</v-icon>
+            <v-icon>mdi-github-circle</v-icon>
           </v-btn>
         </v-row>
         <v-row justify="center">
           <div class="secondarytext--text overline pt-1 mb-3">
-            KICKTEAM {{ new Date().getFullYear() }}
+            {{ new Date().getFullYear() }}
           </div>
         </v-row>
       </v-col>
@@ -179,7 +179,7 @@ export default {
     $route: {
       // eslint-disable-next-line no-unused-vars
       handler: (to, from) => {
-        document.title = to.meta.title || "2GIS KICKSTARTER";
+        document.title = to.meta.title || "LAUNCHPAD";
       },
       immediate: true
     }
