@@ -168,7 +168,7 @@ export default {
     joinProject(payment) {
       this.makeRequest = true;
       let payload = {
-        project: this.$route.params.id,
+        project: Number(this.$route.params.id),
         payment: payment
       };
       this.axios

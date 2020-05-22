@@ -123,8 +123,8 @@ export default {
     editField() {
       this.makeRequest = true;
       let data = {};
-      data["goal_amount"] = this.newAmount;
-      data["goal_people"] = this.newPeople;
+      data["goal_amount"] = Number(this.newAmount);
+      data["goal_people"] = Number(this.newPeople);
       this.axios
         .patch("/project/" + this.$route.params.id, data)
         // eslint-disable-next-line no-unused-vars

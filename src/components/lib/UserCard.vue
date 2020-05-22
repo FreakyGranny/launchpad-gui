@@ -48,11 +48,7 @@
                   </v-btn>
                 </template>
                 <span>
-                  {{
-                    totalDonation == null
-                      ? "Открыть профиль на планете"
-                      : "Выйти"
-                  }}
+                  {{ totalDonation == null ? "Открыть на vk.com" : "Выйти" }}
                 </span>
               </v-tooltip>
             </div>
@@ -197,8 +193,7 @@ export default {
       return value.toFixed() + "₽";
     },
     get_count(project_type) {
-      // for (let obj of this.user.profile.participation) {
-      for (let obj of []) {
+      for (let obj of this.user.participation) {
         if (obj.id == project_type.id) {
           return obj.count;
         }

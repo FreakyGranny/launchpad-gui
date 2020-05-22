@@ -171,11 +171,11 @@
                   </v-row>
                   <v-row class="mx-4">
                     <div class="primarytext--text body-1 font-weight-medium">
-                      {{ project.owner.profile.project_count }}
+                      {{ project.owner.project_count }}
                     </div>
                     <project-counter
                       class="primarytext--text body-1 ml-1"
-                      :count="project.owner.profile.project_count"
+                      :count="project.owner.project_count"
                     />
                   </v-row>
                 </v-col>
