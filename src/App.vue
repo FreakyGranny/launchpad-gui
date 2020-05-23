@@ -120,7 +120,7 @@
       </v-row>
     </v-app-bar>
 
-    <v-content>
+    <v-content class="grey lighten-5">
       <router-view />
     </v-content>
     <v-footer
