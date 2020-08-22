@@ -97,6 +97,9 @@ export default {
       this.makeRequest = true;
       let data = {};
       data[this.fieldName] = this.newValue;
+      if (this.fieldName == "event_date" && this.newValue == null) {
+        data["drop_event_date"] = true;
+      }
       this.axios
         .patch("/project/" + this.$route.params.id, data)
         // eslint-disable-next-line no-unused-vars
