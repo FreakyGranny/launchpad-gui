@@ -250,7 +250,7 @@ export default {
         pUrl += "&type=" + this.typeFilter;
       }
       if (this.onlyOpenFilter) {
-        pUrl += "&filter=open";
+        pUrl += "&open=true";
       }
       return pUrl;
     },

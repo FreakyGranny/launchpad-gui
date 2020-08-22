@@ -1,5 +1,5 @@
 <template>
-  <v-content class="backgrnd">
+  <v-main class="backgrnd">
     <div class="parallelogram"></div>
 
     <v-container class="fill-height" fluid>
@@ -29,7 +29,7 @@
         </v-carousel-item>
       </v-carousel>
     </v-container>
-  </v-content>
+  </v-main>
 </template>
 
 <style scoped>

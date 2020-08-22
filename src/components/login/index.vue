@@ -1,5 +1,5 @@
 <template>
-  <v-content class="backgrnd">
+  <v-main class="backgrnd">
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="5" lg="4">
@@ -29,7 +29,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-content>
+  </v-main>
 </template>
 
 <script>

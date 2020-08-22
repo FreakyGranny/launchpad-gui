@@ -134,7 +134,8 @@ export default {
       "IS_USER_DONATIONS_LOADED",
       "USER_DONATIONS",
       "PROJECT_TYPE",
-      "PROFILE"
+      "PROFILE",
+      "UID"
     ]),
     getSpentAmount() {
       let spent = 0;
@@ -166,12 +167,12 @@ export default {
   },
   methods: {
     buildProjectUrl(filter) {
-      let pUrl = "/project?page_size=20";
+      let pUrl = "/project/user/" + this.UID;
       if (filter === FILTER_OWNED) {
-        pUrl += "&filter=" + FILTER_OWNED;
+        pUrl += "?" + FILTER_OWNED + "=true";
       }
       if (filter === FILTER_CONTRIBUTED) {
-        pUrl += "&filter=" + FILTER_CONTRIBUTED;
+        pUrl += "?" + FILTER_CONTRIBUTED + "=true";
       }
       return pUrl;
     },
@@ -180,11 +181,10 @@ export default {
       this.axios({ url: this.buildProjectUrl(filter) })
         .then(resp => {
           if (filter == FILTER_OWNED) {
-            this.projectsOwned = resp.data.results;
-            // window.console.log(resp);
+            this.projectsOwned = resp.data;
           }
           if (filter == FILTER_CONTRIBUTED) {
-            this.projectsContributed = resp.data.results;
+            this.projectsContributed = resp.data;
           }
           this.loading = false;
         })

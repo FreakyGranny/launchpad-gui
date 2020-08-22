@@ -676,7 +676,7 @@ export default {
         });
     },
     getDonations() {
-      this.axios({ url: "/donation?project_id=" + this.$route.params.id })
+      this.axios({ url: "/donation/project/" + this.$route.params.id })
         .then(resp => {
           this.donations = resp.data;
         })
