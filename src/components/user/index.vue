@@ -121,9 +121,9 @@ export default {
     },
     getProjects() {
       this.loadingProjects = true;
-      this.axios({ url: "/project/user=" + this.$route.params.id })
+      this.axios({ url: "/project/user/" + this.$route.params.id })
         .then(resp => {
-          this.projects = resp.data.results;
+          this.projects = resp.data;
           this.loadingProjects = false;
         })
         .catch(resp => {

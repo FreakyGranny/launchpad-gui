@@ -83,7 +83,7 @@
                 <v-col cols="12" sm="4" md="4" v-if="type.goal_by_amount">
                   <v-text-field
                     label="Сумма"
-                    v-model="payload.goal_amount"
+                    v-model.number="payload.goal_amount"
                     :step="250"
                     :rules="[rules.required, rules.minAmount]"
                     prepend-icon="mdi-currency-rub"
@@ -99,7 +99,7 @@
                     label="Цель"
                     prepend-icon="mdi-account-group"
                     :rules="[rules.required, rules.minPeople]"
-                    v-model="payload.goal_people"
+                    v-model.number="payload.goal_people"
                     hint="Минимальное количество участников"
                     single-line
                     type="number"
